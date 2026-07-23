@@ -1,0 +1,22 @@
+# Default owners for everything in the repo
+* @ai-bos/maintainers
+
+# Backend code
+/backend/ @ai-bos/backend-team
+
+# Frontend code
+/frontend/ @ai-bos/frontend-team
+
+# Infrastructure and deployment
+/infra/ @ai-bos/devops-team
+/docker-compose.yml @ai-bos/devops-team
+
+# GitHub workflows
+/.github/ @ai-bos/maintainers
+
+# Documentation
+/README.md @ai-bos/maintainers
+/PROJECT_STATUS.md @ai-bos/maintainers
+
+# Tests
+/backend/tests/ @ai-bos/backend-team
