@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     database_url: PostgresDsn = "postgresql+asyncpg://postgres:postgres@localhost:5432/ai_bos"
     secret_key: str = "replace-with-secure-env-value"
     access_token_expire_minutes: int = 60
+    refresh_token_expire_minutes: int = 10080  # 7 days
     redis_url: str = "redis://localhost:6379/0"
 
 settings = Settings()

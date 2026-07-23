@@ -106,3 +106,68 @@ async def test_dashboard_summary(client, user_token_headers):
     assert "message" in data
     assert "summary" in data
     assert "total_users" in data["summary"]
+
+
+@pytest.mark.asyncio
+async def test_refresh_token(client, test_user):
+    """Test the refresh token endpoint."""
+    # First login to get tokens
+    response = await client.post(
+        "/api/v1/auth/login",
+        data={"username": "testuser@example.com", "password": "TestPassword123!"},
+    )
+    assert response.status_code == status.HTTP_200_OK
+    login_data = response.json()
+    assert "access_token" in login_data
+    assert "refresh_token" in login_data
+    
+    # Use refresh token to get new access token
+    response = await client.post(
+        "/api/v1/auth/refresh",
+        json={"refresh_token": login_data["refresh_token"]},
+    )
+    assert response.status_code == status.HTTP_200_OK
+    refresh_data = response.json()
+    assert "access_token" in refresh_data
+    assert "refresh_token" in refresh_data
+    assert refresh_data["token_type"] == "bearer"
+
+
+@pytest.mark.asyncio
+async def test_refresh_token_invalid(client):
+    """Test the refresh token endpoint with invalid token."""
+    response = await client.post(
+        "/api/v1/auth/refresh",
+        json={"refresh_token": "invalid_token"},
+    )
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+@pytest.mark.asyncio
+async def test_logout(client, user_token_headers):
+    """Test the logout endpoint."""
+    response = await client.post("/api/v1/auth/logout", headers=user_token_headers)
+    assert response.status_code == status.HTTP_200_OK
+    data = response.json()
+    assert "message" in data
+
+
+@pytest.mark.asyncio
+async def test_validate_token(client, user_token_headers):
+    """Test the token validation endpoint."""
+    response = await client.get("/api/v1/auth/validate", headers=user_token_headers)
+    assert response.status_code == status.HTTP_200_OK
+    data = response.json()
+    assert data["valid"] is True
+    assert "email" in data
+    assert "user_id" in data
+
+
+@pytest.mark.asyncio
+async def test_validate_token_invalid(client):
+    """Test the token validation endpoint with invalid token."""
+    response = await client.get(
+        "/api/v1/auth/validate",
+        headers={"Authorization": "Bearer invalid_token"},
+    )
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED

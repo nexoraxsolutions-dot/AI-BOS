@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { login as apiLogin } from '../lib/api';
+import { login as apiLogin, refreshToken as apiRefreshToken } from '../lib/api';
 
 interface AuthContextType {
   token: string | null;
@@ -9,6 +9,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   loading: boolean;
+  refreshAccessToken: () => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -17,6 +18,7 @@ const AuthContext = createContext<AuthContextType>({
   login: async () => {},
   logout: () => {},
   loading: false,
+  refreshAccessToken: async () => false,
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -30,11 +32,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const refreshAccessToken = async (): Promise<boolean> => {
+    const refreshToken = localStorage.getItem('ai_bos_refresh_token');
+    if (!refreshToken) {
+      return false;
+    }
+
+    try {
+      const response = await apiRefreshToken(refreshToken);
+      localStorage.setItem('ai_bos_token', response.access_token);
+      if (response.refresh_token) {
+        localStorage.setItem('ai_bos_refresh_token', response.refresh_token);
+      }
+      setToken(response.access_token);
+      return true;
+    } catch (error) {
+      console.error('Failed to refresh token:', error);
+      logout();
+      return false;
+    }
+  };
+
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
       const response = await apiLogin(email, password);
       localStorage.setItem('ai_bos_token', response.access_token);
+      if (response.refresh_token) {
+        localStorage.setItem('ai_bos_refresh_token', response.refresh_token);
+      }
       setToken(response.access_token);
     } finally {
       setLoading(false);
@@ -43,6 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     localStorage.removeItem('ai_bos_token');
+    localStorage.removeItem('ai_bos_refresh_token');
     setToken(null);
   };
 
@@ -54,6 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         login,
         logout,
         loading,
+        refreshAccessToken,
       }}
     >
       {children}

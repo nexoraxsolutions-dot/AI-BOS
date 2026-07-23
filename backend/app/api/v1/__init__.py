@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import auth, users, companies, dashboard, health, redis, environment_variables
+from app.api.v1.endpoints import auth, users, companies, dashboard, health, redis, environment_variables, tenant
 
 api_router = APIRouter()
 api_router.include_router(health.router, prefix="", tags=["Health"])
@@ -9,3 +9,4 @@ api_router.include_router(companies.router, prefix="/companies", tags=["Companie
 api_router.include_router(dashboard.router, prefix="/dashboard", tags=["Dashboard"])
 api_router.include_router(redis.router, prefix="/redis", tags=["Redis"])
 api_router.include_router(environment_variables.router, prefix="/environment-variables", tags=["Environment Variables"])
+api_router.include_router(tenant.router, prefix="/tenants", tags=["Tenants"])

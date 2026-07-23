@@ -79,6 +79,17 @@ ai-bos/
 - [x] Self-service password change
 - [x] User search by email, name, or username
 - [x] User CRUD with admin modal-based management UI
+- [x] Enhanced company model with 13 new fields (description, address, phone, email, website, tax_id, industry, employee_count, subscription_plan, subscription_status, subscription_expires_at, logo_url, settings)
+- [x] Company search, filtering, and pagination
+- [x] Company statistics API with plan distribution
+- [x] Company CRUD with admin modal-based management UI
+- [x] Company lookup by domain
+- [x] Multi-tenancy support with data isolation by company
+- [x] Tenant management API (list, detail, stats, user assignment)
+- [x] Tenant-scoped environment variables
+- [x] Tenant dashboard with company-specific metrics
+- [x] User assignment and removal from companies
+- [x] Tenant management UI for superusers
 
 ## API Endpoints
 
@@ -94,10 +105,12 @@ ai-bos/
 | `/api/v1/users/{id}` | GET | Get user by ID | Yes (Active user) |
 | `/api/v1/users/{id}` | PUT | Update user | Yes (Superuser) |
 | `/api/v1/users/{id}` | DELETE | Delete user | Yes (Superuser) |
-| `/api/v1/companies/` | POST | Create new company | Yes (Superuser) |
-| `/api/v1/companies/` | GET | List all companies | Yes (Active user) |
-| `/api/v1/companies/{id}` | GET | Get company by ID | Yes (Active user) |
-| `/api/v1/companies/{id}` | PUT | Update company | Yes (Superuser) |
+| `/api/v1/companies/` | POST | Create new company (all fields) | Yes (Superuser) |
+| `/api/v1/companies/` | GET | List companies (search, filter, paginate, sort) | Yes (Active user) |
+| `/api/v1/companies/stats` | GET | Get company statistics (counts, plan distribution) | Yes (Active user) |
+| `/api/v1/companies/by-domain/{domain}` | GET | Get company by domain | Yes (Active user) |
+| `/api/v1/companies/{id}` | GET | Get company by ID (with user count) | Yes (Active user) |
+| `/api/v1/companies/{id}` | PUT | Update company (any fields) | Yes (Superuser) |
 | `/api/v1/companies/{id}` | DELETE | Delete company | Yes (Superuser) |
 | `/api/v1/dashboard/summary` | GET | Get dashboard summary | Yes (Active user) |
 | `/api/v1/redis/health` | GET | Get Redis health status | No |
@@ -110,6 +123,15 @@ ai-bos/
 | `/api/v1/environment-variables/{id}` | PUT | Update environment variable | Yes (Superuser) |
 | `/api/v1/environment-variables/{id}` | DELETE | Delete environment variable | Yes (Superuser) |
 | `/api/v1/environment-variables/export/.env` | GET | Export all environment variables | Yes (Superuser) |
+| `/api/v1/tenants/` | GET | List all tenants with search/filter | Yes (Superuser) |
+| `/api/v1/tenants/stats` | GET | Get global tenant statistics | Yes (Superuser) |
+| `/api/v1/tenants/my-tenant` | GET | Get current user's tenant details | Yes (Active user with company) |
+| `/api/v1/tenants/my-tenant/dashboard` | GET | Get current tenant's dashboard | Yes (Active user with company) |
+| `/api/v1/tenants/my-tenant/users` | GET | Get users in current tenant | Yes (Active user with company) |
+| `/api/v1/tenants/{company_id}` | GET | Get detailed tenant information | Yes (Superuser) |
+| `/api/v1/tenants/{company_id}/users` | GET | Get users of a specific tenant | Yes (Superuser) |
+| `/api/v1/tenants/assign` | POST | Assign user to a company | Yes (Superuser) |
+| `/api/v1/tenants/remove` | POST | Remove user from company | Yes (Superuser) |
 
 ## Quick Start
 

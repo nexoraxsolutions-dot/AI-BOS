@@ -1,13 +1,30 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List
+from typing import List, Optional
 
 from app.db.dependencies import get_async_session
 from app.schemas import environment_variable as env_var_schema
 from app.services import environment_variable as env_var_service
 from app.core.security import get_current_active_user, require_superuser
+from app.core.tenant import TenantContext, get_tenant_context
+
+def _mask_secret_value(value: str) -> str:
+    """Mask a secret value, showing first 4 and last 4 characters."""
+    if len(value) <= 8:
+        return "*" * 8
+    return value[:4] + "*" * (len(value) - 8) + value[-4:]
 
 router = APIRouter()
+
+
+def _get_company_id_for_env_vars(tenant: TenantContext) -> Optional[int]:
+    """Get the company_id to scope environment variable queries.
+    
+    Superusers (without company) can see all. Regular users see only their company's.
+    """
+    if tenant.is_superuser and not tenant.company_id:
+        return None  # Superuser can see all
+    return tenant.company_id
 
 
 @router.post("/", response_model=env_var_schema.EnvironmentVariableOut, status_code=status.HTTP_201_CREATED)
@@ -29,24 +46,30 @@ async def create_environment_variable(
 
 @router.get("/", response_model=List[env_var_schema.EnvironmentVariableOut])
 async def list_environment_variables(
-    skip: int = 0,
-    limit: int = 100,
+    skip: int = Query(0, ge=0, description="Number of records to skip"),
+    limit: int = Query(100, ge=1, le=500, description="Number of records to return"),
+    search: Optional[str] = Query(None, description="Search by key or description"),
     db: AsyncSession = Depends(get_async_session),
-    current_user=Depends(get_current_active_user),
+    tenant: TenantContext = Depends(get_tenant_context),
 ):
-    """List all environment variables."""
-    env_vars = await env_var_service.get_environment_variables(db, skip=skip, limit=limit)
+    """List environment variables, scoped to user's company."""
+    company_id = _get_company_id_for_env_vars(tenant)
+    env_vars, total = await env_var_service.get_environment_variables(
+        db, skip=skip, limit=limit, search=search, company_id=company_id
+    )
     
-    # Mask secret values
+    # Build response with masked secrets
     result = []
     for env_var in env_vars:
+        masked_value = _mask_secret_value(env_var.value) if env_var.is_secret else None
         env_dict = {
             "id": env_var.id,
             "key": env_var.key,
             "value": env_var.value if not env_var.is_secret else None,
-            "masked_value": env_var_service.mask_secret_value(env_var.value) if env_var.is_secret else None,
+            "masked_value": masked_value,
             "description": env_var.description,
             "is_secret": env_var.is_secret,
+            "company_id": env_var.company_id,
             "created_at": env_var.created_at,
             "updated_at": env_var.updated_at,
         }
@@ -59,23 +82,26 @@ async def list_environment_variables(
 async def get_environment_variable(
     env_var_id: int,
     db: AsyncSession = Depends(get_async_session),
-    current_user=Depends(get_current_active_user),
+    tenant: TenantContext = Depends(get_tenant_context),
 ):
-    """Get a specific environment variable by ID."""
-    env_var = await env_var_service.get_environment_variable(db, env_var_id)
+    """Get a specific environment variable by ID, scoped to company."""
+    company_id = _get_company_id_for_env_vars(tenant)
+    env_var = await env_var_service.get_environment_variable(db, env_var_id, company_id=company_id)
     if not env_var:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Environment variable not found"
         )
     
+    masked_value = _mask_secret_value(env_var.value) if env_var.is_secret else None
     return {
         "id": env_var.id,
         "key": env_var.key,
         "value": env_var.value if not env_var.is_secret else None,
-        "masked_value": env_var_service.mask_secret_value(env_var.value) if env_var.is_secret else None,
+        "masked_value": masked_value,
         "description": env_var.description,
         "is_secret": env_var.is_secret,
+        "company_id": env_var.company_id,
         "created_at": env_var.created_at,
         "updated_at": env_var.updated_at,
     }
@@ -85,10 +111,11 @@ async def get_environment_variable(
 async def get_environment_variable_by_key(
     key: str,
     db: AsyncSession = Depends(get_async_session),
-    current_user=Depends(get_current_active_user),
+    tenant: TenantContext = Depends(get_tenant_context),
 ):
-    """Get a specific environment variable by key."""
-    env_var = await env_var_service.get_environment_variable_by_key(db, key)
+    """Get a specific environment variable by key, scoped to company."""
+    company_id = _get_company_id_for_env_vars(tenant)
+    env_var = await env_var_service.get_environment_variable_by_key(db, key, company_id=company_id)
     if not env_var:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -99,9 +126,10 @@ async def get_environment_variable_by_key(
         "id": env_var.id,
         "key": env_var.key,
         "value": env_var.value if not env_var.is_secret else None,
-        "masked_value": env_var_service.mask_secret_value(env_var.value) if env_var.is_secret else None,
+        "masked_value": env_var.masked_value if env_var.is_secret else None,
         "description": env_var.description,
         "is_secret": env_var.is_secret,
+        "company_id": env_var.company_id,
         "created_at": env_var.created_at,
         "updated_at": env_var.updated_at,
     }
@@ -112,23 +140,26 @@ async def update_environment_variable(
     env_var_id: int,
     payload: env_var_schema.EnvironmentVariableUpdate,
     db: AsyncSession = Depends(get_async_session),
-    current_user=Depends(require_superuser),
+    tenant: TenantContext = Depends(get_tenant_context),
 ):
-    """Update an environment variable."""
-    env_var = await env_var_service.update_environment_variable(db, env_var_id, payload)
+    """Update an environment variable, scoped to company."""
+    company_id = _get_company_id_for_env_vars(tenant)
+    env_var = await env_var_service.update_environment_variable(db, env_var_id, payload, company_id=company_id)
     if not env_var:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Environment variable not found"
+            detail="Environment variable not found or access denied"
         )
     
+    masked_value = _mask_secret_value(env_var.value) if env_var.is_secret else None
     return {
         "id": env_var.id,
         "key": env_var.key,
         "value": env_var.value if not env_var.is_secret else None,
-        "masked_value": env_var_service.mask_secret_value(env_var.value) if env_var.is_secret else None,
+        "masked_value": masked_value,
         "description": env_var.description,
         "is_secret": env_var.is_secret,
+        "company_id": env_var.company_id,
         "created_at": env_var.created_at,
         "updated_at": env_var.updated_at,
     }
@@ -138,14 +169,15 @@ async def update_environment_variable(
 async def delete_environment_variable(
     env_var_id: int,
     db: AsyncSession = Depends(get_async_session),
-    current_user=Depends(require_superuser),
+    tenant: TenantContext = Depends(get_tenant_context),
 ):
-    """Delete an environment variable."""
-    deleted = await env_var_service.delete_environment_variable(db, env_var_id)
+    """Delete an environment variable, scoped to company."""
+    company_id = _get_company_id_for_env_vars(tenant)
+    deleted = await env_var_service.delete_environment_variable(db, env_var_id, company_id=company_id)
     if not deleted:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Environment variable not found"
+            detail="Environment variable not found or access denied"
         )
     return None
 
@@ -153,7 +185,8 @@ async def delete_environment_variable(
 @router.get("/export/.env", response_model=dict)
 async def export_environment_variables(
     db: AsyncSession = Depends(get_async_session),
-    current_user=Depends(require_superuser),
+    tenant: TenantContext = Depends(get_tenant_context),
 ):
-    """Export all environment variables as a dictionary (for .env file generation)."""
-    return await env_var_service.get_all_environment_variables_dict(db)
+    """Export environment variables as a dictionary, scoped to company."""
+    company_id = _get_company_id_for_env_vars(tenant)
+    return await env_var_service.get_all_environment_variables_dict(db, company_id=company_id)

@@ -40,13 +40,14 @@ class EnvironmentVariableBase(BaseModel):
 
 
 class EnvironmentVariableCreate(EnvironmentVariableBase):
-    pass
+    company_id: Optional[int] = None
 
 
 class EnvironmentVariableUpdate(BaseModel):
     value: Optional[str] = None
     description: Optional[str] = None
     is_secret: Optional[bool] = None
+    company_id: Optional[int] = None
 
     @field_validator('value')
     @classmethod
@@ -73,6 +74,7 @@ class EnvironmentVariableOut(BaseModel):
     masked_value: Optional[str] = None
     description: Optional[str] = None
     is_secret: bool = False
+    company_id: Optional[int] = None
     created_at: str
     updated_at: str
 

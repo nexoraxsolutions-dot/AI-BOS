@@ -4,12 +4,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.security import get_password_hash
 from app.models.user import User
+from app.models.company import Company
 from app.models.environment_variable import EnvironmentVariable
 from app.schemas.environment_variable import EnvironmentVariableCreate
 
 
 @pytest.mark.asyncio
-async def test_create_environment_variable(client: AsyncClient, db_session: AsyncSession, test_user: User):
+async def test_create_environment_variable(client: AsyncClient, db_session: AsyncSession, test_user: User, test_company: Company):
     """Test creating an environment variable."""
     # Create a superuser for authentication
     test_user.is_superuser = True
@@ -27,7 +28,8 @@ async def test_create_environment_variable(client: AsyncClient, db_session: Asyn
         "key": "TEST_VAR",
         "value": "test_value_123",
         "description": "Test environment variable",
-        "is_secret": False
+        "is_secret": False,
+        "company_id": test_company.id
     }
     
     response = await client.post(
@@ -45,7 +47,7 @@ async def test_create_environment_variable(client: AsyncClient, db_session: Asyn
 
 
 @pytest.mark.asyncio
-async def test_create_duplicate_environment_variable(client: AsyncClient, db_session: AsyncSession, test_user: User):
+async def test_create_duplicate_environment_variable(client: AsyncClient, db_session: AsyncSession, test_user: User, test_company: Company):
     """Test creating a duplicate environment variable (should fail)."""
     # Create a superuser
     test_user.is_superuser = True
@@ -56,7 +58,8 @@ async def test_create_duplicate_environment_variable(client: AsyncClient, db_ses
         key="DUPLICATE_VAR",
         value="value1",
         description="First var",
-        is_secret=False
+        is_secret=False,
+        company_id=test_company.id
     )
     db_session.add(env_var)
     await db_session.commit()
@@ -87,7 +90,7 @@ async def test_create_duplicate_environment_variable(client: AsyncClient, db_ses
 
 
 @pytest.mark.asyncio
-async def test_list_environment_variables(client: AsyncClient, db_session: AsyncSession, test_user: User):
+async def test_list_environment_variables(client: AsyncClient, db_session: AsyncSession, test_user: User, test_company: Company):
     """Test listing environment variables."""
     # Create multiple environment variables
     for i in range(5):
@@ -95,7 +98,8 @@ async def test_list_environment_variables(client: AsyncClient, db_session: Async
             key=f"VAR_{i}",
             value=f"value_{i}",
             description=f"Test variable {i}",
-            is_secret=(i % 2 == 0)
+            is_secret=(i % 2 == 0),
+            company_id=test_company.id
         )
         db_session.add(env_var)
     await db_session.commit()
@@ -127,14 +131,15 @@ async def test_list_environment_variables(client: AsyncClient, db_session: Async
 
 
 @pytest.mark.asyncio
-async def test_get_environment_variable_by_id(client: AsyncClient, db_session: AsyncSession, test_user: User):
+async def test_get_environment_variable_by_id(client: AsyncClient, db_session: AsyncSession, test_user: User, test_company: Company):
     """Test getting a specific environment variable by ID."""
     # Create environment variable
     env_var = EnvironmentVariable(
         key="SPECIFIC_VAR",
         value="specific_value",
         description="Specific test var",
-        is_secret=False
+        is_secret=False,
+        company_id=test_company.id
     )
     db_session.add(env_var)
     await db_session.commit()
@@ -160,14 +165,15 @@ async def test_get_environment_variable_by_id(client: AsyncClient, db_session: A
 
 
 @pytest.mark.asyncio
-async def test_get_environment_variable_by_key(client: AsyncClient, db_session: AsyncSession, test_user: User):
+async def test_get_environment_variable_by_key(client: AsyncClient, db_session: AsyncSession, test_user: User, test_company: Company):
     """Test getting a specific environment variable by key."""
     # Create environment variable
     env_var = EnvironmentVariable(
         key="KEY_VAR",
         value="key_value",
         description="Key test var",
-        is_secret=False
+        is_secret=False,
+        company_id=test_company.id
     )
     db_session.add(env_var)
     await db_session.commit()
@@ -192,7 +198,7 @@ async def test_get_environment_variable_by_key(client: AsyncClient, db_session: 
 
 
 @pytest.mark.asyncio
-async def test_update_environment_variable(client: AsyncClient, db_session: AsyncSession, test_user: User):
+async def test_update_environment_variable(client: AsyncClient, db_session: AsyncSession, test_user: User, test_company: Company):
     """Test updating an environment variable."""
     # Create superuser
     test_user.is_superuser = True
@@ -203,7 +209,8 @@ async def test_update_environment_variable(client: AsyncClient, db_session: Asyn
         key="UPDATE_VAR",
         value="old_value",
         description="Old description",
-        is_secret=False
+        is_secret=False,
+        company_id=test_company.id
     )
     db_session.add(env_var)
     await db_session.commit()
@@ -238,7 +245,7 @@ async def test_update_environment_variable(client: AsyncClient, db_session: Asyn
 
 
 @pytest.mark.asyncio
-async def test_delete_environment_variable(client: AsyncClient, db_session: AsyncSession, test_user: User):
+async def test_delete_environment_variable(client: AsyncClient, db_session: AsyncSession, test_user: User, test_company: Company):
     """Test deleting an environment variable."""
     # Create superuser
     test_user.is_superuser = True
@@ -249,7 +256,8 @@ async def test_delete_environment_variable(client: AsyncClient, db_session: Asyn
         key="DELETE_VAR",
         value="delete_me",
         description="To be deleted",
-        is_secret=False
+        is_secret=False,
+        company_id=test_company.id
     )
     db_session.add(env_var)
     await db_session.commit()
@@ -279,7 +287,7 @@ async def test_delete_environment_variable(client: AsyncClient, db_session: Asyn
 
 
 @pytest.mark.asyncio
-async def test_export_environment_variables(client: AsyncClient, db_session: AsyncSession, test_user: User):
+async def test_export_environment_variables(client: AsyncClient, db_session: AsyncSession, test_user: User, test_company: Company):
     """Test exporting environment variables."""
     # Create superuser
     test_user.is_superuser = True
@@ -291,7 +299,8 @@ async def test_export_environment_variables(client: AsyncClient, db_session: Asy
             key=f"EXPORT_VAR_{i}",
             value=f"export_value_{i}",
             description=f"Export test {i}",
-            is_secret=False
+            is_secret=False,
+            company_id=test_company.id
         )
         db_session.add(env_var)
     await db_session.commit()

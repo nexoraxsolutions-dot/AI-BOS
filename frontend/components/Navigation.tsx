@@ -47,6 +47,12 @@ export default function Navigation() {
                 Companies
               </button>
               <button
+                onClick={() => router.push('/tenants')}
+                className="text-sm text-slate-300 hover:text-white transition"
+              >
+                Tenants
+              </button>
+              <button
                 onClick={() => router.push('/redis')}
                 className="text-sm text-slate-300 hover:text-white transition"
               >
