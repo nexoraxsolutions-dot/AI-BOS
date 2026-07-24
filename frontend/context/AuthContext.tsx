@@ -1,12 +1,13 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { login as apiLogin, refreshToken as apiRefreshToken } from '../lib/api';
+import { login as apiLogin, register as apiRegister, refreshToken as apiRefreshToken } from '../lib/api';
 
 interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string, fullName?: string, username?: string) => Promise<void>;
   logout: () => void;
   loading: boolean;
   refreshAccessToken: () => Promise<boolean>;
@@ -16,6 +17,7 @@ const AuthContext = createContext<AuthContextType>({
   token: null,
   isAuthenticated: false,
   login: async () => {},
+  register: async () => {},
   logout: () => {},
   loading: false,
   refreshAccessToken: async () => false,
@@ -67,6 +69,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const register = async (email: string, password: string, fullName?: string, username?: string) => {
+    setLoading(true);
+    try {
+      const response = await apiRegister(email, password, fullName, username);
+      localStorage.setItem('ai_bos_token', response.access_token);
+      if (response.refresh_token) {
+        localStorage.setItem('ai_bos_refresh_token', response.refresh_token);
+      }
+      setToken(response.access_token);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('ai_bos_token');
     localStorage.removeItem('ai_bos_refresh_token');
@@ -79,6 +95,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         token,
         isAuthenticated: !!token,
         login,
+        register,
         logout,
         loading,
         refreshAccessToken,

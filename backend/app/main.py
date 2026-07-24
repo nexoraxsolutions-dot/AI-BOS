@@ -27,6 +27,8 @@ app = FastAPI(
         {"name": "Dashboard", "description": "Dashboard operations"},
         {"name": "Redis", "description": "Redis cache management operations"},
         {"name": "Tenants", "description": "Multi-tenancy management operations"},
+        {"name": "Audit Logs", "description": "Audit log and activity tracking operations"},
+        {"name": "Tokens", "description": "Token management and revocation operations"},
     ],
     lifespan=lifespan,
 )

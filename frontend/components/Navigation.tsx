@@ -65,6 +65,18 @@ export default function Navigation() {
                 Environment Variables
               </button>
               <button
+                onClick={() => router.push('/tokens')}
+                className="text-sm text-slate-300 hover:text-white transition"
+              >
+                Tokens
+              </button>
+              <button
+                onClick={() => router.push('/audit-logs')}
+                className="text-sm text-slate-300 hover:text-white transition"
+              >
+                Audit Logs
+              </button>
+              <button
                 onClick={() => router.push('/profile')}
                 className="text-sm text-slate-300 hover:text-white transition"
               >

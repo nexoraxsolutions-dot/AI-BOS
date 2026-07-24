@@ -104,3 +104,32 @@ class TokenValidationResponse(BaseModel):
 
 class MessageResponse(BaseModel):
     message: str
+
+
+class RegisterResponse(BaseModel):
+    """Response returned after successful self-service registration."""
+
+    access_token: str
+    token_type: str = "bearer"
+    refresh_token: Optional[str] = None
+    user: "UserOutLite"
+
+
+class UserOutLite(BaseModel):
+    """Minimal user payload embedded in registration response."""
+
+    id: int
+    email: EmailStr
+    full_name: Optional[str] = None
+    username: Optional[str] = None
+    is_active: bool = True
+    is_superuser: bool = False
+    company_id: Optional[int] = None
+
+    model_config = {"from_attributes": True}
+
+
+# Resolve forward reference for RegisterResponse.user
+RegisterResponse.model_rebuild()
+
+

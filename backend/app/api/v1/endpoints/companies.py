@@ -1,10 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
 
+from app.core.request import get_client_ip, get_user_agent
 from app.db.dependencies import get_async_session
 from app.schemas import company as company_schema
 from app.services import company as company_service
+from app.services.audit_log import create_audit_log
 from app.core.security import get_current_active_user, require_superuser
 
 router = APIRouter()
@@ -12,11 +14,24 @@ router = APIRouter()
 
 @router.post("/", response_model=company_schema.CompanyOut, status_code=status.HTTP_201_CREATED)
 async def create_company(
+    request: Request,
     payload: company_schema.CompanyCreate,
     db: AsyncSession = Depends(get_async_session),
     current_user=Depends(require_superuser),
 ):
-    return await company_service.create_company(db, payload)
+    company = await company_service.create_company(db, payload)
+    # Log company creation
+    await create_audit_log(
+        db,
+        action="create",
+        resource_type="company",
+        resource_id=company.id,
+        user_id=current_user.id,
+        ip_address=get_client_ip(request),
+        user_agent=get_user_agent(request),
+        details={"company_name": company.name, "domain": company.domain, "created_by": current_user.email},
+    )
+    return company
 
 
 @router.get("/", response_model=company_schema.CompanyListResponse)
@@ -86,6 +101,7 @@ async def get_company(
 
 @router.put("/{company_id}", response_model=company_schema.CompanyOut)
 async def update_company(
+    request: Request,
     company_id: int,
     payload: company_schema.CompanyUpdate,
     db: AsyncSession = Depends(get_async_session),
@@ -94,16 +110,41 @@ async def update_company(
     company = await company_service.update_company(db, company_id, payload)
     if not company:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Company not found")
+    # Log company update
+    await create_audit_log(
+        db,
+        action="update",
+        resource_type="company",
+        resource_id=company_id,
+        user_id=current_user.id,
+        ip_address=get_client_ip(request),
+        user_agent=get_user_agent(request),
+        details={"company_name": company.name, "updated_by": current_user.email, "updated_fields": payload.model_dump(exclude_none=True)},
+    )
     return company
 
 
 @router.delete("/{company_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_company(
+    request: Request,
     company_id: int,
     db: AsyncSession = Depends(get_async_session),
     current_user=Depends(require_superuser),
 ):
+    # Fetch company before deletion for audit log
+    company_to_delete = await company_service.get_company(db, company_id)
     deleted = await company_service.delete_company(db, company_id)
     if not deleted:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Company not found")
+    # Log company deletion
+    await create_audit_log(
+        db,
+        action="delete",
+        resource_type="company",
+        resource_id=company_id,
+        user_id=current_user.id,
+        ip_address=get_client_ip(request),
+        user_agent=get_user_agent(request),
+        details={"company_name": company_to_delete.name if company_to_delete else "unknown", "deleted_by": current_user.email},
+    )
     return None

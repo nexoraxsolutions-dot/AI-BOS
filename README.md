@@ -58,7 +58,7 @@ ai-bos/
 - [x] Full CRUD for users and companies (Create, Read, Update, Delete)
 - [x] Health check endpoint (`GET /api/v1/health`)
 - [x] Input validation with Pydantic
-- [x] Unit and integration tests (70 backend tests + 15 frontend tests)
+- [x] Unit and integration tests (145 backend tests + 21 frontend tests)
 - [x] CI/CD pipelines with GitHub Actions
 - [x] Docker containerization with multi-stage builds, healthchecks, and networking
 - [x] Dashboard API with real-time aggregated statistics
@@ -90,6 +90,25 @@ ai-bos/
 - [x] Tenant dashboard with company-specific metrics
 - [x] User assignment and removal from companies
 - [x] Tenant management UI for superusers
+- [x] Audit log system with database persistence and Redis caching
+- [x] Audit log filtering by action, resource type, and user
+- [x] User-scoped audit logs (my-logs) and superuser global view
+- [x] Audit log frontend UI with filters and pagination
+- [x] Audit logging integrated into auth (login, logout, refresh, failed login)
+- [x] Audit logging integrated into user CRUD (create, update, delete, password change)
+- [x] Audit logging integrated into company CRUD (create, update, delete)
+- [x] Client IP and user-agent tracking for all audit events
+- [x] Token management system with database storage and revocation
+- [x] Refresh token stored in database with IP and user-agent tracking
+- [x] Token revocation (single, all, and expired cleanup)
+- [x] Token management UI with status, expiration, and revoke actions
+- [x] Token blacklist checking via DB verification on refresh
+- [x] Public self-service registration with email, password, full name, and optional username
+- [x] Registration returns access/refresh tokens and created user profile
+- [x] Duplicate email and username validation on registration
+- [x] Registration audit logging with IP and user-agent tracking
+- [x] Frontend registration page with validation and error handling
+- [x] 145 backend tests + 21 frontend tests
 
 ## API Endpoints
 
@@ -97,6 +116,7 @@ ai-bos/
 |----------|--------|-------------|---------------|
 | `/api/v1/health` | GET | Health check (API + database) | No |
 | `/api/v1/auth/login` | POST | User login with email/password | No |
+| `/api/v1/auth/register` | POST | Self-service registration | No |
 | `/api/v1/users/` | POST | Create new user | Yes (Superuser) |
 | `/api/v1/users/` | GET | List all users (supports `?search=`) | Yes (Active user) |
 | `/api/v1/users/me` | GET | Get current user profile | Yes (Active user) |
@@ -132,6 +152,12 @@ ai-bos/
 | `/api/v1/tenants/{company_id}/users` | GET | Get users of a specific tenant | Yes (Superuser) |
 | `/api/v1/tenants/assign` | POST | Assign user to a company | Yes (Superuser) |
 | `/api/v1/tenants/remove` | POST | Remove user from company | Yes (Superuser) |
+| `/api/v1/tokens/` | GET | List current user tokens (paginated) | Yes (Active user) |
+| `/api/v1/tokens/all` | GET | List all tokens (paginated) | Yes (Superuser) |
+| `/api/v1/tokens/{token_id}` | GET | Get specific token details | Yes (Active user) |
+| `/api/v1/tokens/revoke` | POST | Revoke a specific token by ID | Yes (Active user) |
+| `/api/v1/tokens/revoke-all` | POST | Revoke all refresh tokens for current user | Yes (Active user) |
+| `/api/v1/tokens/cleanup` | POST | Clean up expired tokens | Yes (Superuser) |
 
 ## Quick Start
 

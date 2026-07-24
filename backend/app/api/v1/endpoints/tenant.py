@@ -96,41 +96,6 @@ async def list_tenants(
     )
 
 
-@router.get("/{company_id}", response_model=tenant_schema.TenantDetail)
-async def get_tenant_detail(
-    company_id: int,
-    include_users: bool = Query(True, description="Include user list"),
-    db: AsyncSession = Depends(get_async_session),
-    current_user=Depends(require_superuser),
-):
-    """Get detailed tenant information (superuser only)."""
-    company_data = await tenant_service.get_tenant_by_id(
-        db, company_id, include_users=include_users
-    )
-    if not company_data:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Tenant not found",
-        )
-    return company_data
-
-
-@router.get("/{company_id}/users", response_model=List[tenant_schema.TenantUserSummary])
-async def list_tenant_users(
-    company_id: int,
-    skip: int = Query(0, ge=0, description="Number of records to skip"),
-    limit: int = Query(20, ge=1, le=100, description="Number of records to return"),
-    search: Optional[str] = Query(None, description="Search by email, name, or username"),
-    db: AsyncSession = Depends(get_async_session),
-    current_user=Depends(require_superuser),
-):
-    """Get users belonging to a tenant (superuser only)."""
-    users, total = await tenant_service.get_tenant_users(
-        db, company_id, skip=skip, limit=limit, search=search
-    )
-    return users  # Return only the users list, not the tuple
-
-
 @router.post("/assign", status_code=status.HTTP_200_OK)
 async def assign_user_to_company(
     payload: tenant_schema.UserCompanyAssignment,
@@ -202,5 +167,40 @@ async def get_my_tenant_users(
         )
     users, total = await tenant_service.get_tenant_users(
         db, tenant.company_id, skip=skip, limit=limit, search=search
+    )
+    return users  # Return only the users list, not the tuple
+
+
+@router.get("/{company_id}", response_model=tenant_schema.TenantDetail)
+async def get_tenant_detail(
+    company_id: int,
+    include_users: bool = Query(True, description="Include user list"),
+    db: AsyncSession = Depends(get_async_session),
+    current_user=Depends(require_superuser),
+):
+    """Get detailed tenant information (superuser only)."""
+    company_data = await tenant_service.get_tenant_by_id(
+        db, company_id, include_users=include_users
+    )
+    if not company_data:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Tenant not found",
+        )
+    return company_data
+
+
+@router.get("/{company_id}/users", response_model=List[tenant_schema.TenantUserSummary])
+async def list_tenant_users(
+    company_id: int,
+    skip: int = Query(0, ge=0, description="Number of records to skip"),
+    limit: int = Query(20, ge=1, le=100, description="Number of records to return"),
+    search: Optional[str] = Query(None, description="Search by email, name, or username"),
+    db: AsyncSession = Depends(get_async_session),
+    current_user=Depends(require_superuser),
+):
+    """Get users belonging to a tenant (superuser only)."""
+    users, total = await tenant_service.get_tenant_users(
+        db, company_id, skip=skip, limit=limit, search=search
     )
     return users  # Return only the users list, not the tuple

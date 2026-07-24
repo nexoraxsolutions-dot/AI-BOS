@@ -109,6 +109,21 @@ export interface LoginResponse {
   token_type: string;
 }
 
+export interface RegisterResponse {
+  access_token: string;
+  refresh_token: string;
+  token_type: string;
+  user: {
+    id: number;
+    email: string;
+    full_name?: string | null;
+    username?: string | null;
+    is_active: boolean;
+    is_superuser: boolean;
+    company_id?: number | null;
+  };
+}
+
 function getToken(): string | null {
   if (typeof window === 'undefined') return null;
   return localStorage.getItem('ai_bos_token');
@@ -157,6 +172,29 @@ export async function login(email: string, password: string): Promise<LoginRespo
   if (!response.ok) {
     const error = await response.json().catch(() => ({ detail: 'Login failed' }));
     throw new Error(error.detail || 'Login failed');
+  }
+
+  return response.json();
+}
+
+
+export async function register(
+  email: string,
+  password: string,
+  fullName?: string,
+  username?: string,
+): Promise<RegisterResponse> {
+  const response = await fetch(`${API_BASE_URL}/auth/register`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email, password, full_name: fullName, username }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Registration failed' }));
+    throw new Error(error.detail || 'Registration failed');
   }
 
   return response.json();
@@ -536,6 +574,129 @@ export async function assignUserToCompany(data: UserCompanyAssignment): Promise<
 
 export async function removeUserFromCompany(userId: number): Promise<{ message: string; user_id: number }> {
   return request<{ message: string; user_id: number }>(`/tenants/remove?user_id=${userId}`, {
+    method: 'POST',
+  });
+}
+
+// Audit Log API functions
+export interface AuditLog {
+  id: number;
+  action: string;
+  resource_type: string;
+  resource_id?: number;
+  user_id?: number;
+  ip_address?: string;
+  user_agent?: string;
+  details?: Record<string, unknown>;
+  created_at: string;
+}
+
+export interface AuditLogListResponse {
+  items: AuditLog[];
+  total: number;
+  page: number;
+  page_size: number;
+}
+
+export async function getAuditLogs(params?: {
+  skip?: number;
+  limit?: number;
+  action?: string;
+  resource_type?: string;
+  user_id?: number;
+}): Promise<AuditLogListResponse> {
+  const searchParams = new URLSearchParams();
+  if (params) {
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        searchParams.append(key, String(value));
+      }
+    });
+  }
+  const query = searchParams.toString();
+  return request<AuditLogListResponse>(`/audit-logs/?${query}`);
+}
+
+export async function getMyAuditLogs(params?: {
+  skip?: number;
+  limit?: number;
+  action?: string;
+  resource_type?: string;
+}): Promise<AuditLogListResponse> {
+  const searchParams = new URLSearchParams();
+  if (params) {
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        searchParams.append(key, String(value));
+      }
+    });
+  }
+  const query = searchParams.toString();
+  return request<AuditLogListResponse>(`/audit-logs/my-logs/?${query}`);
+}
+
+// Token Management API functions
+export interface TokenInfo {
+  id: number;
+  user_id: number;
+  token: string;
+  token_type: string;
+  client_ip?: string;
+  user_agent?: string;
+  is_revoked: boolean;
+  expires_at: string;
+  created_at?: string;
+}
+
+export interface TokenListResponse {
+  items: TokenInfo[];
+  total: number;
+  page: number;
+  page_size: number;
+}
+
+export interface TokenRevokeResponse {
+  message: string;
+  token_id: number;
+  revoked: boolean;
+}
+
+export interface TokenCleanupResponse {
+  message: string;
+  deleted_count: number;
+}
+
+export async function getTokens(
+  skip: number = 0,
+  limit: number = 50,
+  include_revoked: boolean = false
+): Promise<TokenListResponse> {
+  const params = new URLSearchParams();
+  params.append('skip', String(skip));
+  params.append('limit', String(limit));
+  params.append('include_revoked', String(include_revoked));
+  return request<TokenListResponse>(`/tokens/?${params.toString()}`);
+}
+
+export async function getTokenById(id: number): Promise<TokenInfo> {
+  return request<TokenInfo>(`/tokens/${id}`);
+}
+
+export async function revokeToken(token_id: number): Promise<TokenRevokeResponse> {
+  return request<TokenRevokeResponse>('/tokens/revoke', {
+    method: 'POST',
+    body: JSON.stringify({ token_id }),
+  });
+}
+
+export async function revokeAllTokens(): Promise<{ message: string; revoked_count: number }> {
+  return request<{ message: string; revoked_count: number }>('/tokens/revoke-all', {
+    method: 'POST',
+  });
+}
+
+export async function cleanupTokens(): Promise<TokenCleanupResponse> {
+  return request<TokenCleanupResponse>('/tokens/cleanup', {
     method: 'POST',
   });
 }

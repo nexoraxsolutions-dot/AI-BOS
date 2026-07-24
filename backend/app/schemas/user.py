@@ -65,6 +65,7 @@ class UserOut(UserBase):
     id: int
     is_active: bool
     is_superuser: bool
+    is_email_verified: bool = False
     company_id: Optional[int] = None
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None

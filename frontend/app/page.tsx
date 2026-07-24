@@ -24,6 +24,12 @@ export default function Home() {
           <h2 className="text-3xl font-semibold text-white">Sign in</h2>
           <p className="mt-2 text-slate-400">Log in securely using your company credentials.</p>
           <LoginForm />
+          <p className="mt-4 text-center text-sm text-slate-400">
+            Don't have an account?{' '}
+            <a href="/register" className="text-cyan-400 hover:text-cyan-300">
+              Create account
+            </a>
+          </p>
         </aside>
       </div>
     </main>
