@@ -18,4 +18,7 @@ class Token(Base):
     expires_at = Column(DateTime, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
-    user = relationship("User", backref="tokens")
+    user = relationship(
+           "User",
+            back_populates="tokens"
+    )

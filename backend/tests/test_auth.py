@@ -74,7 +74,13 @@ async def test_login_endpoint(client, test_user):
     assert response.status_code == status.HTTP_200_OK
     data = response.json()
     assert "access_token" in data
+    assert "refresh_token" in data
     assert data["token_type"] == "bearer"
+    assert "user" in data
+    assert data["user"]["email"] == "testuser@example.com"
+    assert data["user"]["full_name"] == "Test User"
+    assert data["user"]["is_active"] is True
+    assert data["user"]["is_superuser"] is False
 
 
 @pytest.mark.asyncio
@@ -83,6 +89,33 @@ async def test_login_endpoint_invalid(client):
     response = await client.post(
         "/api/v1/auth/login",
         data={"username": "wrong@example.com", "password": "wrongpassword"},
+    )
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+@pytest.mark.asyncio
+async def test_login_json_endpoint(client, test_user):
+    """Test the JSON login endpoint with valid credentials."""
+    response = await client.post(
+        "/api/v1/auth/login-json",
+        json={"email": "testuser@example.com", "password": "TestPassword123!"},
+    )
+    assert response.status_code == status.HTTP_200_OK
+    data = response.json()
+    assert "access_token" in data
+    assert "refresh_token" in data
+    assert data["token_type"] == "bearer"
+    assert "user" in data
+    assert data["user"]["email"] == "testuser@example.com"
+    assert data["user"]["full_name"] == "Test User"
+
+
+@pytest.mark.asyncio
+async def test_login_json_endpoint_invalid(client):
+    """Test the JSON login endpoint with invalid credentials."""
+    response = await client.post(
+        "/api/v1/auth/login-json",
+        json={"email": "wrong@example.com", "password": "wrongpassword"},
     )
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 

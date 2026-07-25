@@ -21,3 +21,9 @@ class User(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     company = relationship("Company", back_populates="users")
+    
+    tokens = relationship(
+        "Token",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
