@@ -22,6 +22,7 @@ export interface User {
   username: string | null;
   is_active: boolean;
   is_superuser: boolean;
+  is_email_verified?: boolean;
   company_id: number | null;
   created_at?: string;
   updated_at?: string;
@@ -107,6 +108,15 @@ export interface LoginResponse {
   access_token: string;
   refresh_token: string;
   token_type: string;
+  user?: {
+    id: number;
+    email: string;
+    full_name?: string | null;
+    username?: string | null;
+    is_active: boolean;
+    is_superuser: boolean;
+    company_id?: number | null;
+  };
 }
 
 export interface RegisterResponse {
@@ -699,4 +709,47 @@ export async function cleanupTokens(): Promise<TokenCleanupResponse> {
   return request<TokenCleanupResponse>('/tokens/cleanup', {
     method: 'POST',
   });
+}
+
+// Email Verification API functions
+export interface VerifyEmailResponse {
+  message: string;
+  email_verified: boolean;
+}
+
+export interface ResendVerificationResponse {
+  message: string;
+}
+
+export async function verifyEmail(token: string): Promise<VerifyEmailResponse> {
+  const response = await fetch(`${API_BASE_URL}/auth/verify-email/${encodeURIComponent(token)}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Verification failed' }));
+    throw new Error(error.detail || 'Verification failed');
+  }
+
+  return response.json();
+}
+
+export async function resendVerification(email: string): Promise<ResendVerificationResponse> {
+  const response = await fetch(`${API_BASE_URL}/auth/resend-verification`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Failed to resend verification' }));
+    throw new Error(error.detail || 'Failed to resend verification');
+  }
+
+  return response.json();
 }

@@ -195,6 +195,16 @@ export default function ProfilePage() {
                   <label className="block text-sm text-slate-400 mb-1">Company ID</label>
                   <p className="text-lg font-medium">{profile.company_id || 'N/A'}</p>
                 </div>
+                <div>
+                  <label className="block text-sm text-slate-400 mb-1">Email Verified</label>
+                  <span className={`inline-flex rounded-full px-3 py-1 text-xs font-medium ${
+                    profile.is_email_verified
+                      ? 'bg-green-500/10 text-green-400 border border-green-500/30'
+                      : 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/30'
+                  }`}>
+                    {profile.is_email_verified ? 'Verified' : 'Not Verified'}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
