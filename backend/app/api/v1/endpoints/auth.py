@@ -64,17 +64,17 @@ async def register(
         "access_token": access_token,
         "refresh_token": refresh_token,
         "token_type": "bearer",
-        "user": user_schema.UserOut.model_validate(user),
+        "user": auth_schema.UserOutLite.model_validate(user),
     }
 
 
-@router.post("/login", response_model=auth_schema.Token)
+@router.post("/login", response_model=auth_schema.LoginResponse)
 async def login(
-
     request: Request,
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: AsyncSession = Depends(get_async_session),
 ):
+    """User login with email/password (form-based, OAuth2 compatible)."""
     user = await auth_service.authenticate_user(db, form_data.username, form_data.password)
     if not user:
         # Log failed login attempt
@@ -119,6 +119,62 @@ async def login(
         "access_token": access_token,
         "refresh_token": refresh_token,
         "token_type": "bearer",
+        "user": user_schema.UserOut.model_validate(user),
+    }
+
+
+@router.post("/login-json", response_model=auth_schema.LoginResponse)
+async def login_json(
+    request: Request,
+    payload: auth_schema.LoginRequest,
+    db: AsyncSession = Depends(get_async_session),
+):
+    """User login with email/password (JSON body, REST-compatible)."""
+    user = await auth_service.authenticate_user(db, payload.email, payload.password)
+    if not user:
+        # Log failed login attempt
+        await create_audit_log(
+            db,
+            action="login_failed",
+            resource_type="auth",
+            resource_id=None,
+            user_id=None,
+            ip_address=get_client_ip(request),
+            user_agent=get_user_agent(request),
+            details={"email": payload.email},
+        )
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect username or password")
+    
+    access_token_expires = timedelta(minutes=security.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = token.create_access_token(data={"sub": user.email}, expires_delta=access_token_expires)
+    refresh_token = token.create_refresh_token(data={"sub": user.email})
+    
+    # Store refresh token in database
+    await token.store_refresh_token(
+        db,
+        token_str=refresh_token,
+        user_id=user.id,
+        client_ip=get_client_ip(request),
+        user_agent=get_user_agent(request),
+    )
+    
+    # Log successful login
+    await create_audit_log(
+        db,
+        action="login",
+        resource_type="auth",
+        resource_id=user.id,
+        user_id=user.id,
+        ip_address=get_client_ip(request),
+        user_agent=get_user_agent(request),
+        details={"email": user.email},
+    )
+    
+    return {
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer",
+        "user": user_schema.UserOut.model_validate(user),
     }
 
 
@@ -219,3 +275,39 @@ async def validate_token(current_user=Depends(security.get_current_active_user))
         "email": current_user.email,
         "user_id": current_user.id,
     }
+
+
+@router.get("/verify-email/{token}", response_model=auth_schema.VerifyEmailResponse)
+async def verify_email(
+    token: str,
+    db: AsyncSession = Depends(get_async_session),
+):
+    """Verify a user's email address using a verification token."""
+    try:
+        user = await auth_service.verify_email(db, token)
+        return {
+            "message": "Email verified successfully",
+            "email_verified": True,
+        }
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc),
+        ) from exc
+
+
+@router.post("/resend-verification", response_model=auth_schema.MessageResponse)
+async def resend_verification(
+    request: Request,
+    payload: auth_schema.EmailVerificationRequest,
+    db: AsyncSession = Depends(get_async_session),
+):
+    """Resend the email verification link."""
+    try:
+        await auth_service.resend_verification_email(db, payload.email)
+        return {"message": "Verification email sent successfully"}
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc),
+        ) from exc

@@ -106,6 +106,26 @@ class MessageResponse(BaseModel):
     message: str
 
 
+class EmailVerificationRequest(BaseModel):
+    """Request to resend email verification."""
+    email: EmailStr
+
+
+class VerifyEmailResponse(BaseModel):
+    """Response after email verification."""
+    message: str
+    email_verified: bool = True
+
+
+class LoginResponse(BaseModel):
+    """Response returned after successful login."""
+
+    access_token: str
+    token_type: str = "bearer"
+    refresh_token: Optional[str] = None
+    user: "UserOutLite"
+
+
 class RegisterResponse(BaseModel):
     """Response returned after successful self-service registration."""
 
@@ -129,7 +149,8 @@ class UserOutLite(BaseModel):
     model_config = {"from_attributes": True}
 
 
-# Resolve forward reference for RegisterResponse.user
+# Resolve forward references
+LoginResponse.model_rebuild()
 RegisterResponse.model_rebuild()
 
 

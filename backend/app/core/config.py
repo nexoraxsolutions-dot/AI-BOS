@@ -16,4 +16,15 @@ class Settings(BaseSettings):
     refresh_token_expire_minutes: int = 10080  # 7 days
     redis_url: str = "redis://localhost:6379/0"
 
+    # Email configuration
+    smtp_host: str = "localhost"
+    smtp_port: int = 587
+    smtp_username: str = ""
+    smtp_password: str = ""
+    smtp_use_tls: bool = True
+    email_from_address: str = "noreply@ai-bos.com"
+    email_from_name: str = "AI-BOS"
+    email_verification_token_expire_hours: int = 48
+    frontend_url: str = "http://localhost:3000"
+
 settings = Settings()
