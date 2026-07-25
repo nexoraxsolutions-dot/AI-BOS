@@ -58,7 +58,7 @@ ai-bos/
 - [x] Full CRUD for users and companies (Create, Read, Update, Delete)
 - [x] Health check endpoint (`GET /api/v1/health`)
 - [x] Input validation with Pydantic
-- [x] Unit and integration tests (145 backend tests + 21 frontend tests)
+- [x] Unit and integration tests (155+ backend tests + 22+ frontend tests)
 - [x] CI/CD pipelines with GitHub Actions
 - [x] Docker containerization with multi-stage builds, healthchecks, and networking
 - [x] Dashboard API with real-time aggregated statistics
@@ -103,20 +103,35 @@ ai-bos/
 - [x] Token revocation (single, all, and expired cleanup)
 - [x] Token management UI with status, expiration, and revoke actions
 - [x] Token blacklist checking via DB verification on refresh
+- [x] REST API login endpoint (form-based, OAuth2 compatible)
+- [x] REST API login endpoint (JSON-based, REST compatible)
+- [x] Login returns access/refresh tokens and authenticated user profile
+- [x] Real-time login form validation (email format, password required)
+- [x] Dedicated `/login` page with register link
+- [x] Landing page (`/`) with sign in and create account buttons
+- [x] AuthContext stores user info from login and register responses
+- [x] Audit logging for login success, login failure, and logout
 - [x] Public self-service registration with email, password, full name, and optional username
 - [x] Registration returns access/refresh tokens and created user profile
 - [x] Duplicate email and username validation on registration
 - [x] Registration audit logging with IP and user-agent tracking
 - [x] Frontend registration page with validation and error handling
-- [x] 145 backend tests + 21 frontend tests
+- [x] Email verification for new registrations
+- [x] 155+ backend tests + 22+ frontend tests
 
 ## API Endpoints
 
 | Endpoint | Method | Description | Auth Required |
 |----------|--------|-------------|---------------|
 | `/api/v1/health` | GET | Health check (API + database) | No |
-| `/api/v1/auth/login` | POST | User login with email/password | No |
-| `/api/v1/auth/register` | POST | Self-service registration | No |
+| `/api/v1/auth/login` | POST | User login with email/password (form-based, OAuth2) | No |
+| `/api/v1/auth/login-json` | POST | User login with email/password (JSON-based, REST) | No |
+| `/api/v1/auth/register` | POST | Self-service registration with tokens and user info | No |
+| `/api/v1/auth/refresh` | POST | Refresh access token using refresh token | No |
+| `/api/v1/auth/logout` | POST | Logout and revoke all refresh tokens | Yes (Active user) |
+| `/api/v1/auth/validate` | GET | Validate current access token | Yes (Active user) |
+| `/api/v1/auth/verify-email/{token}` | GET | Verify email address via token | No |
+| `/api/v1/auth/resend-verification` | POST | Resend email verification link | No |
 | `/api/v1/users/` | POST | Create new user | Yes (Superuser) |
 | `/api/v1/users/` | GET | List all users (supports `?search=`) | Yes (Active user) |
 | `/api/v1/users/me` | GET | Get current user profile | Yes (Active user) |

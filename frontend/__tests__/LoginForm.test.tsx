@@ -24,6 +24,13 @@ jest.mock('next/navigation', () => ({
   })),
 }))
 
+// Mock next/link
+jest.mock('next/link', () => {
+  return ({ children, href }: { children: React.ReactNode; href: string }) => (
+    <a href={href}>{children}</a>
+  )
+})
+
 describe('LoginForm', () => {
   beforeEach(() => {
     mockLogin.mockClear()
@@ -126,5 +133,13 @@ describe('LoginForm', () => {
     
     const submitButton = screen.getByRole('button', { name: /signing in/i })
     expect(submitButton).toBeDisabled()
+  })
+
+  it('renders link to register page', () => {
+    render(<LoginForm />)
+    
+    const registerLink = screen.getByText(/create account/i)
+    expect(registerLink).toBeInTheDocument()
+    expect(registerLink.closest('a')).toHaveAttribute('href', '/register')
   })
 })

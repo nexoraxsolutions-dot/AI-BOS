@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { useAuth } from '../context/AuthContext'
 
 interface FormErrors {
@@ -159,6 +160,13 @@ export default function LoginForm() {
           <p className="text-sm text-red-400">{message}</p>
         </div>
       )}
+
+      <p className="text-center text-sm text-slate-400">
+        Don't have an account?{' '}
+        <Link href="/register" className="text-cyan-400 hover:text-cyan-300">
+          Create account
+        </Link>
+      </p>
     </form>
   )
 }

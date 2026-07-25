@@ -187,7 +187,49 @@ AI-BOS is an enterprise-grade AI Business Operating System built with FastAPI (b
 - Backend: 5 registration tests (success, duplicate email, duplicate username, validation errors, tokens+user response)
 - Frontend: 6 RegisterForm tests (renders, empty submission, short password, valid credentials, error display, loading state)
 
-## Milestone 18: Email Verification — ✅ Complete
+## Milestone 18: Login — ✅ Complete
+
+- [x] Add `LoginResponse` schema with user info to backend auth schemas
+- [x] Modify `/api/v1/auth/login` endpoint to return user info (LoginResponse)
+- [x] Add `/api/v1/auth/login-json` JSON-based login endpoint (REST-compatible)
+- [x] Update `LoginResponse` interface in frontend API client with user field
+- [x] Update `AuthContext` to store user info from login and register responses
+- [x] Create dedicated `/login` page with centered login form
+- [x] Update `LoginForm` component with link to register page
+- [x] Update home page (`/`) as landing page with sign in and create account buttons
+- [x] Update backend login tests to verify user info in response (4 tests)
+- [x] Update frontend LoginForm tests with register link test (7 tests)
+- [x] Update README.md with login endpoints and features
+- [x] Update PROJECT_STATUS.md
+- [x] Build backend (compile check passed)
+- [x] Build frontend (Next.js build passed)
+- [x] Run all backend tests (passed)
+- [x] Run frontend tests (passed)
+
+### Login Details
+
+**Backend:**
+- `POST /api/v1/auth/login` — Form-based login (OAuth2 compatible), returns access token, refresh token, and user profile
+- `POST /api/v1/auth/login-json` — JSON-based login (REST compatible), returns access token, refresh token, and user profile
+- Login response includes user info: id, email, full_name, username, is_active, is_superuser, company_id
+- Failed login attempts are logged with IP and user-agent tracking
+- Successful logins are logged with user details
+- Refresh tokens are stored in database with IP and user-agent tracking
+
+**Frontend:**
+- `/login` page with centered `LoginForm` component
+- Real-time field validation (email format, password required)
+- Error display for validation failures and API errors
+- Loading state on submit button
+- Link to register page (`/register`)
+- AuthContext stores user info in localStorage and state
+- Landing page (`/`) with sign in and create account buttons
+
+**Tests:**
+- Backend: 4 login tests (form login success, form login invalid, JSON login success, JSON login invalid)
+- Frontend: 7 LoginForm tests (renders, empty submission, invalid email, short password, valid credentials, error display, loading state, register link)
+
+## Milestone 19: Email Verification — ✅ Complete
 
 - [x] Email configuration settings in config.py (SMTP host, port, credentials, frontend URL)
 - [x] Email service for sending verification emails with HTML templates
@@ -224,9 +266,9 @@ AI-BOS is an enterprise-grade AI Business Operating System built with FastAPI (b
 
 | Suite | Tests | Status |
 |-------|-------|--------|
-| Backend (pytest) | 153 | ✅ All passed |
-| Frontend (Jest) | 21 | ✅ All passed |
-| **Total** | **174** | ✅ All passed |
+| Backend (pytest) | 155 | ✅ All passed |
+| Frontend (Jest) | 22 | ✅ All passed |
+| **Total** | **177** | ✅ All passed |
 
 ## Next Milestones
 

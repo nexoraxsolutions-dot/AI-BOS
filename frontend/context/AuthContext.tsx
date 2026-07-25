@@ -3,9 +3,20 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { login as apiLogin, register as apiRegister, refreshToken as apiRefreshToken } from '../lib/api';
 
+interface UserInfo {
+  id: number;
+  email: string;
+  full_name?: string | null;
+  username?: string | null;
+  is_active: boolean;
+  is_superuser: boolean;
+  company_id?: number | null;
+}
+
 interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
+  user: UserInfo | null;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, fullName?: string, username?: string) => Promise<void>;
   logout: () => void;
@@ -16,6 +27,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({
   token: null,
   isAuthenticated: false,
+  user: null,
   login: async () => {},
   register: async () => {},
   logout: () => {},
@@ -25,12 +37,21 @@ const AuthContext = createContext<AuthContextType>({
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<UserInfo | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem('ai_bos_token');
+    const storedUser = localStorage.getItem('ai_bos_user');
     if (stored) {
       setToken(stored);
+    }
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch {
+        localStorage.removeItem('ai_bos_user');
+      }
     }
   }, []);
 
@@ -63,6 +84,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (response.refresh_token) {
         localStorage.setItem('ai_bos_refresh_token', response.refresh_token);
       }
+      if (response.user) {
+        localStorage.setItem('ai_bos_user', JSON.stringify(response.user));
+        setUser(response.user);
+      }
       setToken(response.access_token);
     } finally {
       setLoading(false);
@@ -77,6 +102,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (response.refresh_token) {
         localStorage.setItem('ai_bos_refresh_token', response.refresh_token);
       }
+      if (response.user) {
+        localStorage.setItem('ai_bos_user', JSON.stringify(response.user));
+        setUser(response.user);
+      }
       setToken(response.access_token);
     } finally {
       setLoading(false);
@@ -86,7 +115,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     localStorage.removeItem('ai_bos_token');
     localStorage.removeItem('ai_bos_refresh_token');
+    localStorage.removeItem('ai_bos_user');
     setToken(null);
+    setUser(null);
   };
 
   return (
@@ -94,6 +125,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         token,
         isAuthenticated: !!token,
+        user,
         login,
         register,
         logout,
