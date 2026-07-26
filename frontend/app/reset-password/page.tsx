@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, FormEvent, useEffect } from 'react'
+import { useState, FormEvent, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { resetPassword } from '../../lib/api'
@@ -12,7 +12,7 @@ interface FormErrors {
   confirmPassword?: string
 }
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
@@ -80,7 +80,6 @@ export default function ResetPasswordPage() {
   function handleChange(field: string, value: string) {
     if (field === 'password') {
       setPassword(value)
-      // Also validate confirm password if it has been touched
       if (touched.confirmPassword && confirmPassword) {
         const error = validateConfirmPassword(confirmPassword, value)
         setErrors(prev => ({ ...prev, confirmPassword: error }))
@@ -100,10 +99,8 @@ export default function ResetPasswordPage() {
     setError(null)
     setMessage(null)
 
-    // Mark all fields as touched
     setTouched({ password: true, confirmPassword: true })
 
-    // Validate all fields
     const passwordError = validatePassword(password)
     const confirmPasswordError = validateConfirmPassword(confirmPassword, password)
     
@@ -131,7 +128,6 @@ export default function ResetPasswordPage() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'An error occurred. Please try again.'
       
-      // Check if it's an expired/invalid token error
       if (errorMessage.toLowerCase().includes('invalid or expired') || 
           errorMessage.toLowerCase().includes('invalid token')) {
         setError('This password reset link has expired or is invalid. Please request a new one.')
@@ -148,7 +144,6 @@ export default function ResetPasswordPage() {
     router.push('/forgot-password')
   }
 
-  // Success Screen
   if (screen === 'success' && message) {
     return (
       <main className="min-h-screen bg-slate-950 text-white py-12 px-6">
@@ -186,7 +181,6 @@ export default function ResetPasswordPage() {
     )
   }
 
-  // Error Screen (Invalid/Expired Token)
   if (screen === 'error' && error && !token) {
     return (
       <main className="min-h-screen bg-slate-950 text-white py-12 px-6">
@@ -238,7 +232,6 @@ export default function ResetPasswordPage() {
     )
   }
 
-  // Error Screen (Token exists but invalid/expired)
   if (screen === 'error' && error && token) {
     return (
       <main className="min-h-screen bg-slate-950 text-white py-12 px-6">
@@ -290,7 +283,6 @@ export default function ResetPasswordPage() {
     )
   }
 
-  // Reset Password Form
   return (
     <main className="min-h-screen bg-slate-950 text-white py-12 px-6">
       <div className="mx-auto flex max-w-6xl items-center justify-center">
@@ -425,5 +417,31 @@ export default function ResetPasswordPage() {
         </div>
       </div>
     </main>
+  )
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-slate-950 text-white py-12 px-6">
+        <div className="mx-auto flex max-w-6xl items-center justify-center">
+          <div className="w-full max-w-md">
+            <div className="mb-8 text-center">
+              <p className="text-cyan-300 uppercase tracking-[0.3em] text-sm">AI-BOS</p>
+              <h1 className="mt-4 text-4xl font-semibold">Reset Password</h1>
+              <p className="mt-2 text-slate-400">Enter your new password below</p>
+            </div>
+            <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-8 shadow-2xl backdrop-blur-xl">
+              <div className="text-center py-8">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto mb-4"></div>
+                <p className="text-slate-400">Loading...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    }>
+      <ResetPasswordContent />
+    </Suspense>
   )
 }

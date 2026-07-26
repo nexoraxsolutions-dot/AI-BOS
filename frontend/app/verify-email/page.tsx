@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { verifyEmail, resendVerification } from '@/lib/api';
+import { verifyEmail, resendVerification } from '../../lib/api';
 import Link from 'next/link';
 
 function VerifyEmailContent() {
@@ -19,13 +19,13 @@ function VerifyEmailContent() {
     if (token) {
       setStatus('loading');
       verifyEmail(token)
-        .then((data) => {
+         .then((data: { message: string }) => {
           setStatus('success');
           setMessage(data.message);
         })
-        .catch((err) => {
+         .catch((err: unknown) => {
           setStatus('error');
-          setMessage(err.message || 'Verification failed');
+          setMessage(err instanceof Error ? err.message : 'Verification failed');
         });
     } else {
       setStatus('idle');
