@@ -9,7 +9,17 @@ from app.core.redis import close_redis_client
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan events."""
-    # Startup
+    # Startup - seed default RBAC roles and permissions
+    from app.db.dependencies import get_async_session
+    from app.services.role import seed_default_roles_and_permissions
+    try:
+        async for session in get_async_session():
+            await seed_default_roles_and_permissions(session)
+            break
+    except Exception as e:
+        import logging
+        logger = logging.getLogger("ai_bos")
+        logger.warning("Could not seed roles (DB may not be ready): %s", e)
     yield
     # Shutdown
     await close_redis_client()

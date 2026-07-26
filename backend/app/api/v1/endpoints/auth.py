@@ -10,6 +10,8 @@ from app.schemas import auth as auth_schema
 from app.schemas import user as user_schema
 from app.services import auth as auth_service
 from app.services.audit_log import create_audit_log
+from app.services.password_reset import request_password_reset, reset_password as password_reset_service
+from app.services.rate_limiter import check_password_reset_rate_limit, check_reset_password_rate_limit, record_failed_reset_attempt
 from app.services.user import get_user_by_email
 
 router = APIRouter()
@@ -307,6 +309,88 @@ async def resend_verification(
         await auth_service.resend_verification_email(db, payload.email)
         return {"message": "Verification email sent successfully"}
     except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc),
+        ) from exc
+
+
+@router.post("/forgot-password", response_model=auth_schema.ForgotPasswordResponse)
+async def forgot_password(
+    request: Request,
+    payload: auth_schema.PasswordResetRequest,
+    db: AsyncSession = Depends(get_async_session),
+):
+    """Request a password reset email. Always returns the same response regardless of whether the email exists."""
+    client_ip = get_client_ip(request)
+    email = payload.email.lower()
+    
+    # Check if user exists (for rate limiting by user_id)
+    user = await get_user_by_email(db, email)
+    user_id = user.id if user else None
+    
+    # Check rate limits (IP, email, and user-based)
+    try:
+        await check_password_reset_rate_limit(
+            db,
+            ip_address=client_ip,
+            email=email,
+            user_id=user_id,
+        )
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail=str(exc),
+        ) from exc
+    
+    await request_password_reset(
+        db,
+        email=email,
+        client_ip=client_ip,
+        user_agent=get_user_agent(request),
+    )
+    return {"message": "If an account with that email exists, a password reset link has been sent."}
+
+
+@router.post("/reset-password", response_model=auth_schema.MessageResponse)
+async def reset_password(
+    request: Request,
+    payload: auth_schema.PasswordReset,
+    db: AsyncSession = Depends(get_async_session),
+):
+    """Reset password using a token from the password reset email."""
+    client_ip = get_client_ip(request)
+    
+    # Validate token first to get user_id for rate limiting
+    from app.services.password_reset import validate_reset_token
+    user = await validate_reset_token(db, payload.token)
+    user_id = user.id if user else None
+    
+    # Check rate limits (IP and user-based)
+    try:
+        await check_reset_password_rate_limit(
+            db,
+            ip_address=client_ip,
+            user_id=user_id,
+        )
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail=str(exc),
+        ) from exc
+    
+    try:
+        await password_reset_service(
+            db,
+            raw_token=payload.token,
+            new_password=payload.new_password,
+            client_ip=client_ip,
+            user_agent=get_user_agent(request),
+        )
+        return {"message": "Password has been reset successfully. You can now log in with your new password."}
+    except ValueError as exc:
+        # Record failed attempt for brute-force detection
+        await record_failed_reset_attempt(db, client_ip, user_id)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(exc),

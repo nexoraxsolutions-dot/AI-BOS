@@ -1,0 +1,22 @@
+ImportError while loading conftest 'C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\conftest.py'.
+tests\conftest.py:12: in <module>
+    from app.main import app
+app\main.py:5: in <module>
+    from app.api.v1 import api_router
+app\api\v1\__init__.py:2: in <module>
+    from app.api.v1.endpoints import auth, users, companies, dashboard, health, redis, environment_variables, tenant, audit_log, tokens
+app\api\v1\endpoints\__init__.py:1: in <module>
+    from app.api.v1.endpoints import auth, users, companies, dashboard
+app\api\v1\endpoints\auth.py:6: in <module>
+    from app.core import security, token
+app\core\token.py:8: in <module>
+    from app.services import token as token_service
+app\services\__init__.py:1: in <module>
+    from app.services import auth, company, user
+app\services\company.py:7: in <module>
+    from app.services.cache import cache_service
+app\services\cache.py:7: in <module>
+    from app.core.redis import get_redis_client
+app\core\redis.py:2: in <module>
+    import redis.asyncio as redis
+E   ModuleNotFoundError: No module named 'redis'

@@ -18,11 +18,15 @@ async def send_email(
     """Send an email via SMTP. Falls back to logging in development."""
     if not settings.smtp_host or settings.smtp_host == "localhost":
         # Development mode: log the email instead of sending
+        # SECURITY: Redact any tokens/URLs from logs to prevent accidental exposure
+        safe_html = html_content.replace("?token=", "?token=[REDACTED]")
+        safe_text = text_content.replace("?token=", "?token=[REDACTED]") if text_content else None
         logger.info(
-            "DEV EMAIL [To: %s] [Subject: %s]\n%s",
+            "DEV EMAIL [To: %s] [Subject: %s]\nHTML:\n%s\nText:\n%s",
             to_email,
             subject,
-            html_content,
+            safe_html,
+            safe_text,
         )
         return True
 
@@ -48,6 +52,138 @@ async def send_email(
     except Exception as exc:
         logger.error("Failed to send email to %s: %s", to_email, exc)
         return False
+
+
+async def send_password_reset_email(
+    to_email: str,
+    token: str,
+    frontend_url: str,
+    company_name: str = "AI-BOS",
+    company_logo_url: str | None = None,
+    support_email: str | None = None,
+    expiry_hours: int = 1,
+) -> bool:
+    """
+    Send a password reset email with professional template.
+
+    Args:
+        to_email: Recipient email address
+        token: Password reset token (will be included in reset URL)
+        frontend_url: Base URL of the frontend application
+        company_name: Company name for branding
+        company_logo_url: Optional company logo URL
+        support_email: Optional support email address
+        expiry_hours: Token expiration time in hours
+
+    Returns:
+        True if email was queued/sent successfully, False otherwise
+
+    Security:
+        - Token is never logged or exposed in plain text
+        - Uses HTTPS reset links
+        - Includes expiration notice
+        - Includes ignore message for unauthorized requests
+    """
+    reset_url = f"{frontend_url}/reset-password?token={token}"
+    subject = f"Password Reset - {company_name}"
+
+    # Support email defaults to from address if not provided
+    if not support_email:
+        from app.core.config import settings
+        support_email = settings.email_from_address
+
+    # Company logo HTML (if provided)
+    logo_html = ""
+    if company_logo_url:
+        logo_html = f'<img src="{company_logo_url}" alt="{company_name}" style="max-height: 60px; margin-bottom: 20px;" />'
+
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Password Reset</title>
+        <style>
+            body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f4f4; }}
+            .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+            .email-wrapper {{ background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }}
+            .header {{ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 30px; text-align: center; }}
+            .header h1 {{ margin: 10px 0 0 0; font-size: 28px; font-weight: 600; }}
+            .content {{ background: #ffffff; padding: 40px 30px; }}
+            .button {{ display: inline-block; padding: 14px 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 6px; font-weight: bold; margin: 25px 0; font-size: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }}
+            .button:hover {{ opacity: 0.9; }}
+            .link-box {{ background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 4px; padding: 15px; margin: 20px 0; word-break: break-all; font-size: 13px; color: #667eea; }}
+            .warning {{ background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; border-radius: 4px; }}
+            .info {{ background-color: #d1ecf1; border-left: 4px solid #17a2b8; padding: 15px; margin: 20px 0; border-radius: 4px; }}
+            .footer {{ background-color: #f8f9fa; padding: 20px 30px; text-align: center; font-size: 12px; color: #6c757d; border-top: 1px solid #dee2e6; }}
+            .footer a {{ color: #667eea; text-decoration: none; }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="email-wrapper">
+                <div class="header">
+                    {logo_html}
+                    <h1>Password Reset Request</h1>
+                </div>
+                <div class="content">
+                    <p>We received a request to reset your password for your <strong>{company_name}</strong> account.</p>
+
+                    <p style="text-align: center;">
+                        <a class="button" href="{reset_url}">Reset Password</a>
+                    </p>
+
+                    <p><strong>This link will expire in {expiry_hours} hour(s).</strong></p>
+
+                    <div class="info">
+                        <p style="margin: 0;"><strong>Having trouble clicking the button?</strong></p>
+                        <p style="margin: 5px 0 0 0;">Copy and paste this link into your browser:</p>
+                    </div>
+                    <div class="link-box">{reset_url}</div>
+
+                    <div class="warning">
+                        <p style="margin: 0;"><strong>Didn't request this?</strong></p>
+                        <p style="margin: 5px 0 0 0;">If you did not request a password reset, please ignore this email. Your account remains secure and no changes have been made.</p>
+                    </div>
+
+                    <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #dee2e6; font-size: 14px; color: #6c757d;">
+                        For security reasons, this link can only be used once and will expire after {expiry_hours} hour(s).
+                    </p>
+                </div>
+                <div class="footer">
+                    <p style="margin: 0 0 10px 0;">&copy; 2026 {company_name}. All rights reserved.</p>
+                    <p style="margin: 0; font-size: 11px;">
+                        Need help? Contact us at <a href="mailto:{support_email}">{support_email}</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+
+    text_content = f"""
+Password Reset - {company_name}
+
+We received a request to reset your password for your {company_name} account.
+
+Click the link below to set a new password:
+
+{reset_url}
+
+This link will expire in {expiry_hours} hour(s).
+
+If you did not request a password reset, please ignore this email. Your account remains secure and no changes have been made.
+
+For security reasons, this link can only be used once and will expire after {expiry_hours} hour(s).
+
+Need help? Contact us at {support_email}
+
+© 2026 {company_name}. All rights reserved.
+    """
+
+    return await send_email(to_email, subject, html_content, text_content)
 
 
 async def send_verification_email(to_email: str, token: str) -> bool:

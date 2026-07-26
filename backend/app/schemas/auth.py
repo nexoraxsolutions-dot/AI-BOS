@@ -62,6 +62,7 @@ class PasswordResetRequest(BaseModel):
 class PasswordReset(BaseModel):
     token: str
     new_password: str
+    confirm_password: str
 
     @field_validator('new_password')
     @classmethod
@@ -74,6 +75,13 @@ class PasswordReset(BaseModel):
             raise ValueError('Password must contain at least one lowercase letter')
         if not any(c.isdigit() for c in v):
             raise ValueError('Password must contain at least one digit')
+        return v
+
+    @field_validator('confirm_password')
+    @classmethod
+    def validate_confirm_password(cls, v, info):
+        if 'new_password' in info.data and v != info.data['new_password']:
+            raise ValueError('Passwords do not match')
         return v
 
 
@@ -104,6 +112,10 @@ class TokenValidationResponse(BaseModel):
 
 class MessageResponse(BaseModel):
     message: str
+
+
+class ForgotPasswordResponse(BaseModel):
+    message: str = "If an account with that email exists, a password reset link has been sent."
 
 
 class EmailVerificationRequest(BaseModel):

@@ -27,3 +27,24 @@ class User(Base):
         back_populates="user",
         cascade="all, delete-orphan"
     )
+
+    password_reset_tokens = relationship(
+        "PasswordResetToken",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+
+    password_history = relationship(
+        "PasswordHistory",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        order_by="desc(PasswordHistory.created_at)",
+    )
+
+    user_roles = relationship(
+        "UserRole",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        lazy="selectin",
+        foreign_keys="UserRole.user_id",
+    )

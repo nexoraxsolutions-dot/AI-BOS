@@ -758,3 +758,46 @@
 
     return response.json();
   }
+
+  // Forgot Password API functions
+  export interface ForgotPasswordResponse {
+    message: string;
+  }
+
+  export interface ResetPasswordResponse {
+    message: string;
+  }
+
+  export async function forgotPassword(email: string): Promise<ForgotPasswordResponse> {
+    const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ detail: 'Request failed' }));
+      throw new Error(error.detail || 'Request failed');
+    }
+
+    return response.json();
+  }
+
+  export async function resetPassword(token: string, newPassword: string, confirmPassword: string): Promise<ResetPasswordResponse> {
+    const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token, new_password: newPassword, confirm_password: confirmPassword }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ detail: 'Reset failed' }));
+      throw new Error(error.detail || 'Reset failed');
+    }
+
+    return response.json();
+  }
