@@ -4,5 +4,16 @@ from app.models.token import Token
 from app.models.password_reset import PasswordResetToken
 from app.models.password_history import PasswordHistory
 from app.models.role import Role, Permission, UserRole
+from app.models.audit_log import AuditLog
 
-__all__ = ["Company", "User", "Token", "PasswordResetToken", "Role", "Permission", "UserRole"]
+__all__ = [
+    "Company",
+    "User",
+    "Token",
+    "PasswordResetToken",
+    "PasswordHistory",
+    "Role",
+    "Permission",
+    "UserRole",
+    "AuditLog",
+]

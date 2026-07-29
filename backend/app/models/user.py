@@ -40,11 +40,10 @@ class User(Base):
         cascade="all, delete-orphan",
         order_by="desc(PasswordHistory.created_at)",
     )
-
     user_roles = relationship(
-        "UserRole",
-        back_populates="user",
-        cascade="all, delete-orphan",
-        lazy="selectin",
-        foreign_keys="UserRole.user_id",
+    "UserRole",
+    back_populates="user",
+    cascade="all, delete-orphan",
+    foreign_keys="UserRole.user_id",
     )
+
