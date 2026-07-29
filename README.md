@@ -116,8 +116,17 @@ ai-bos/
 - [x] Duplicate email and username validation on registration
 - [x] Registration audit logging with IP and user-agent tracking
 - [x] Frontend registration page with validation and error handling
-- [x] Email verification for new registrations
-- [x] 155+ backend tests + 22+ frontend tests
+ - [x] Email verification for new registrations
+ - [x] 155+ backend tests + 22+ frontend tests
+ - [x] Role-Based Access Control (RBAC) system
+ - [x] Permission-based authorization (resource:action pattern)
+ - [x] Default roles (admin, manager, user, viewer) with seeded permissions
+ - [x] Custom role creation with permission assignment
+ - [x] User-role assignment and management
+ - [x] Permission checking API for authorization decisions
+ - [x] RBAC API endpoints (permissions, roles, user roles, checks)
+ - [x] RBAC frontend UI with roles and permissions management
+ - [x] System role protection (cannot rename/delete system roles)
 
 ## API Endpoints
 

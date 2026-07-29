@@ -270,8 +270,65 @@ AI-BOS is an enterprise-grade AI Business Operating System built with FastAPI (b
 | Frontend (Jest) | 22 | ✅ All passed |
 | **Total** | **177** | ✅ All passed |
 
+## Milestone 20: Role-Based Access Control (RBAC) — ✅ Complete
+
+- [x] RBAC database models (Role, Permission, UserRole) with many-to-many relationships
+- [x] Database migration for RBAC tables (permissions, roles, role_permissions, user_roles)
+- [x] Permission schemas with resource:action pattern (e.g., users:read, companies:write)
+- [x] Role schemas with permission assignment support
+- [x] User-role assignment schemas
+- [x] Permission service with CRUD operations
+- [x] Role service with CRUD operations and permission management
+- [x] User-role assignment service (assign, remove, get user roles, get role users)
+- [x] Permission checking service (user_has_permission, get_user_permissions)
+- [x] Default role seeding (admin, manager, user, viewer) with 23 permissions
+- [x] System role protection (cannot rename or delete system roles)
+- [x] RBAC API endpoints registered in main router
+- [x] Permission endpoints (list, create, delete)
+- [x] Role endpoints (list, get, create, update, delete)
+- [x] User role assignment endpoints (get user roles, assign role, remove role)
+- [x] Role users endpoint (get all users with a specific role)
+- [x] Permission checking endpoint (check if current user has permission)
+- [x] User permissions endpoint (get all permissions for a user)
+- [x] Superuser bypass for all permission checks
+- [x] RBAC API functions in frontend (getPermissions, createRole, assignRoleToUser, etc.)
+- [x] Roles management page with tabs (Roles and Permissions)
+- [x] Role creation modal with permission checkboxes
+- [x] Role editing modal with permission management
+- [x] Role deletion with system role protection
+- [x] User assignment modal (assign/remove users from roles)
+- [x] Permissions table view (read-only)
+- [x] Navigation link to roles page
+- [x] Backend: 22 RBAC tests (all passed)
+- [x] Frontend build successful
+- [x] README.md updated with RBAC features
+- [x] PROJECT_STATUS.md updated
+
+### RBAC Details
+
+**Backend:**
+- **Models**: `Role`, `Permission`, `UserRole` with proper relationships and cascading deletes
+- **Migration**: `7c70e2aecf55_create_rbac_tables.py` creates all RBAC tables
+- **Services**: Complete CRUD for permissions and roles, user-role assignment, permission checking
+- **Default Roles**: 
+  - `admin` — all 23 permissions
+  - `manager` — 13 permissions (read/write on most resources)
+  - `user` — 6 permissions (read-only on most resources)
+  - `viewer` — 3 permissions (basic read-only)
+- **Endpoints**: 10 RBAC endpoints under `/api/v1/roles/`
+- **Security**: Superusers bypass all permission checks, system roles protected from modification
+
+**Frontend:**
+- **Page**: `/roles` with tabbed interface (Roles and Permissions)
+- **Features**: Create/edit/delete roles, assign permissions, manage user assignments
+- **UI**: Modal-based forms, permission checkboxes, user assignment panels
+- **Navigation**: Added "Roles" link to main navigation
+
+**Tests:**
+- Backend: 22 RBAC tests covering seeding, CRUD, assignment, permission checking, and endpoints
+- All tests passed successfully
+
 ## Next Milestones
 
-- **Milestone 19**: Password reset via email
-- **Milestone 20**: Role-based access control (RBAC)
-- **Milestone 21**: Activity monitoring dashboard
+- **Milestone 21**: Password reset via email
+- **Milestone 22**: Activity monitoring dashboard

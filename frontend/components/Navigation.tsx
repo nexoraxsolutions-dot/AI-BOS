@@ -77,6 +77,12 @@ export default function Navigation() {
                 Audit Logs
               </button>
               <button
+                onClick={() => router.push('/roles')}
+                className="text-sm text-slate-300 hover:text-white transition"
+              >
+                Roles
+              </button>
+              <button
                 onClick={() => router.push('/profile')}
                 className="text-sm text-slate-300 hover:text-white transition"
               >

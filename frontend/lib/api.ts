@@ -801,3 +801,154 @@
 
     return response.json();
   }
+
+  // RBAC API functions
+  export interface Permission {
+    id: number;
+    name: string;
+    description?: string;
+    resource: string;
+    action: string;
+    created_at: string;
+  }
+
+  export interface Role {
+    id: number;
+    name: string;
+    description?: string;
+    is_system_role: boolean;
+    created_at: string;
+    updated_at?: string;
+    permissions: Permission[];
+  }
+
+  export interface RoleList {
+    id: number;
+    name: string;
+    description?: string;
+    is_system_role: boolean;
+    permission_count: number;
+    user_count: number;
+    created_at: string;
+  }
+
+  export interface UserRole {
+    id: number;
+    user_id: number;
+    role_id: number;
+    assigned_at: string;
+    role: Role;
+  }
+
+  export interface UserWithRoles {
+    id: number;
+    email: string;
+    full_name?: string;
+    username?: string;
+    is_active: boolean;
+    is_superuser: boolean;
+    roles: Role[];
+  }
+
+  export interface UserPermissions {
+    user_id: number;
+    email: string;
+    permissions: string[];
+    roles: string[];
+  }
+
+  export interface PermissionCheck {
+    resource: string;
+    action: string;
+    has_permission: boolean;
+  }
+
+  export async function getPermissions(): Promise<Permission[]> {
+    return request<Permission[]>('/roles/permissions');
+  }
+
+  export async function createPermission(data: {
+    name: string;
+    resource: string;
+    action: string;
+    description?: string;
+  }): Promise<Permission> {
+    return request<Permission>('/roles/permissions', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  export async function deletePermission(permissionId: number): Promise<void> {
+    await request(`/roles/permissions/${permissionId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  export async function getRoles(): Promise<RoleList[]> {
+    return request<RoleList[]>('/roles/roles');
+  }
+
+  export async function getRole(roleId: number): Promise<Role> {
+    return request<Role>(`/roles/roles/${roleId}`);
+  }
+
+  export async function createRole(data: {
+    name: string;
+    description?: string;
+    permission_ids?: number[];
+  }): Promise<Role> {
+    return request<Role>('/roles/roles', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  export async function updateRole(roleId: number, data: {
+    name?: string;
+    description?: string;
+    permission_ids?: number[];
+  }): Promise<Role> {
+    return request<Role>(`/roles/roles/${roleId}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  export async function deleteRole(roleId: number): Promise<void> {
+    await request(`/roles/roles/${roleId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  export async function getUserRoles(userId: number): Promise<Role[]> {
+    return request<Role[]>(`/roles/users/${userId}/roles`);
+  }
+
+  export async function assignRoleToUser(userId: number, roleId: number): Promise<UserRole> {
+    return request<UserRole>(`/roles/users/${userId}/roles`, {
+      method: 'POST',
+      body: JSON.stringify({ user_id: userId, role_id: roleId }),
+    });
+  }
+
+  export async function removeRoleFromUser(userId: number, roleId: number): Promise<void> {
+    await request(`/roles/users/${userId}/roles/${roleId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  export async function getRoleUsers(roleId: number): Promise<UserWithRoles[]> {
+    return request<UserWithRoles[]>(`/roles/roles/${roleId}/users`);
+  }
+
+  export async function getUserPermissions(userId: number): Promise<UserPermissions> {
+    return request<UserPermissions>(`/roles/users/${userId}/permissions`);
+  }
+
+  export async function checkPermission(resource: string, action: string): Promise<PermissionCheck> {
+    return request<PermissionCheck>('/roles/check-permission', {
+      method: 'POST',
+      body: JSON.stringify({ resource, action }),
+    });
+  }
