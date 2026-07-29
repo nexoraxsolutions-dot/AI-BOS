@@ -47,6 +47,12 @@ export default function Navigation() {
                 Companies
               </button>
               <button
+                onClick={() => router.push('/departments')}
+                className="text-sm text-slate-300 hover:text-white transition"
+              >
+                Departments
+              </button>
+              <button
                 onClick={() => router.push('/tenants')}
                 className="text-sm text-slate-300 hover:text-white transition"
               >
@@ -81,6 +87,12 @@ export default function Navigation() {
                 className="text-sm text-slate-300 hover:text-white transition"
               >
                 Roles
+              </button>
+              <button
+                onClick={() => router.push('/organization-settings')}
+                className="text-sm text-slate-300 hover:text-white transition"
+              >
+                Organization Settings
               </button>
               <button
                 onClick={() => router.push('/profile')}

@@ -127,6 +127,22 @@ ai-bos/
  - [x] RBAC API endpoints (permissions, roles, user roles, checks)
  - [x] RBAC frontend UI with roles and permissions management
  - [x] System role protection (cannot rename/delete system roles)
+ - [x] Organization settings management system
+ - [x] Organization settings for localization (timezone, date/time format, language, currency)
+ - [x] Organization settings for security policies (password requirements, 2FA, session timeout)
+ - [x] Organization settings for notifications (email notifications, event-based alerts)
+ - [x] Organization settings for branding (primary color, logo URL, custom CSS)
+ - [x] Organization settings for feature flags (user registration, API access, audit logs, data export)
+ - [x] Role-based access control for settings (superuser can edit all, regular users limited)
+ - [x] Organization settings REST API with validation
+ - [x] Organization settings frontend UI with tabbed interface
+ - [x] Default settings template and reset functionality
+ - [x] Department management system with company association
+ - [x] Department CRUD operations with manager assignment
+ - [x] Department budget and location tracking
+ - [x] Department statistics and analytics
+ - [x] Department search, filtering, and pagination
+ - [x] Department management UI with modals
 
 ## API Endpoints
 

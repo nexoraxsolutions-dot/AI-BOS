@@ -14,6 +14,7 @@ from app.db import Base, get_async_session
 from app.core.security import get_password_hash, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
 from app.models.user import User
 from app.models.company import Company
+from app.models.department import Department
 
 DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 
@@ -106,3 +107,20 @@ async def admin_token_headers(admin_user):
         expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
     )
     return {"Authorization": f"Bearer {token}"}
+
+
+@pytest.fixture
+async def test_department(db_session, test_company):
+    """Create a test department."""
+    department = Department(
+        name="Test Department",
+        description="A test department",
+        company_id=test_company.id,
+        budget="$50,000",
+        location="Building B",
+        is_active=True,
+    )
+    db_session.add(department)
+    await db_session.commit()
+    await db_session.refresh(department)
+    return department

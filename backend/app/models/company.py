@@ -29,3 +29,4 @@ class Company(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     users = relationship("User", back_populates="company")
+    departments = relationship("Department", back_populates="company", cascade="all, delete-orphan")

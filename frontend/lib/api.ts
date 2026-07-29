@@ -952,3 +952,187 @@
       body: JSON.stringify({ resource, action }),
     });
   }
+
+  // Organization Settings API functions
+  export interface OrganizationSettings {
+    id: number;
+    company_id: number;
+    timezone: string;
+    date_format: string;
+    time_format: string;
+    language: string;
+    currency: string;
+    password_min_length: number;
+    password_require_uppercase: boolean;
+    password_require_lowercase: boolean;
+    password_require_numbers: boolean;
+    password_require_special_chars: boolean;
+    password_expiry_days: number;
+    session_timeout_minutes: number;
+    enforce_2fa: boolean;
+    max_login_attempts: number;
+    email_notifications_enabled: boolean;
+    notify_on_user_creation: boolean;
+    notify_on_user_deletion: boolean;
+    notify_on_password_reset: boolean;
+    notify_on_security_alerts: boolean;
+    notify_on_subscription_changes: boolean;
+    primary_color: string;
+    logo_url?: string;
+    custom_css?: string;
+    enable_user_registration: boolean;
+    enable_api_access: boolean;
+    enable_audit_logs: boolean;
+    enable_data_export: boolean;
+    custom_settings?: Record<string, unknown>;
+    created_at?: string;
+    updated_at?: string;
+  }
+
+  export interface OrganizationSettingsUpdate {
+    timezone?: string;
+    date_format?: string;
+    time_format?: string;
+    language?: string;
+    currency?: string;
+    password_min_length?: number;
+    password_require_uppercase?: boolean;
+    password_require_lowercase?: boolean;
+    password_require_numbers?: boolean;
+    password_require_special_chars?: boolean;
+    password_expiry_days?: number;
+    session_timeout_minutes?: number;
+    enforce_2fa?: boolean;
+    max_login_attempts?: number;
+    email_notifications_enabled?: boolean;
+    notify_on_user_creation?: boolean;
+    notify_on_user_deletion?: boolean;
+    notify_on_password_reset?: boolean;
+    notify_on_security_alerts?: boolean;
+    notify_on_subscription_changes?: boolean;
+    primary_color?: string;
+    logo_url?: string;
+    custom_css?: string;
+    enable_user_registration?: boolean;
+    enable_api_access?: boolean;
+    enable_audit_logs?: boolean;
+    enable_data_export?: boolean;
+    custom_settings?: Record<string, unknown>;
+  }
+
+  export async function getOrganizationSettings(): Promise<OrganizationSettings> {
+    return request<OrganizationSettings>('/organization-settings/');
+  }
+
+  export async function updateOrganizationSettings(data: OrganizationSettingsUpdate): Promise<OrganizationSettings> {
+    return request<OrganizationSettings>('/organization-settings/', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  export async function getDefaultOrganizationSettings(): Promise<OrganizationSettings> {
+    return request<OrganizationSettings>('/organization-settings/defaults');
+  }
+
+  // Department API functions
+  export interface Department {
+    id: number;
+    name: string;
+    description?: string;
+    company_id: number;
+    manager_id?: number;
+    budget?: string;
+    location?: string;
+    is_active: boolean;
+    created_at?: string;
+    updated_at?: string;
+    manager_name?: string;
+    company_name?: string;
+    employee_count?: number;
+  }
+
+  export interface DepartmentCreate {
+    name: string;
+    description?: string;
+    company_id: number;
+    manager_id?: number;
+    budget?: string;
+    location?: string;
+    is_active?: boolean;
+  }
+
+  export interface DepartmentUpdate {
+    name?: string;
+    description?: string;
+    manager_id?: number;
+    budget?: string;
+    location?: string;
+    is_active?: boolean;
+  }
+
+  export interface DepartmentStats {
+    total_departments: number;
+    active_departments: number;
+    inactive_departments: number;
+    total_companies_with_departments: number;
+    avg_departments_per_company: number | null;
+    departments_by_company: Record<string, number>;
+  }
+
+  export interface DepartmentListResponse {
+    items: Department[];
+    total: number;
+    page: number;
+    page_size: number;
+  }
+
+  export async function getDepartments(params?: {
+    skip?: number;
+    limit?: number;
+    search?: string;
+    company_id?: number;
+    is_active?: boolean;
+    manager_id?: number;
+    sort_by?: string;
+    sort_order?: string;
+  }): Promise<DepartmentListResponse> {
+    const searchParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          searchParams.append(key, String(value));
+        }
+      });
+    }
+    const query = searchParams.toString();
+    return request<DepartmentListResponse>(`/departments/?${query}`);
+  }
+
+  export async function getDepartment(id: number): Promise<Department> {
+    return request<Department>(`/departments/${id}`);
+  }
+
+  export async function createDepartment(data: DepartmentCreate): Promise<Department> {
+    return request<Department>('/departments/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  export async function updateDepartment(id: number, data: DepartmentUpdate): Promise<Department> {
+    return request<Department>(`/departments/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  export async function deleteDepartment(id: number): Promise<void> {
+    await request(`/departments/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  export async function getDepartmentStats(): Promise<DepartmentStats> {
+    return request<DepartmentStats>('/departments/stats');
+  }

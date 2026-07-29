@@ -46,4 +46,10 @@ class User(Base):
     cascade="all, delete-orphan",
     foreign_keys="UserRole.user_id",
     )
+    
+    managed_departments = relationship(
+    "Department",
+    back_populates="manager",
+    foreign_keys="Department.manager_id",
+    )
 

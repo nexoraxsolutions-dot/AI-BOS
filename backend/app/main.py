@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1 import api_router
+from app.api.v1.endpoints import organization_settings as org_settings_router
 from app.core.redis import close_redis_client
 
 
@@ -34,11 +35,13 @@ app = FastAPI(
         {"name": "Auth", "description": "Authentication operations"},
         {"name": "Users", "description": "User management operations"},
         {"name": "Companies", "description": "Company management operations"},
+        {"name": "Departments", "description": "Department management operations"},
         {"name": "Dashboard", "description": "Dashboard operations"},
         {"name": "Redis", "description": "Redis cache management operations"},
         {"name": "Tenants", "description": "Multi-tenancy management operations"},
         {"name": "Audit Logs", "description": "Audit log and activity tracking operations"},
         {"name": "Tokens", "description": "Token management and revocation operations"},
+        {"name": "Organization Settings", "description": "Organization settings and configuration operations"},
     ],
     lifespan=lifespan,
 )
@@ -57,3 +60,4 @@ app.add_middleware(
 )
 
 app.include_router(api_router, prefix="/api/v1")
+app.include_router(org_settings_router.router, prefix="/api/v1/organization-settings", tags=["Organization Settings"])

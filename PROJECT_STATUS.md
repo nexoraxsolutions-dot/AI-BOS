@@ -328,7 +328,104 @@ AI-BOS is an enterprise-grade AI Business Operating System built with FastAPI (b
 - Backend: 22 RBAC tests covering seeding, CRUD, assignment, permission checking, and endpoints
 - All tests passed successfully
 
+## Milestone 22: Organization Settings — ✅ Complete
+
+- [x] Organization settings database model with 30+ configurable fields
+- [x] Database migration for organization_settings table (revision 0010)
+- [x] Organization settings Pydantic schemas with comprehensive validation
+- [x] Organization settings service layer with caching support
+- [x] REST API endpoints (GET, POST, PUT, DELETE, defaults)
+- [x] Role-based access control (superuser can edit all, regular users limited to branding/localization)
+- [x] Organization settings frontend page with tabbed interface
+- [x] Tabbed UI: General, Security, Notifications, Branding, Features
+- [x] Real-time form updates with change tracking
+- [x] Reset to defaults functionality
+- [x] Comprehensive input validation (timezone, currency, color, password length, etc.)
+- [x] Audit logging for all settings changes
+- [x] Backend: 15 organization settings tests (all passed)
+- [x] Frontend build successful
+- [x] README.md updated with organization settings features
+- [x] PROJECT_STATUS.md updated
+
+### Organization Settings Details
+
+**Backend:**
+- **Model**: `OrganizationSettings` with company_id foreign key (one-to-one relationship)
+- **Migration**: `0010_create_organization_settings.py` creates table with all fields and indexes
+- **Schemas**: `OrganizationSettingsBase`, `OrganizationSettingsCreate`, `OrganizationSettingsUpdate`, `OrganizationSettingsOut`
+- **Validation**: Timezone (pytz), date/time format, language, currency, password length (6-128), color (hex), session timeout (5-1440 min)
+- **Services**: CRUD operations with Redis caching (TTL: 600s), auto-create defaults on first access
+- **Endpoints**: 6 endpoints under `/api/v1/organization-settings/`
+  - `GET /` — Get current user's company settings (auto-creates defaults)
+  - `POST /` — Create settings for a company (superuser only)
+  - `PUT /` — Update current user's company settings (restricted fields for non-superusers)
+  - `PUT /{company_id}` — Update any company's settings (superuser only)
+  - `DELETE /` — Delete settings (superuser only)
+  - `GET /defaults` — Get default settings template
+
+**Frontend:**
+- **Page**: `/organization-settings` with 5 tabs
+- **Tabs**: General (timezone, date/time format, language, currency), Security (password policies, 2FA, session timeout), Notifications (email alerts), Branding (color, logo, CSS), Features (feature flags)
+- **Access Control**: Superusers can edit all settings, regular users can only edit timezone, date/time format, language, currency, primary color, logo URL, custom CSS
+- **Features**: Real-time form updates, change tracking, reset to defaults, success/error notifications
+
+**Settings Categories:**
+1. **Localization**: timezone, date_format, time_format, language, currency
+2. **Security**: password_min_length, password_require_uppercase/lowercase/numbers/special_chars, password_expiry_days, session_timeout_minutes, enforce_2fa, max_login_attempts
+3. **Notifications**: email_notifications_enabled, notify_on_user_creation/deletion/password_reset/security_alerts/subscription_changes
+4. **Branding**: primary_color (hex), logo_url, custom_css
+5. **Feature Flags**: enable_user_registration, enable_api_access, enable_audit_logs, enable_data_export
+6. **Custom**: custom_settings (JSON field for extensibility)
+
+## Milestone 23: Departments — ✅ Complete
+
+- [x] Department database model with company association and manager assignment
+- [x] Database migration for departments table (revision 0011)
+- [x] Department Pydantic schemas with comprehensive validation
+- [x] Department service layer with CRUD operations and caching
+- [x] REST API endpoints (CRUD + stats)
+- [x] Department search, filtering, and pagination
+- [x] Department statistics API (total, active, inactive, per-company distribution)
+- [x] Manager and company name resolution in department details
+- [x] Department frontend page with table view
+- [x] Create/Edit/Delete modals with form validation
+- [x] Search, filter, and sort controls
+- [x] Statistics cards (total, active, companies with departments, average per company)
+- [x] Navigation link to departments page
+- [x] Audit logging for all department operations
+- [x] Backend: 11 department tests (all passed)
+- [x] Frontend build successful
+- [x] README.md updated with department features
+- [x] PROJECT_STATUS.md updated
+
+### Department Details
+
+**Backend:**
+- **Model**: `Department` with company_id (FK to companies), manager_id (FK to users), budget, location, is_active
+- **Migration**: `0011_create_departments.py` creates table with indexes and foreign keys
+- **Schemas**: `DepartmentBase`, `DepartmentCreate`, `DepartmentUpdate`, `DepartmentOut`, `DepartmentStats`, `DepartmentListResponse`
+- **Validation**: Name (2-100 chars), budget (formats like $100,000 or 100K), location (max 255 chars)
+- **Services**: CRUD operations with Redis caching (TTL: 600s for individual, 300s for stats)
+- **Endpoints**: 6 endpoints under `/api/v1/departments/`
+  - `POST /` — Create department (superuser only)
+  - `GET /` — List departments with search/filter/pagination (authenticated)
+  - `GET /stats` — Get department statistics (authenticated)
+  - `GET /{id}` — Get department with details (authenticated)
+  - `PUT /{id}` — Update department (superuser only)
+  - `DELETE /{id}` — Delete department (superuser only)
+
+**Frontend:**
+- **Page**: `/departments` with table view
+- **Features**: Search by name/description/location, filter by company ID and status, sort by name/created_at/company_id
+- **UI**: Statistics cards, data table with pagination, create/edit/delete modals
+- **Access Control**: Superusers see create/edit/delete buttons, regular users have read-only access
+- **Validation**: Real-time form validation, error display, loading states
+
+**Test Coverage:**
+- Backend: 11 tests covering CRUD, authorization, filtering, search, validation, and stats
+- All tests passed successfully
+
 ## Next Milestones
 
-- **Milestone 21**: Password reset via email
-- **Milestone 22**: Activity monitoring dashboard
+- **Milestone 23**: Advanced reporting and analytics
+- **Milestone 24**: API rate limiting and throttling
