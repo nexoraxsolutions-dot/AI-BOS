@@ -17,6 +17,10 @@ class Token(Base):
     is_revoked = Column(Boolean, default=False)
     expires_at = Column(DateTime, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
+    device_name = Column(String(255), nullable=True)
+    device_type = Column(String(50), nullable=True)
+    last_used_at = Column(DateTime, nullable=True)
+    is_current = Column(Boolean, default=False)
 
     user = relationship(
            "User",

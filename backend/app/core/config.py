@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     secret_key: str = "replace-with-secure-env-value"
     access_token_expire_minutes: int = 60
     refresh_token_expire_minutes: int = 10080  # 7 days
+    session_expire_hours: int = 24
     redis_url: str = "redis://localhost:6379/0"
 
     # Email configuration

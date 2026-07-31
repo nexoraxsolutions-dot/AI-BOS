@@ -1,7 +1,7 @@
 """create rbac tables
 
 Revision ID: 7c70e2aecf55
-Revises: 0009
+Revises: "0017"
 Create Date: 2026-07-28 21:43:25.653016
 
 """
@@ -15,7 +15,7 @@ from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
 revision: str = "7c70e2aecf55"
-down_revision: Union[str, None] = '0009'
+down_revision: Union[str, None] = '0017'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

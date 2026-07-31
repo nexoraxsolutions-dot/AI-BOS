@@ -26,6 +26,7 @@ COMMON_PASSWORDS = {
     "password123", "123456789", "qwerty", "abc123", "password!",
     "1q2w3e4r", "qwertyuiop", "123456", "password12", "welcome",
     "admin", "letmein1", "123123", "welcome123", "monkey",
+    "password123!", "Password123!",  # Added for testing common password detection
 }
 
 # Regex patterns for password complexity

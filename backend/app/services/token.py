@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.token import Token
 from app.schemas.token import TokenCreate, TokenOut
+from app.services.device import generate_device_name, generate_device_type
 
 logger = logging.getLogger("ai_bos")
 
@@ -45,6 +46,8 @@ async def store_token(
         client_ip=client_ip,
         user_agent=user_agent,
         expires_at=expires_at,
+        device_name=generate_device_name(user_agent) if user_agent else None,
+        device_type=generate_device_type(user_agent) if user_agent else None,
     )
     db.add(token)
     await db.commit()

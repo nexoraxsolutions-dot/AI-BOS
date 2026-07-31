@@ -6,7 +6,6 @@ from app.api.v1 import api_router
 from app.api.v1.endpoints import organization_settings as org_settings_router
 from app.core.redis import close_redis_client
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan events."""
@@ -21,6 +20,18 @@ async def lifespan(app: FastAPI):
         import logging
         logger = logging.getLogger("ai_bos")
         logger.warning("Could not seed roles (DB may not be ready): %s", e)
+
+    # Configure database logging handler
+    try:
+        import logging
+        from app.core.logging_handler import setup_database_logging
+        db_handler = setup_database_logging(level=logging.INFO)
+        logging.getLogger("ai_bos").addHandler(db_handler)
+    except Exception as e:
+        import logging
+        logger = logging.getLogger("ai_bos")
+        logger.warning("Could not configure database logging handler: %s", e)
+
     yield
     # Shutdown
     await close_redis_client()
@@ -42,6 +53,7 @@ app = FastAPI(
         {"name": "Audit Logs", "description": "Audit log and activity tracking operations"},
         {"name": "Tokens", "description": "Token management and revocation operations"},
         {"name": "Organization Settings", "description": "Organization settings and configuration operations"},
+        {"name": "Logging History", "description": "Application log history and management operations"},
     ],
     lifespan=lifespan,
 )

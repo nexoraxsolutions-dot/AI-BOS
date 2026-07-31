@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision: str = '0010'
-down_revision: Union[str, None] = '0009_create_password_reset_tokens'
+down_revision: Union[str, None] = '0009'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

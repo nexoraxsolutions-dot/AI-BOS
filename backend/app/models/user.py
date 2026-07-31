@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, Integer
 from sqlalchemy.orm import relationship
 
 from app.db import Base
@@ -16,14 +16,27 @@ class User(Base):
     is_superuser = Column(Boolean, default=False)
     is_email_verified = Column(Boolean, default=False)
     email_verification_token = Column(String, nullable=True)
+    is_2fa_enabled = Column(Boolean, default=False)
+    otp_secret = Column(String, nullable=True)
     company_id = Column(Integer, ForeignKey("companies.id"), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    # Account lock fields
+    failed_login_attempts = Column(Integer, default=0)
+    locked_until = Column(DateTime, nullable=True)
+    lock_reason = Column(String, nullable=True)
 
     company = relationship("Company", back_populates="users")
     
     tokens = relationship(
         "Token",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
+
+    sessions = relationship(
+        "UserSession",
         back_populates="user",
         cascade="all, delete-orphan"
     )
@@ -40,6 +53,12 @@ class User(Base):
         cascade="all, delete-orphan",
         order_by="desc(PasswordHistory.created_at)",
     )
+    backup_codes = relationship(
+        "TwoFactorBackupCode",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+
     user_roles = relationship(
     "UserRole",
     back_populates="user",
@@ -51,5 +70,11 @@ class User(Base):
     "Department",
     back_populates="manager",
     foreign_keys="Department.manager_id",
+    )
+
+    api_keys = relationship(
+        "ApiKey",
+        back_populates="user",
+        cascade="all, delete-orphan",
     )
 

@@ -77,7 +77,7 @@ async def login(
     db: AsyncSession = Depends(get_async_session),
 ):
     """User login with email/password (form-based, OAuth2 compatible)."""
-    user = await auth_service.authenticate_user(db, form_data.username, form_data.password)
+    user = await auth_service.authenticate_user(db, form_data.username, form_data.password, request)
     if not user:
         # Log failed login attempt
         await create_audit_log(
@@ -132,7 +132,7 @@ async def login_json(
     db: AsyncSession = Depends(get_async_session),
 ):
     """User login with email/password (JSON body, REST-compatible)."""
-    user = await auth_service.authenticate_user(db, payload.email, payload.password)
+    user = await auth_service.authenticate_user(db, payload.email, payload.password, request)
     if not user:
         # Log failed login attempt
         await create_audit_log(

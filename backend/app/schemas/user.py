@@ -69,6 +69,10 @@ class UserOut(UserBase):
     company_id: Optional[int] = None
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
+    # Account lock fields
+    failed_login_attempts: int = 0
+    locked_until: Optional[datetime] = None
+    lock_reason: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)
 
