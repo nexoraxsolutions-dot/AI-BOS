@@ -1,0 +1,10 @@
+(protected)
+api
+forgot-password
+login
+register
+reset-password
+verify-email
+globals.css
+layout.tsx
+page.tsx

@@ -1,0 +1,13 @@
+
+LineNumber Line
+---------- ----
+        18   export interface User {
+       238   export async function getUsers(): Promise<User[]> {
+       997   export interface Role {
+      1016   export async function getRoleUsers(roleId: number): Promise<User[]> {
+      1020   export interface RoleList {
+      1030   export async function getRoles(): Promise<RoleList[]> {
+      1031     return request<RoleList[]>('/roles/');
+      1084   export interface UserWithRoles extends User {
+
+

@@ -1,0 +1,250 @@
+
+Path                                                                                          LineNumber Line
+----                                                                                          ---------- ----
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_organization_settings.py         13 async def test_get_organizat
+                                                                                                         ion_settings_defaults(client
+                                                                                                         : AsyncClient, db_session:
+                                                                                                         AsyncSession, test_user:
+                                                                                                         User, test_company:
+                                                                                                         Company,
+                                                                                                         user_token_headers: dict):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_organization_settings.py         29 async def test_update_organi
+                                                                                                         zation_settings(client:
+                                                                                                         AsyncClient, db_session:
+                                                                                                         AsyncSession, test_user:
+                                                                                                         User, test_company:
+                                                                                                         Company,
+                                                                                                         user_token_headers: dict):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_organization_settings.py         53 async def test_get_default_o
+                                                                                                         rganization_settings(client:
+                                                                                                          AsyncClient,
+                                                                                                         admin_token_headers: dict):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_organization_settings.py         65 async def test_create_organi
+                                                                                                         zation_settings_as_superuser
+                                                                                                         (client: AsyncClient,
+                                                                                                         db_session: AsyncSession,
+                                                                                                         admin_token_headers: dict,
+                                                                                                         test_company: Company):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_organization_settings.py         91 async def test_create_organi
+                                                                                                         zation_settings_duplicate(cl
+                                                                                                         ient: AsyncClient,
+                                                                                                         db_session: AsyncSession,
+                                                                                                         admin_token_headers: dict,
+                                                                                                         test_company: Company):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_organization_settings.py        109 async def test_update_organi
+                                                                                                         zation_settings_as_superuser
+                                                                                                         _for_company(client:
+                                                                                                         AsyncClient, db_session:
+                                                                                                         AsyncSession,
+                                                                                                         admin_token_headers: dict,
+                                                                                                         test_company: Company):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_organization_settings.py        127 async def test_validation_ti
+                                                                                                         mezone(client: AsyncClient,
+                                                                                                         db_session: AsyncSession,
+                                                                                                         test_user: User,
+                                                                                                         test_company: Company,
+                                                                                                         user_token_headers: dict):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_organization_settings.py        138 async def test_validation_pa
+                                                                                                         ssword_min_length(client:
+                                                                                                         AsyncClient, db_session:
+                                                                                                         AsyncSession, test_user:
+                                                                                                         User, test_company:
+                                                                                                         Company,
+                                                                                                         admin_token_headers: dict):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_organization_settings.py        157 async def test_validation_cu
+                                                                                                         rrency(client: AsyncClient,
+                                                                                                         db_session: AsyncSession,
+                                                                                                         test_user: User,
+                                                                                                         test_company: Company,
+                                                                                                         user_token_headers: dict):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_organization_settings.py        173 async def test_validation_pr
+                                                                                                         imary_color(client:
+                                                                                                         AsyncClient, db_session:
+                                                                                                         AsyncSession, test_user:
+                                                                                                         User, test_company:
+                                                                                                         Company,
+                                                                                                         user_token_headers: dict):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_organization_settings.py        189 async def test_unauthorized_
+                                                                                                         access(client: AsyncClient):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_organization_settings.py        196 async def test_user_without_
+                                                                                                         company(client:
+                                                                                                         AsyncClient, db_session:
+                                                                                                         AsyncSession, test_user:
+                                                                                                         User, user_token_headers:
+                                                                                                         dict):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_organization_settings.py        207 async def test_delete_organi
+                                                                                                         zation_settings_as_superuser
+                                                                                                         (client: AsyncClient,
+                                                                                                         db_session: AsyncSession,
+                                                                                                         admin_token_headers: dict,
+                                                                                                         test_company: Company):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_organization_settings.py        223 async def test_regular_user_
+                                                                                                         cannot_update_restricted_fie
+                                                                                                         lds(client: AsyncClient,
+                                                                                                         db_session: AsyncSession,
+                                                                                                         test_user: User,
+                                                                                                         test_company: Company,
+                                                                                                         user_token_headers: dict):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_password_policy.py               12 async def test_get_password_
+                                                                                                         policy_defaults(client:
+                                                                                                         AsyncClient, db_session:
+                                                                                                         AsyncSession, test_user:
+                                                                                                         User, test_company:
+                                                                                                         Company,
+                                                                                                         user_token_headers: dict):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_password_policy.py               30 async def test_get_password_
+                                                                                                         policy_with_org_settings(cli
+                                                                                                         ent: AsyncClient,
+                                                                                                         db_session: AsyncSession,
+                                                                                                         test_user: User,
+                                                                                                         test_company: Company,
+                                                                                                         user_token_headers: dict):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_password_policy.py               59 async def test_validate_pass
+                                                                                                         word_success(client:
+                                                                                                         AsyncClient, db_session:
+                                                                                                         AsyncSession, test_user:
+                                                                                                         User, test_company:
+                                                                                                         Company,
+                                                                                                         user_token_headers: dict):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_password_policy.py               76 async def test_validate_pass
+                                                                                                         word_too_short(client:
+                                                                                                         AsyncClient, db_session:
+                                                                                                         AsyncSession, test_user:
+                                                                                                         User, test_company:
+                                                                                                         Company,
+                                                                                                         user_token_headers: dict):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_password_policy.py               92 async def test_validate_pass
+                                                                                                         word_missing_uppercase(clien
+                                                                                                         t: AsyncClient, db_session:
+                                                                                                         AsyncSession, test_user:
+                                                                                                         User, test_company:
+                                                                                                         Company,
+                                                                                                         user_token_headers: dict):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_password_policy.py              108 async def test_validate_pass
+                                                                                                         word_missing_lowercase(clien
+                                                                                                         t: AsyncClient, db_session:
+                                                                                                         AsyncSession, test_user:
+                                                                                                         User, test_company:
+                                                                                                         Company,
+                                                                                                         user_token_headers: dict):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_password_policy.py              124 async def test_validate_pass
+                                                                                                         word_missing_number(client:
+                                                                                                         AsyncClient, db_session:
+                                                                                                         AsyncSession, test_user:
+                                                                                                         User, test_company:
+                                                                                                         Company,
+                                                                                                         user_token_headers: dict):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_password_policy.py              140 async def test_validate_pass
+                                                                                                         word_missing_special_char(cl
+                                                                                                         ient: AsyncClient,
+                                                                                                         db_session: AsyncSession,
+                                                                                                         test_user: User,
+                                                                                                         test_company: Company,
+                                                                                                         user_token_headers: dict):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_password_policy.py              156 async def test_validate_pass
+                                                                                                         word_common_password(client:
+                                                                                                          AsyncClient, db_session:
+                                                                                                         AsyncSession, test_user:
+                                                                                                         User, test_company:
+                                                                                                         Company,
+                                                                                                         user_token_headers: dict):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_password_policy.py              172 async def test_get_default_p
+                                                                                                         assword_policy(client:
+                                                                                                         AsyncClient,
+                                                                                                         user_token_headers: dict):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_password_policy.py              186 async def test_update_passwo
+                                                                                                         rd_policy_as_superuser(clien
+                                                                                                         t: AsyncClient, db_session:
+                                                                                                         AsyncSession,
+                                                                                                         admin_token_headers: dict,
+                                                                                                         test_company: Company):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_password_policy.py              208 async def test_update_passwo
+                                                                                                         rd_policy_for_specific_compa
+                                                                                                         ny(client: AsyncClient,
+                                                                                                         db_session: AsyncSession,
+                                                                                                         admin_token_headers: dict,
+                                                                                                         test_company: Company):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_password_policy.py              228 async def test_update_passwo
+                                                                                                         rd_policy_validation_error(c
+                                                                                                         lient: AsyncClient,
+                                                                                                         db_session: AsyncSession,
+                                                                                                         admin_token_headers: dict,
+                                                                                                         test_company: Company):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_password_policy.py              245 async def test_password_poli
+                                                                                                         cy_unauthorized(client:
+                                                                                                         AsyncClient):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_password_policy.py              252 async def test_password_poli
+                                                                                                         cy_user_without_company(clie
+                                                                                                         nt: AsyncClient,
+                                                                                                         db_session: AsyncSession,
+                                                                                                         test_user: User,
+                                                                                                         user_token_headers: dict):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_password_policy.py              263 async def test_password_poli
+                                                                                                         cy_service_get_organization_
+                                                                                                         policy(db_session:
+                                                                                                         AsyncSession, test_company:
+                                                                                                         Company):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_password_policy.py              285 async def test_password_poli
+                                                                                                         cy_service_validate_password
+                                                                                                         _against_policy():
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_password_policy.py              325 async def test_password_poli
+                                                                                                         cy_service_check_password_ag
+                                                                                                         ainst_requirements():
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_password_policy.py              355 async def test_password_poli
+                                                                                                         cy_service_get_password_requ
+                                                                                                         irements_display():
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_password_policy.py              374 async def test_password_poli
+                                                                                                         cy_service_get_default_polic
+                                                                                                         y():
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py             21     def test_parse_chrome_wi
+                                                                                                         ndows(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py             31     def test_parse_firefox_m
+                                                                                                         acos(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py             39     def
+                                                                                                         test_parse_safari_ios(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py             48     def test_parse_android_c
+                                                                                                         hrome(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py             56     def
+                                                                                                         test_parse_ipad(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py             63     def test_parse_edge_wind
+                                                                                                         ows(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py             70     def test_parse_empty_use
+                                                                                                         r_agent(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py             79     def test_parse_empty_str
+                                                                                                         ing_user_agent(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py             84     def test_generate_device
+                                                                                                         _name(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py             91     def test_generate_device
+                                                                                                         _type(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py            102     async def
+                                                                                                         test_get_user_devices(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py            115     async def
+                                                                                                         test_get_device_by_id(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py            127     async def test_get_devic
+                                                                                                         e_by_id_not_found(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py            138     async def
+                                                                                                         test_revoke_device(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py            153     async def test_revoke_de
+                                                                                                         vice_not_found(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py            164     async def test_revoke_al
+                                                                                                         l_devices(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py            182     async def test_revoke_al
+                                                                                                         l_devices_no_tokens(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py            193     async def
+                                                                                                         test_get_device_stats(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py            222     async def test_mark_curr
+                                                                                                         ent_device(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py            231     async def test_update_de
+                                                                                                         vice_last_used(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py            244     def test_token_to_device
+                                                                                                         _out_with_user_agent(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py            269     def test_token_to_device
+                                                                                                         _out_with_stored_device_name
+                                                                                                         (self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py            294     def test_user_agent_inje
+                                                                                                         ction_attempt(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py            301     def test_very_long_user_
+                                                                                                         agent(self):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\tests\test_device_management.py            307     def test_device_ownershi
+                                                                                                         p_check(self):
+

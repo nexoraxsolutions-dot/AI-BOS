@@ -1,0 +1,19 @@
+
+Path                                                                                         LineNumber Line
+----                                                                                         ---------- ----
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\api\v1\endpoints\two_factor.py          8 - GET  /auth/2fa/status - Check 2FA status
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\api\v1\endpoints\two_factor.py         35     if current_user.is_2fa_enabled:
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\api\v1\endpoints\two_factor.py         41     secret, qr_code_url, backup_codes = await two_facto…
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\api\v1\endpoints\two_factor.py         56         qr_code_url=qr_code_url,
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\api\v1\endpoints\two_factor.py         69     if current_user.is_2fa_enabled:
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\api\v1\endpoints\two_factor.py        115     if not current_user.is_2fa_enabled:
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\api\v1\endpoints\two_factor.py        147 @router.get("/2fa/status", response_model=two_factor_sc…
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\api\v1\endpoints\two_factor.py        148 async def get_2fa_status(
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\api\v1\endpoints\two_factor.py        153         is_2fa_enabled=current_user.is_2fa_enabled,
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\api\v1\endpoints\two_factor.py        164     if not current_user.is_2fa_enabled:
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\api\v1\endpoints\two_factor.py        191         qr_code_url=two_factor_service.get_qr_code_url(…
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\schemas\two_factor.py                   7     qr_code_url: str
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\schemas\two_factor.py                  47 class TwoFactorStatusResponse(BaseModel):
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\schemas\two_factor.py                  48     is_2fa_enabled: bool
+
+

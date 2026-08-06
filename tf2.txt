@@ -1,0 +1,7 @@
+
+LineNumber Line
+---------- ----
+      1669     return getTwoFactorStatus();
+      1722   export async function getTwoFactorStatus(): Promise<{ enabled: boolean }> {
+
+

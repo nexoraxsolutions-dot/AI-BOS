@@ -1,0 +1,103 @@
+npm notice run ai-bos-frontend@0.1.0 build
+npm notice run next build
+ ⚠ Compiled with warnings
+
+./app/(protected)/organization-settings/page.tsx
+Attempted import error: 'getOrganizationSettings' is not exported from '../../../lib/api' (imported as 'getOrganizationSettings').
+
+Import trace for requested module:
+./app/(protected)/organization-settings/page.tsx
+
+./app/(protected)/organization-settings/page.tsx
+Attempted import error: 'updateOrganizationSettings' is not exported from '../../../lib/api' (imported as 'updateOrganizationSettings').
+
+Import trace for requested module:
+./app/(protected)/organization-settings/page.tsx
+
+./app/(protected)/organization-settings/page.tsx
+Attempted import error: 'getDefaultOrganizationSettings' is not exported from '../../../lib/api' (imported as 'getDefaultOrganizationSettings').
+
+Import trace for requested module:
+./app/(protected)/organization-settings/page.tsx
+
+./app/(protected)/password-policy/page.tsx
+Attempted import error: 'getPasswordPolicy' is not exported from '../../../lib/api' (imported as 'getPasswordPolicy').
+
+Import trace for requested module:
+./app/(protected)/password-policy/page.tsx
+
+./app/(protected)/password-policy/page.tsx
+Attempted import error: 'updatePasswordPolicy' is not exported from '../../../lib/api' (imported as 'updatePasswordPolicy').
+
+Import trace for requested module:
+./app/(protected)/password-policy/page.tsx
+
+./app/(protected)/password-policy/page.tsx
+Attempted import error: 'getDefaultPasswordPolicy' is not exported from '../../../lib/api' (imported as 'getDefaultPasswordPolicy').
+
+Import trace for requested module:
+./app/(protected)/password-policy/page.tsx
+
+./app/(protected)/password-policy/page.tsx
+Attempted import error: 'validatePassword' is not exported from '../../../lib/api' (imported as 'validatePassword').
+
+Import trace for requested module:
+./app/(protected)/password-policy/page.tsx
+
+ ⚠ Compiled with warnings
+
+./app/(protected)/organization-settings/page.tsx
+Attempted import error: 'getOrganizationSettings' is not exported from '../../../lib/api' (imported as 'getOrganizationSettings').
+
+Import trace for requested module:
+./app/(protected)/organization-settings/page.tsx
+
+./app/(protected)/organization-settings/page.tsx
+Attempted import error: 'updateOrganizationSettings' is not exported from '../../../lib/api' (imported as 'updateOrganizationSettings').
+
+Import trace for requested module:
+./app/(protected)/organization-settings/page.tsx
+
+./app/(protected)/organization-settings/page.tsx
+Attempted import error: 'getDefaultOrganizationSettings' is not exported from '../../../lib/api' (imported as 'getDefaultOrganizationSettings').
+
+Import trace for requested module:
+./app/(protected)/organization-settings/page.tsx
+
+./app/(protected)/password-policy/page.tsx
+Attempted import error: 'getPasswordPolicy' is not exported from '../../../lib/api' (imported as 'getPasswordPolicy').
+
+Import trace for requested module:
+./app/(protected)/password-policy/page.tsx
+
+./app/(protected)/password-policy/page.tsx
+Attempted import error: 'updatePasswordPolicy' is not exported from '../../../lib/api' (imported as 'updatePasswordPolicy').
+
+Import trace for requested module:
+./app/(protected)/password-policy/page.tsx
+
+./app/(protected)/password-policy/page.tsx
+Attempted import error: 'getDefaultPasswordPolicy' is not exported from '../../../lib/api' (imported as 'getDefaultPasswordPolicy').
+
+Import trace for requested module:
+./app/(protected)/password-policy/page.tsx
+
+./app/(protected)/password-policy/page.tsx
+Attempted import error: 'validatePassword' is not exported from '../../../lib/api' (imported as 'validatePassword').
+
+Import trace for requested module:
+./app/(protected)/password-policy/page.tsx
+
+Failed to compile.
+
+./app/(protected)/devices/page.tsx:239:74
+Type error: Property 'client_ip' does not exist on type 'DeviceOut'.
+
+[0m [90m 237 |[39m                       [33m<[39m[33m/[39m[33mtd[39m[33m>[39m[0m
+[0m [90m 238 |[39m                       [33m<[39m[33mtd[39m className[33m=[39m[32m"px-6 py-4"[39m[33m>[39m[0m
+[0m[31m[1m>[22m[39m[90m 239 |[39m                         [33m<[39m[33mcode[39m className[33m=[39m[32m"text-sm text-slate-300"[39m[33m>[39m{device[33m.[39mclient_ip [33m||[39m [32m'N/A'[39m}[33m<[39m[33m/[39m[33mcode[39m[33m>[39m[0m
+[0m [90m     |[39m                                                                          [31m[1m^[22m[39m[0m
+[0m [90m 240 |[39m                       [33m<[39m[33m/[39m[33mtd[39m[33m>[39m[0m
+[0m [90m 241 |[39m                       [33m<[39m[33mtd[39m className[33m=[39m[32m"px-6 py-4"[39m[33m>[39m[0m
+[0m [90m 242 |[39m                         {device[33m.[39mis_revoked [33m?[39m ([0m
+Next.js build worker exited with code: 1 and signal: null

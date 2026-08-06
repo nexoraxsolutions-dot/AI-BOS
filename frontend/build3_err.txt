@@ -1,0 +1,15 @@
+npm notice run ai-bos-frontend@0.1.0 build
+npm notice run next build
+Failed to compile.
+
+./app/(protected)/two-factor-setup/page.tsx:39:30
+Type error: Property 'is_2fa_enabled' does not exist on type '{ enabled: boolean; }'.
+
+[0m [90m 37 |[39m     [36mtry[39m {[0m
+[0m [90m 38 |[39m       [36mconst[39m status [33m=[39m [36mawait[39m get2FAStatus()[0m
+[0m[31m[1m>[22m[39m[90m 39 |[39m       setIs2FAEnabled(status[33m.[39mis_2fa_enabled)[0m
+[0m [90m    |[39m                              [31m[1m^[22m[39m[0m
+[0m [90m 40 |[39m       [36mif[39m (status[33m.[39mis_2fa_enabled) {[0m
+[0m [90m 41 |[39m         [36mconst[39m remaining [33m=[39m [36mawait[39m getBackupCodesRemaining()[0m
+[0m [90m 42 |[39m         setRemainingCodes(remaining[33m.[39mremaining)[0m
+Next.js build worker exited with code: 1 and signal: null

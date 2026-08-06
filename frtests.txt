@@ -1,0 +1,5 @@
+LoggingHistory.test.tsx
+LoginForm.test.tsx
+Navigation.test.tsx
+RegisterForm.test.tsx
+TestFramework.test.tsx

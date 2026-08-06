@@ -1,0 +1,80 @@
+npm notice run ai-bos-frontend@0.1.0 npx
+npm notice run jest --ci
+PASS __tests__/LoginForm.test.tsx (24.451 s)
+PASS __tests__/TestFramework.test.tsx
+PASS __tests__/RegisterForm.test.tsx (26.033 s)
+FAIL __tests__/LoggingHistory.test.tsx (41.714 s)
+  ● LoggingHistory Page › renders logging history page when authenticated as superuser
+
+
+
+
+
+  ● LoggingHistory Page › shows loading state initially
+
+
+
+
+
+  ● LoggingHistory Page › displays log entries after loading
+
+
+
+
+
+  ● LoggingHistory Page › displays log level badges with correct styling
+
+
+
+
+
+  ● LoggingHistory Page › displays statistics cards
+
+
+
+
+
+  ● LoggingHistory Page › displays top loggers section
+
+
+
+
+
+  ● LoggingHistory Page › shows filters section
+
+
+
+
+
+  ● LoggingHistory Page › shows cleanup section
+
+
+
+
+
+  ● LoggingHistory Page › shows refresh button
+
+
+
+
+
+  ● LoggingHistory Page › shows pagination when total > 50
+
+
+
+
+
+  ● LoggingHistory Page › shows no entries message when logs are empty
+
+
+
+
+
+PASS __tests__/Navigation.test.tsx (21.814 s)
+
+Test Suites: 1 failed, 4 passed, 5 total
+Tests:       11 failed, 31 passed, 42 total
+Snapshots:   0 total
+Time:        58.497 s
+Ran all test suites.
+EXIT_COMPLETE 

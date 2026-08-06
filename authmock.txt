@@ -1,0 +1,48 @@
+
+Path                                                                                        LineNumber Line
+----                                                                                        ---------- ----
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                   4 import { login as apiLogin, register as apiRegister, refreshToken …
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  16 interface AuthContextType {
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  17   token: string | null;
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  24   refreshAccessToken: () => Promise<boolean>;
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  27 const AuthContext = createContext<AuthContextType>({
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  28   token: null,
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  35   refreshAccessToken: async () => false,
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  39   const [token, setToken] = useState<string | null>(null);
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  44     const stored = localStorage.getItem('ai_bos_token');
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  47       setToken(stored);
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  58   const refreshAccessToken = async (): Promise<boolean> => {
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  59     const refreshToken = localStorage.getItem('ai_bos_refresh_toke…
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  60     if (!refreshToken) {
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  65       const response = await apiRefreshToken(refreshToken);
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  66       localStorage.setItem('ai_bos_token', response.access_token);
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  67       if (response.refresh_token) {
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  68         localStorage.setItem('ai_bos_refresh_token', response.refr…
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  70       setToken(response.access_token);
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  73       console.error('Failed to refresh token:', error);
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  83       localStorage.setItem('ai_bos_token', response.access_token);
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  84       if (response.refresh_token) {
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  85         localStorage.setItem('ai_bos_refresh_token', response.refr…
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                  91       setToken(response.access_token);
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                 101       localStorage.setItem('ai_bos_token', response.access_token);
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                 102       if (response.refresh_token) {
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                 103         localStorage.setItem('ai_bos_refresh_token', response.refr…
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                 109       setToken(response.access_token);
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                 116     localStorage.removeItem('ai_bos_token');
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                 117     localStorage.removeItem('ai_bos_refresh_token');
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                 119     setToken(null);
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                 126         token,
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                 127         isAuthenticated: !!token,
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\context\AuthContext.tsx                 133         refreshAccessToken,
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\__tests__\Documentation.test.tsx          7 jest.mock('next/navigation', () => ({
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\__tests__\Documentation.test.tsx         12 jest.mock('../context/AuthContext', () => ({
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\__tests__\Documentation.test.tsx         16 jest.mock('../lib/api', () => ({
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\__tests__\Documentation.test.tsx         26 const mockUseRouter = useRouter as jest.MockedFunction<typeof useR…
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\__tests__\Documentation.test.tsx         27 const mockUseAuth = useAuth as jest.MockedFunction<typeof useAuth>
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\__tests__\Documentation.test.tsx         28 const mockGetDocuments = require('../lib/api').getDocuments as jes…
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\__tests__\Documentation.test.tsx         29 const mockGetDocumentStats = require('../lib/api').getDocumentStat…
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\__tests__\Documentation.test.tsx         90       refreshAccessToken: jest.fn(),
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\__tests__\Documentation.test.tsx        194       refreshAccessToken: jest.fn(),
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\__tests__\Documentation.test.tsx        219       refreshAccessToken: jest.fn(),
+
+

@@ -77,6 +77,12 @@ export default function Navigation() {
                 Tokens
               </button>
               <button
+                onClick={() => router.push('/sessions')}
+                className="text-sm text-slate-300 hover:text-white transition"
+              >
+                Sessions
+              </button>
+              <button
                 onClick={() => router.push('/audit-logs')}
                 className="text-sm text-slate-300 hover:text-white transition"
               >
@@ -93,6 +99,18 @@ export default function Navigation() {
                 className="text-sm text-slate-300 hover:text-white transition"
               >
                 Organization Settings
+              </button>
+              <button
+                onClick={() => router.push('/api-keys')}
+                className="text-sm text-slate-300 hover:text-white transition"
+              >
+                API Keys
+              </button>
+              <button
+                onClick={() => router.push('/password-policy')}
+                className="text-sm text-slate-300 hover:text-white transition"
+              >
+                Password Policy
               </button>
               <button
                 onClick={() => router.push('/profile')}

@@ -1,0 +1,11 @@
+
+Path                                                                  LineNumber Line
+----                                                                  ---------- ----
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\lib\api.ts       1575   export interface DeviceInfo {
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\lib\api.ts       1590   export interface DeviceListResponse {
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\lib\api.ts       1591     items: DeviceInfo[];
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\lib\api.ts       1616   } = {}): Promise<DeviceListResponse> {
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\lib\api.ts       1623     return request<DeviceListResponse>(`/devices/?${
+                                                                                 params.toString()}`);
+C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\lib\api.ts       1637   export interface DeviceOut {
+

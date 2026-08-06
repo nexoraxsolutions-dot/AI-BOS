@@ -58,7 +58,7 @@ ai-bos/
 - [x] Full CRUD for users and companies (Create, Read, Update, Delete)
 - [x] Health check endpoint (`GET /api/v1/health`)
 - [x] Input validation with Pydantic
-- [x] Unit and integration tests (155+ backend tests + 22+ frontend tests)
+- [x] Unit and integration tests (629 backend tests + 42 frontend tests)
 - [x] CI/CD pipelines with GitHub Actions
 - [x] Docker containerization with multi-stage builds, healthchecks, and networking
 - [x] Dashboard API with real-time aggregated statistics
@@ -137,12 +137,72 @@ ai-bos/
  - [x] Organization settings REST API with validation
  - [x] Organization settings frontend UI with tabbed interface
  - [x] Default settings template and reset functionality
- - [x] Department management system with company association
- - [x] Department CRUD operations with manager assignment
- - [x] Department budget and location tracking
- - [x] Department statistics and analytics
- - [x] Department search, filtering, and pagination
- - [x] Department management UI with modals
+  - [x] Department management system with company association
+  - [x] Department CRUD operations with manager assignment
+  - [x] Department budget and location tracking
+  - [x] Department statistics and analytics
+  - [x] Department search, filtering, and pagination
+  - [x] Department management UI with modals
+  - [x] Session management system with database persistence
+  - [x] Session tracking across devices with IP and user-agent
+  - [x] Session creation on login with automatic expiration
+  - [x] Session statistics (active, inactive, expired counts)
+  - [x] Session termination (single and bulk operations)
+  - [x] Session cleanup for expired sessions
+  - [x] Session management REST API with validation
+  - [x] Session management frontend UI with statistics
+  - [x] Audit logging for session operations
+  - [x] API key management system for programmatic access
+  - [x] Secure API key generation with SHA256 hashing
+  - [x] API key CRUD operations with user ownership
+  - [x] API key expiration and revocation support
+  - [x] API key permissions field for fine-grained access control
+  - [x] API key last used tracking
+  - [x] API key management REST API with validation
+  - [x] API key management frontend UI with modals
+  - [x] Audit logging for API key operations
+  - [x] Password policy management system with organization-specific rules
+  - [x] Dynamic password validation based on organization settings
+  - [x] Password policy service with configurable requirements (length, uppercase, lowercase, numbers, special chars)
+  - [x] Password policy REST API (get, validate, update, defaults)
+  - [x] Password policy frontend UI with policy settings and password validator
+  - [x] Real-time password strength testing against organization policy
+  - [x] Integration with organization settings for centralized policy management
+  - [x] Account lock system for security after failed login attempts
+  - [x] Automatic account locking after 5 failed login attempts
+  - [x] 30-minute lock duration with auto-unlock on expiration
+  - [x] Manual account unlock by administrators
+  - [x] Account lock status tracking and display
+  - [x] Audit logging for account lock and unlock events
+  - [x] Account lock REST API (status, locked accounts, unlock)
+  - [x] Account lock frontend UI components
+  - [x] Security Dashboard with comprehensive security metrics and visualization
+  - [x] Security score calculation based on 2FA adoption, failed logins, and suspicious activities
+  - [x] Security recommendations generation based on current security posture
+  - [x] Security Dashboard REST API endpoints (/api/v1/security/summary, /api/v1/security/score)
+  - [x] Security Dashboard frontend page with score card, metrics grid, events timeline, and recommendations
+    - [x] Redis caching for security dashboard data (2-minute TTL)
+  - [x] RBAC security: Superuser-only access to security dashboard
+  - [x] Automated Testing Framework with test suite, test case, test run, and test result management
+  - [x] Configurable test cases (type: unit/integration/e2e/performance/security, priority, timeout, retries)
+  - [x] Test execution tracking with status, duration, output, and request/response logging
+  - [x] Test statistics dashboard with success rates, failure analysis, and recent runs
+  - [x] Test framework REST API with RBAC security and company-scoped data isolation
+  - [x] Test framework frontend UI with suites, cases, runs, and statistics tabs
+  - [x] Redis caching for test framework queries
+  - [x] 160+ backend tests + 42 frontend tests
+  - [x] Automated tests for test framework (30 backend) and logging history (20 backend + 8 frontend)
+  - [x] Logging configuration management system with per-company settings
+  - [x] Configurable log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+  - [x] Database and console logging toggles (enable/disable handlers)
+  - [x] Text and JSON log format options
+  - [x] Configurable log retention period (1–3650 days)
+  - [x] Logging configuration REST API (`/api/v1/logging-config/`)
+  - [x] GET auto-creates a default configuration when none exists
+  - [x] Superuser-only create/update/delete operations
+  - [x] Logging configuration frontend page with toggles and form controls
+  - [x] Audit logging for all logging configuration changes
+  - [x] Automated tests for logging configuration (18 backend)
 
 ## API Endpoints
 
@@ -198,6 +258,16 @@ ai-bos/
 | `/api/v1/tokens/revoke` | POST | Revoke a specific token by ID | Yes (Active user) |
 | `/api/v1/tokens/revoke-all` | POST | Revoke all refresh tokens for current user | Yes (Active user) |
 | `/api/v1/tokens/cleanup` | POST | Clean up expired tokens | Yes (Superuser) |
+| `/api/v1/testing/suites` | GET | List test suites (paginated) | Yes (Superuser) |
+| `/api/v1/testing/suites` | POST | Create test suite | Yes (Superuser) |
+| `/api/v1/testing/suites/{id}` | GET | Get test suite by ID | Yes (Superuser) |
+| `/api/v1/testing/cases` | GET | List test cases | Yes (Superuser) |
+| `/api/v1/testing/results` | GET | List test results | Yes (Superuser) |
+| `/api/v1/testing/statistics` | GET | Get test framework statistics | Yes (Superuser) |
+| `/api/v1/logging-config/` | GET | Get logging configuration (creates default if none) | Yes (Active user) |
+| `/api/v1/logging-config/` | POST | Create logging configuration | Yes (Superuser) |
+| `/api/v1/logging-config/` | PUT | Update logging configuration | Yes (Superuser) |
+| `/api/v1/logging-config/` | DELETE | Delete logging configuration | Yes (Superuser) |
 
 ## Quick Start
 
@@ -309,6 +379,8 @@ docker compose exec backend pytest -v
 
 ## Testing
 
+### Backend Tests
+
 Run the full test suite:
 ```bash
 cd backend
@@ -320,6 +392,29 @@ Run tests with coverage:
 cd backend
 pytest --cov=app --cov-report=term-missing
 ```
+
+The backend uses **pytest** with async support and an in-memory SQLite database for
+fast, isolated unit and integration testing. Test files live in `backend/tests/`
+with integration scenarios under `backend/tests/integration/`.
+
+### Frontend Tests
+
+Run the Jest test suite:
+```bash
+cd frontend
+npx jest --ci --forceExit
+```
+
+The frontend uses **Jest** with React Testing Library and a mocked API client for
+fast, deterministic component testing. Tests live in `frontend/__tests__/`.
+
+### Automated Testing Framework
+
+The application includes a built-in **Automated Testing Framework** that lets
+teams define, execute, and track API test suites. Test suites, cases, runs, and
+results are stored in the database with RBAC security (superuser-only) and
+company-scoped data isolation. Statistics include pass/fail/skip/error counts,
+success rates, average duration, most-failed tests, and recent runs.
 
 ## Docker Architecture
 

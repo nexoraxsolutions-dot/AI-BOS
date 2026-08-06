@@ -1,0 +1,3 @@
+npm notice run ai-bos-frontend@0.1.0 npx
+npm notice run jest __tests__/LoggingHistory.test.tsx --ci
+Terminate batch job (Y/N)? Terminate batch job (Y/N)? 

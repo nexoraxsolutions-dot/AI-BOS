@@ -1,0 +1,53 @@
+  ▲ Next.js 14.2.35
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/31) ...
+   Generating static pages (7/31) 
+   Generating static pages (15/31) 
+   Generating static pages (23/31) 
+ ✓ Generating static pages (31/31)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    855 B          96.9 kB
+├ ○ /_not-found                          873 B          88.2 kB
+├ ○ /api-keys                            3.45 kB        93.5 kB
+├ ○ /api/health                          0 B                0 B
+├ ○ /audit-logs                          2.15 kB        92.2 kB
+├ ○ /companies                           4.76 kB        94.9 kB
+├ ○ /dashboard                           6.26 kB         138 kB
+├ ○ /departments                         4.28 kB        94.4 kB
+├ ○ /devices                             2.92 kB         102 kB
+├ ○ /documentation                       4.64 kB        94.7 kB
+├ ○ /environment-variables               3.21 kB        93.3 kB
+├ ○ /forgot-password                     2.04 kB         101 kB
+├ ○ /logging                             3.4 kB         93.5 kB
+├ ○ /login                               1.99 kB         101 kB
+├ ○ /organization-settings               5.7 kB         95.8 kB
+├ ○ /password-policy                     3.43 kB        93.5 kB
+├ ○ /profile                             2.61 kB        92.7 kB
+├ ○ /redis                               2.46 kB        92.6 kB
+├ ○ /register                            2.33 kB         101 kB
+├ ○ /reset-password                      3.31 kB         102 kB
+├ ○ /roles                               4.1 kB         94.2 kB
+├ ○ /security                            4.07 kB         146 kB
+├ ○ /sessions                            2.93 kB          93 kB
+├ ○ /tenants                             2.73 kB        92.8 kB
+├ ○ /test-framework                      5.33 kB        95.4 kB
+├ ○ /tokens                              2.69 kB        92.8 kB
+├ ○ /two-factor-setup                    3.32 kB         102 kB
+├ ○ /users                               3.2 kB         93.3 kB
+└ ○ /verify-email                        1.71 kB         101 kB
++ First Load JS shared by all            87.3 kB
+  ├ chunks/117-648129468f8bcd07.js       31.7 kB
+  ├ chunks/fd9d1056-ea949d58b73d551c.js  53.6 kB
+  └ other shared chunks (total)          1.95 kB
+
+
+○  (Static)  prerendered as static content
+

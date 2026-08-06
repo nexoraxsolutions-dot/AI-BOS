@@ -1,0 +1,269 @@
+npm notice run ai-bos-frontend@0.1.0 npx
+npm notice run jest --ci --forceExit
+PASS __tests__/Navigation.test.tsx (36.524 s)
+PASS __tests__/LoginForm.test.tsx (40.162 s)
+PASS __tests__/RegisterForm.test.tsx (45.122 s)
+PASS __tests__/TestFramework.test.tsx (13.702 s)
+PASS __tests__/LoggingHistory.test.tsx (9.545 s)
+  ● Console
+
+    console.error
+      Warning: An update to LoggingPage inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at LoggingPage (C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\app\(protected)\logging\page.tsx:20:35)
+
+    [0m [90m 56 |[39m         search[33m:[39m searchFilter [33m||[39m undefined[33m,[39m
+     [90m 57 |[39m       })
+    [31m[1m>[22m[39m[90m 58 |[39m       setLogs(response[33m.[39mitems)
+     [90m    |[39m       [31m[1m^[22m[39m
+     [90m 59 |[39m       setTotal(response[33m.[39mtotal)
+     [90m 60 |[39m     } [36mcatch[39m (err) {
+     [90m 61 |[39m       setError(err [36minstanceof[39m [33mError[39m [33m?[39m err[33m.[39mmessage [33m:[39m [32m'Failed to fetch log entries'[39m)[0m
+
+      at printWarning (node_modules/react-dom/cjs/react-dom.development.js:86:30)
+      at error (node_modules/react-dom/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom.development.js:25547:5)
+      at dispatchSetState (node_modules/react-dom/cjs/react-dom.development.js:16708:7)
+      at fetchLogs (C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\app\(protected)../../../../../../logging/page.tsx:58:7)
+
+    console.error
+      Warning: An update to LoggingPage inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at LoggingPage (C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\app\(protected)\logging\page.tsx:20:35)
+
+    [0m [90m 57 |[39m       })
+     [90m 58 |[39m       setLogs(response[33m.[39mitems)
+    [31m[1m>[22m[39m[90m 59 |[39m       setTotal(response[33m.[39mtotal)
+     [90m    |[39m       [31m[1m^[22m[39m
+     [90m 60 |[39m     } [36mcatch[39m (err) {
+     [90m 61 |[39m       setError(err [36minstanceof[39m [33mError[39m [33m?[39m err[33m.[39mmessage [33m:[39m [32m'Failed to fetch log entries'[39m)
+     [90m 62 |[39m     } [36mfinally[39m {[0m
+
+      at printWarning (node_modules/react-dom/cjs/react-dom.development.js:86:30)
+      at error (node_modules/react-dom/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom.development.js:25547:5)
+      at dispatchSetState (node_modules/react-dom/cjs/react-dom.development.js:16708:7)
+      at fetchLogs (C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\app\(protected)../../../../../../logging/page.tsx:59:7)
+
+    console.error
+      Warning: An update to LoggingPage inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at LoggingPage (C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\app\(protected)\logging\page.tsx:20:35)
+
+    [0m [90m 61 |[39m       setError(err [36minstanceof[39m [33mError[39m [33m?[39m err[33m.[39mmessage [33m:[39m [32m'Failed to fetch log entries'[39m)
+     [90m 62 |[39m     } [36mfinally[39m {
+    [31m[1m>[22m[39m[90m 63 |[39m       setLoading([36mfalse[39m)
+     [90m    |[39m       [31m[1m^[22m[39m
+     [90m 64 |[39m     }
+     [90m 65 |[39m   }
+     [90m 66 |[39m[0m
+
+      at printWarning (node_modules/react-dom/cjs/react-dom.development.js:86:30)
+      at error (node_modules/react-dom/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom.development.js:25547:5)
+      at dispatchSetState (node_modules/react-dom/cjs/react-dom.development.js:16708:7)
+      at fetchLogs (C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\app\(protected)../../../../../../logging/page.tsx:63:7)
+
+    console.error
+      Warning: An update to LoggingPage inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at LoggingPage (C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\app\(protected)\logging\page.tsx:20:35)
+
+    [0m [90m 68 |[39m     [36mtry[39m {
+     [90m 69 |[39m       [36mconst[39m response [33m=[39m [36mawait[39m getLogStats()
+    [31m[1m>[22m[39m[90m 70 |[39m       setStats(response)
+     [90m    |[39m       [31m[1m^[22m[39m
+     [90m 71 |[39m     } [36mcatch[39m (err) {
+     [90m 72 |[39m       [90m// Stats are optional — don't block the UI[39m
+     [90m 73 |[39m       console[33m.[39merror([32m'Failed to fetch stats:'[39m[33m,[39m err)[0m
+
+      at printWarning (node_modules/react-dom/cjs/react-dom.development.js:86:30)
+      at error (node_modules/react-dom/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom.development.js:25547:5)
+      at dispatchSetState (node_modules/react-dom/cjs/react-dom.development.js:16708:7)
+      at fetchStats (C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\app\(protected)../../../../../../logging/page.tsx:70:7)
+
+    console.error
+      Warning: An update to LoggingPage inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at LoggingPage (C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\app\(protected)\logging\page.tsx:20:35)
+
+    [0m [90m 68 |[39m     [36mtry[39m {
+     [90m 69 |[39m       [36mconst[39m response [33m=[39m [36mawait[39m getLogStats()
+    [31m[1m>[22m[39m[90m 70 |[39m       setStats(response)
+     [90m    |[39m       [31m[1m^[22m[39m
+     [90m 71 |[39m     } [36mcatch[39m (err) {
+     [90m 72 |[39m       [90m// Stats are optional — don't block the UI[39m
+     [90m 73 |[39m       console[33m.[39merror([32m'Failed to fetch stats:'[39m[33m,[39m err)[0m
+
+      at printWarning (node_modules/react-dom/cjs/react-dom.development.js:86:30)
+      at error (node_modules/react-dom/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom.development.js:25547:5)
+      at dispatchSetState (node_modules/react-dom/cjs/react-dom.development.js:16708:7)
+      at fetchStats (C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\app\(protected)../../../../../../logging/page.tsx:70:7)
+
+    console.error
+      Warning: An update to LoggingPage inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at LoggingPage (C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\app\(protected)\logging\page.tsx:20:35)
+
+    [0m [90m 56 |[39m         search[33m:[39m searchFilter [33m||[39m undefined[33m,[39m
+     [90m 57 |[39m       })
+    [31m[1m>[22m[39m[90m 58 |[39m       setLogs(response[33m.[39mitems)
+     [90m    |[39m       [31m[1m^[22m[39m
+     [90m 59 |[39m       setTotal(response[33m.[39mtotal)
+     [90m 60 |[39m     } [36mcatch[39m (err) {
+     [90m 61 |[39m       setError(err [36minstanceof[39m [33mError[39m [33m?[39m err[33m.[39mmessage [33m:[39m [32m'Failed to fetch log entries'[39m)[0m
+
+      at printWarning (node_modules/react-dom/cjs/react-dom.development.js:86:30)
+      at error (node_modules/react-dom/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom.development.js:25547:5)
+      at dispatchSetState (node_modules/react-dom/cjs/react-dom.development.js:16708:7)
+      at fetchLogs (C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\app\(protected)../../../../../../logging/page.tsx:58:7)
+
+    console.error
+      Warning: An update to LoggingPage inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at LoggingPage (C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\app\(protected)\logging\page.tsx:20:35)
+
+    [0m [90m 57 |[39m       })
+     [90m 58 |[39m       setLogs(response[33m.[39mitems)
+    [31m[1m>[22m[39m[90m 59 |[39m       setTotal(response[33m.[39mtotal)
+     [90m    |[39m       [31m[1m^[22m[39m
+     [90m 60 |[39m     } [36mcatch[39m (err) {
+     [90m 61 |[39m       setError(err [36minstanceof[39m [33mError[39m [33m?[39m err[33m.[39mmessage [33m:[39m [32m'Failed to fetch log entries'[39m)
+     [90m 62 |[39m     } [36mfinally[39m {[0m
+
+      at printWarning (node_modules/react-dom/cjs/react-dom.development.js:86:30)
+      at error (node_modules/react-dom/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom.development.js:25547:5)
+      at dispatchSetState (node_modules/react-dom/cjs/react-dom.development.js:16708:7)
+      at fetchLogs (C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\app\(protected)../../../../../../logging/page.tsx:59:7)
+
+    console.error
+      Warning: An update to LoggingPage inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at LoggingPage (C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\app\(protected)\logging\page.tsx:20:35)
+
+    [0m [90m 61 |[39m       setError(err [36minstanceof[39m [33mError[39m [33m?[39m err[33m.[39mmessage [33m:[39m [32m'Failed to fetch log entries'[39m)
+     [90m 62 |[39m     } [36mfinally[39m {
+    [31m[1m>[22m[39m[90m 63 |[39m       setLoading([36mfalse[39m)
+     [90m    |[39m       [31m[1m^[22m[39m
+     [90m 64 |[39m     }
+     [90m 65 |[39m   }
+     [90m 66 |[39m[0m
+
+      at printWarning (node_modules/react-dom/cjs/react-dom.development.js:86:30)
+      at error (node_modules/react-dom/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom.development.js:25547:5)
+      at dispatchSetState (node_modules/react-dom/cjs/react-dom.development.js:16708:7)
+      at fetchLogs (C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\app\(protected)../../../../../../logging/page.tsx:63:7)
+
+    console.error
+      Warning: An update to LoggingPage inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at LoggingPage (C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\app\(protected)\logging\page.tsx:20:35)
+
+    [0m [90m 68 |[39m     [36mtry[39m {
+     [90m 69 |[39m       [36mconst[39m response [33m=[39m [36mawait[39m getLogStats()
+    [31m[1m>[22m[39m[90m 70 |[39m       setStats(response)
+     [90m    |[39m       [31m[1m^[22m[39m
+     [90m 71 |[39m     } [36mcatch[39m (err) {
+     [90m 72 |[39m       [90m// Stats are optional — don't block the UI[39m
+     [90m 73 |[39m       console[33m.[39merror([32m'Failed to fetch stats:'[39m[33m,[39m err)[0m
+
+      at printWarning (node_modules/react-dom/cjs/react-dom.development.js:86:30)
+      at error (node_modules/react-dom/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom.development.js:25547:5)
+      at dispatchSetState (node_modules/react-dom/cjs/react-dom.development.js:16708:7)
+      at fetchStats (C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\frontend\app\(protected)../../../../../../logging/page.tsx:70:7)
+
+
+Test Suites: 5 passed, 5 total
+Tests:       42 passed, 42 total
+Snapshots:   0 total
+Time:        56.604 s
+Ran all test suites.
+Force exiting Jest: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
+EXIT_COMPLETE 

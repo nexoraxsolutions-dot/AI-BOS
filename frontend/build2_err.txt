@@ -1,0 +1,17 @@
+npm notice run ai-bos-frontend@0.1.0 build
+npm notice run next build
+Failed to compile.
+
+./app/(protected)/roles/page.tsx:177:18
+Type error: Argument of type 'User[]' is not assignable to parameter of type 'SetStateAction<UserWithRoles[]>'.
+  Type 'User[]' is not assignable to type 'UserWithRoles[]'.
+    Property 'roles' is missing in type 'User' but required in type 'UserWithRoles'.
+
+[0m [90m 175 |[39m     console[33m.[39mlog([32m"All users:"[39m[33m,[39m [33mJSON[39m[33m.[39mstringify(allUsers[33m,[39m [36mnull[39m[33m,[39m [35m2[39m))[33m;[39m[0m
+[0m [90m 176 |[39m[0m
+[0m[31m[1m>[22m[39m[90m 177 |[39m     setRoleUsers(roleUsersData)[33m;[39m[0m
+[0m [90m     |[39m                  [31m[1m^[22m[39m[0m
+[0m [90m 178 |[39m     setUsers(allUsers)[33m;[39m[0m
+[0m [90m 179 |[39m[0m
+[0m [90m 180 |[39m     setSelectedRole({[0m
+Next.js build worker exited with code: 1 and signal: null

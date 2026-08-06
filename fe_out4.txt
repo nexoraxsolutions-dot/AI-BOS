@@ -1,0 +1,50 @@
+npm notice run ai-bos-frontend@0.1.0 npx
+npm notice run jest --ci --forceExit
+PASS __tests__/RegisterForm.test.tsx (20.725 s)
+PASS __tests__/LoginForm.test.tsx (20.904 s)
+PASS __tests__/Navigation.test.tsx (22.273 s)
+PASS __tests__/TestFramework.test.tsx
+FAIL __tests__/LoggingHistory.test.tsx
+  ● Test suite failed to run
+
+    [96mapp/(protected)/logging/page.tsx[0m:[93m7[0m:[93m3[0m - [91merror[0m[90m TS2305: [0mModule '"../../../lib/api"' has no exported member 'getLogEntries'.
+
+    [7m7[0m   getLogEntries,
+    [7m [0m [91m  ~~~~~~~~~~~~~[0m
+    [96mapp/(protected)/logging/page.tsx[0m:[93m8[0m:[93m3[0m - [91merror[0m[90m TS2305: [0mModule '"../../../lib/api"' has no exported member 'getLogStats'.
+
+    [7m8[0m   getLogStats,
+    [7m [0m [91m  ~~~~~~~~~~~[0m
+    [96mapp/(protected)/logging/page.tsx[0m:[93m9[0m:[93m3[0m - [91merror[0m[90m TS2305: [0mModule '"../../../lib/api"' has no exported member 'cleanupLogs'.
+
+    [7m9[0m   cleanupLogs,
+    [7m [0m [91m  ~~~~~~~~~~~[0m
+    [96mapp/(protected)/logging/page.tsx[0m:[93m10[0m:[93m3[0m - [91merror[0m[90m TS2305: [0mModule '"../../../lib/api"' has no exported member 'LogEntry'.
+
+    [7m10[0m   LogEntry,
+    [7m  [0m [91m  ~~~~~~~~[0m
+    [96mapp/(protected)/logging/page.tsx[0m:[93m11[0m:[93m3[0m - [91merror[0m[90m TS2305: [0mModule '"../../../lib/api"' has no exported member 'LogStats'.
+
+    [7m11[0m   LogStats,
+    [7m  [0m [91m  ~~~~~~~~[0m
+    [96mapp/(protected)/logging/page.tsx[0m:[93m185[0m:[93m54[0m - [91merror[0m[90m TS2322: [0mType 'unknown' is not assignable to type 'ReactNode'.
+
+    [7m185[0m                     <span className="text-slate-300">{count}</span>
+    [7m   [0m [91m                                                     ~~~~~~~[0m
+
+      [96mnode_modules/@types/react/index.d.ts[0m:[93m2379[0m:[93m9[0m
+        [7m2379[0m         children?: ReactNode | undefined;
+        [7m    [0m [96m        ~~~~~~~~[0m
+        The expected type comes from property 'children' which is declared here on type 'DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>'
+    [96mapp/(protected)/logging/page.tsx[0m:[93m210[0m:[93m39[0m - [91merror[0m[90m TS7006: [0mParameter 'logger' implicitly has an 'any' type.
+
+    [7m210[0m               {stats.top_loggers.map((logger) => (
+    [7m   [0m [91m                                      ~~~~~~[0m
+
+Test Suites: 1 failed, 4 passed, 5 total
+Tests:       31 passed, 31 total
+Snapshots:   0 total
+Time:        33.347 s
+Ran all test suites.
+Force exiting Jest: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
+EXIT_COMPLETE 

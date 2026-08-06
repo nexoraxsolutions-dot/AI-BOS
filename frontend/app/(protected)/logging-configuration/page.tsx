@@ -1,0 +1,285 @@
+"use client"
+
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '../../../context/AuthContext'
+import {
+  getLoggingConfiguration,
+  updateLoggingConfiguration,
+  deleteLoggingConfiguration,
+  LoggingConfiguration,
+  LoggingConfigurationUpdate,
+} from '../../../lib/api'
+
+const LOG_LEVELS = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
+const LOG_FORMATS = ['text', 'json']
+
+export default function LoggingConfigurationPage() {
+  const { isAuthenticated } = useAuth()
+  const router = useRouter()
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
+
+  const [config, setConfig] = useState<LoggingConfiguration | null>(null)
+  const [formData, setFormData] = useState<LoggingConfigurationUpdate>({})
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/')
+      return
+    }
+    fetchConfig()
+  }, [isAuthenticated, router])
+
+  const fetchConfig = async () => {
+    try {
+      setLoading(true)
+      const data = await getLoggingConfiguration()
+      setConfig(data)
+      setFormData({})
+      setError(null)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load logging configuration')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleSave = async () => {
+    if (!config) return
+
+    setSaving(true)
+    setError(null)
+    setSuccess(null)
+
+    try {
+      const updated = await updateLoggingConfiguration(formData)
+      setConfig(updated)
+      setFormData({})
+      setSuccess('Logging configuration updated successfully')
+      setTimeout(() => setSuccess(null), 3000)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update logging configuration')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleResetToDefaults = () => {
+    setFormData({})
+    setSuccess('Form reset to default values. Click Save to apply.')
+    setTimeout(() => setSuccess(null), 3000)
+  }
+
+  const handleDelete = async () => {
+    if (!confirm('Delete logging configuration? This will revert to system defaults.')) return
+    setDeleting(true)
+    setError(null)
+    setSuccess(null)
+    try {
+      await deleteLoggingConfiguration()
+      setSuccess('Logging configuration deleted. Reverting to defaults.')
+      await fetchConfig()
+      setTimeout(() => setSuccess(null), 3000)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete logging configuration')
+    } finally {
+      setDeleting(false)
+    }
+  }
+
+  const updateField = <K extends keyof LoggingConfigurationUpdate>(
+    field: K,
+    value: LoggingConfigurationUpdate[K],
+  ) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
+  }
+
+  if (!isAuthenticated) {
+    return null
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header — always visible so the title renders even during loading/error */}
+      <div>
+        <h1 className="text-2xl font-bold text-white">Logging Configuration</h1>
+        <p className="mt-1 text-sm text-slate-400">Manage application logging settings</p>
+      </div>
+
+      {/* Loading state */}
+      {loading && !config && (
+        <div className="flex h-96 items-center justify-center">
+          <div className="text-center">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-cyan-500 border-t-transparent"></div>
+            <p className="mt-2 text-slate-400">Loading logging configuration...</p>
+          </div>
+        </div>
+      )}
+
+      {/* Error state when no config has been loaded yet */}
+      {!loading && !config && error && (
+        <div className="rounded-2xl border border-red-500/30 bg-red-500/10 p-8 text-center">
+          <p className="mt-2 text-sm text-slate-400">{error}</p>
+          <button
+            onClick={fetchConfig}
+            className="mt-4 rounded-xl border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 transition"
+          >
+            Retry
+          </button>
+        </div>
+      )}
+
+      {/* Form section — rendered only when configuration is loaded */}
+      {config && !loading && (
+      <>
+      {error && (
+        <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4">
+          <p className="text-sm text-red-400">{error}</p>
+        </div>
+      )}
+      {success && (
+        <div className="rounded-xl border border-green-500/30 bg-green-500/10 p-4">
+          <p className="text-sm text-green-400">{success}</p>
+        </div>
+      )}
+
+      <div className="rounded-2xl border border-white/10 bg-slate-950/80 p-6">
+        <div className="grid gap-6 md:grid-cols-2">
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-slate-300">Log Level</label>
+            <select
+              value={formData.log_level ?? config.log_level}
+              onChange={e => updateField('log_level', e.target.value.toUpperCase())}
+              disabled={saving}
+              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-500/50 disabled:opacity-50"
+            >
+              {LOG_LEVELS.map(level => (
+                <option key={level} value={level} className="bg-slate-900">
+                  {level}
+                </option>
+              ))}
+            </select>
+            <p className="text-xs text-slate-500">Minimum severity level to log</p>
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-slate-300">Log Format</label>
+            <select
+              value={formData.log_format ?? config.log_format}
+              onChange={e => updateField('log_format', e.target.value.toLowerCase())}
+              disabled={saving}
+              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-500/50 disabled:opacity-50"
+            >
+              {LOG_FORMATS.map(format => (
+                <option key={format} value={format} className="bg-slate-900">
+                  {format.toUpperCase()}
+                </option>
+              ))}
+            </select>
+            <p className="text-xs text-slate-500">Output format for log entries</p>
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-slate-300">Retention Days</label>
+            <input
+              type="number"
+              min={1}
+              max={3650}
+              value={formData.retention_days ?? config.retention_days}
+              onChange={e => {
+                const val = parseInt(e.target.value, 10)
+                if (!isNaN(val)) updateField('retention_days', val)
+              }}
+              disabled={saving}
+              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-500/50 disabled:opacity-50"
+            />
+            <p className="text-xs text-slate-500">Number of days to retain log entries (1-3650)</p>
+          </div>
+
+          <div className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 p-4">
+            <div>
+              <p className="text-white font-medium">Database Logging</p>
+              <p className="text-xs text-slate-400 mt-1">Persist logs to database</p>
+            </div>
+            <button
+              onClick={() =>
+                updateField('enable_database_logging', !(formData.enable_database_logging ?? config.enable_database_logging))
+              }
+              disabled={saving}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition disabled:opacity-50 ${
+                (formData.enable_database_logging ?? config.enable_database_logging) ? 'bg-cyan-600' : 'bg-slate-700'
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${
+                  (formData.enable_database_logging ?? config.enable_database_logging) ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </button>
+          </div>
+
+          <div className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 p-4">
+            <div>
+              <p className="text-white font-medium">Console Logging</p>
+              <p className="text-xs text-slate-400 mt-1">Output logs to console/stdout</p>
+            </div>
+            <button
+              onClick={() =>
+                updateField('enable_console_logging', !(formData.enable_console_logging ?? config.enable_console_logging))
+              }
+              disabled={saving}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition disabled:opacity-50 ${
+                (formData.enable_console_logging ?? config.enable_console_logging) ? 'bg-cyan-600' : 'bg-slate-700'
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${
+                  (formData.enable_console_logging ?? config.enable_console_logging) ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-8 flex items-center justify-between border-t border-white/10 pt-6">
+        <button
+          onClick={handleDelete}
+          disabled={saving || deleting}
+          className="rounded-xl border border-red-500/30 bg-red-500/10 px-6 py-2.5 text-sm text-red-400 hover:bg-red-500/20 transition disabled:opacity-50"
+        >
+          {deleting ? 'Deleting...' : 'Delete Configuration'}
+        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={handleResetToDefaults}
+            disabled={saving}
+            className="rounded-xl border border-slate-700 bg-slate-900 px-6 py-2.5 text-sm text-slate-300 hover:bg-slate-800 transition disabled:opacity-50"
+          >
+            Reset to Defaults
+          </button>
+          <button
+            onClick={() => setFormData({})}
+            disabled={saving}
+            className="rounded-xl border border-slate-700 bg-slate-900 px-6 py-2.5 text-sm text-slate-300 hover:bg-slate-800 transition disabled:opacity-50"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="rounded-xl bg-cyan-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-cyan-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {saving ? 'Saving...' : 'Save Changes'}
+          </button>
+        </div>
+      </div>
+      </>
+      )}
+    </div>
+  )
+}

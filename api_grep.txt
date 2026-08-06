@@ -1,0 +1,32 @@
+
+LineNumber Line
+---------- ----
+        47     settings?: Record<string, unknown>;
+        69     settings?: Record<string, unknown>;
+        88     settings?: Record<string, unknown>;
+       174   export async function login(email: string, password: string): Promise<LoginResponse> {
+       177     formData.append('password', password);
+       197     password: string,
+       206       body: JSON.stringify({ email, password, full_name: fullName, username }),
+       258     password: string;
+       270     password?: string;
+       302   export async function changeMyPassword(current_password: string, new_password: string): Promise<{ message: string }> {
+       303     return request<{ message: string }>('/users/me/change-password', {
+       305       body: JSON.stringify({ current_password, new_password }),
+       922   // Forgot Password API functions
+       923   export interface ForgotPasswordResponse {
+       927   export interface ResetPasswordResponse {
+       931   export async function forgotPassword(email: string): Promise<ForgotPasswordResponse> {
+       932     const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+       948   export async function resetPassword(token: string, newPassword: string, confirmPassword: string): Promise<ResetPasswordResponse> {
+       949     const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+       954       body: JSON.stringify({ token, new_password: newPassword, confirm_password: confirmPassword }),
+      1703   export async function disable2FA(password: string): Promise<TwoFactorDisableResponse> {
+      1706       body: JSON.stringify({ password }),
+      1731     password_changes_30d: number;
+      1757   // ==================== Logging History API ====================
+      1813     return request<LogEntryListResponse>(`/logging/?${query}`);
+      1817     return request<LogStats>('/logging/stats');
+      1822       `/logging/?older_than_days=${olderThanDays}`,
+
+

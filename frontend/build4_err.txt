@@ -1,0 +1,2 @@
+npm notice run ai-bos-frontend@0.1.0 build
+npm notice run next build

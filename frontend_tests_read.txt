@@ -1,0 +1,2 @@
+npm notice run ai-bos-frontend@0.1.0 test
+npm notice run jest --ci
