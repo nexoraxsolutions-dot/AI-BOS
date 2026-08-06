@@ -1,7 +1,7 @@
 """create_departments
 
 Revision ID: 0011
-Revises: 0010_create_organization_settings
+Revises: 0010
 Create Date: 2025-01-15 10:00:00.000000
 
 """

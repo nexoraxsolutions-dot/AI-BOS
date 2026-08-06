@@ -1,15 +1,15 @@
 """add created_at and updated_at columns to users and companies
 
-Revision ID: 0002_add_timestamps
-Revises: 0001_create_users_companies
+Revision ID: 0002
+Revises: 0001
 Create Date: 2026-07-22 00:00:00.000000
 """
 from alembic import op
 import sqlalchemy as sa
 from datetime import datetime
 
-revision = '0002_add_timestamps'
-down_revision = '0001_create_users_companies'
+revision = '0002'
+down_revision = '0001'
 branch_labels = None
 depends_on = None
 

@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\_diag.py", line 5, in <module>
+    import app.main
+  File "C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\main.py", line 3, in <module>
+    from fastapi import FastAPI
+ModuleNotFoundError: No module named 'fastapi'

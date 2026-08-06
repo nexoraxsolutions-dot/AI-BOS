@@ -10,7 +10,23 @@ from alembic import context
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from app.core.config import settings
 from app.db import Base
-from app.models import user, company
+from app.models import (
+    user,
+    company,
+    token,
+    password_reset,
+    password_history,
+    role,
+    audit_log,
+    two_factor,
+    logging_history,
+    session,
+    api_key,
+    department,
+    organization_settings,
+    environment_variable,
+    document,
+)
 
 config = context.config
 fileConfig(config.config_file_name)

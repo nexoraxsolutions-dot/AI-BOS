@@ -1,0 +1,235 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.9, pytest-7.4.4, pluggy-1.6.0 -- C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend
+configfile: pytest.ini
+plugins: anyio-4.14.2, asyncio-0.21.1, cov-5.0.0
+asyncio: mode=Mode.AUTO
+collecting ... collected 30 items
+
+tests/test_test_framework.py::TestTestSuites::test_create_test_suite PASSED [  3%]
+tests/test_test_framework.py::TestTestSuites::test_create_test_suite_unauthorized PASSED [  6%]
+tests/test_test_framework.py::TestTestSuites::test_list_test_suites PASSED [ 10%]
+tests/test_test_framework.py::TestTestSuites::test_list_test_suites_with_filters PASSED [ 13%]
+tests/test_test_framework.py::TestTestSuites::test_get_test_suite PASSED [ 16%]
+tests/test_test_framework.py::TestTestSuites::test_get_test_suite_not_found PASSED [ 20%]
+tests/test_test_framework.py::TestTestSuites::test_update_test_suite PASSED [ 23%]
+tests/test_test_framework.py::TestTestSuites::test_delete_test_suite PASSED [ 26%]
+tests/test_test_framework.py::TestTestCases::test_create_test_case PASSED [ 30%]
+tests/test_test_framework.py::TestTestCases::test_create_test_case_invalid_method PASSED [ 33%]
+tests/test_test_framework.py::TestTestCases::test_create_test_case_invalid_type PASSED [ 36%]
+tests/test_test_framework.py::TestTestCases::test_list_test_cases PASSED [ 40%]
+tests/test_test_framework.py::TestTestCases::test_list_test_cases_with_filters PASSED [ 43%]
+tests/test_test_framework.py::TestTestCases::test_get_test_case PASSED   [ 46%]
+tests/test_test_framework.py::TestTestCases::test_update_test_case PASSED [ 50%]
+tests/test_test_framework.py::TestTestCases::test_delete_test_case PASSED [ 53%]
+tests/test_test_framework.py::TestTestRuns::test_create_test_run PASSED  [ 56%]
+tests/test_test_framework.py::TestTestRuns::test_list_test_runs FAILED   [ 60%]
+tests/test_test_framework.py::TestTestRuns::test_list_test_runs_with_filters PASSED [ 63%]
+tests/test_test_framework.py::TestTestRuns::test_get_test_run PASSED     [ 66%]
+tests/test_test_framework.py::TestTestRuns::test_complete_test_run PASSED [ 70%]
+tests/test_test_framework.py::TestTestResults::test_create_test_result FAILED [ 73%]
+tests/test_test_framework.py::TestTestResults::test_list_test_results PASSED [ 76%]
+tests/test_test_framework.py::TestStatistics::test_get_test_statistics FAILED [ 80%]
+tests/test_test_framework.py::TestValidation::test_test_suite_name_required PASSED [ 83%]
+tests/test_test_framework.py::TestValidation::test_test_case_name_too_long PASSED [ 86%]
+tests/test_test_framework.py::TestValidation::test_test_case_timeout_range PASSED [ 90%]
+tests/test_test_framework.py::TestValidation::test_test_case_retry_count_range PASSED [ 93%]
+tests/test_test_framework.py::TestIntegration::test_full_test_lifecycle FAILED [ 96%]
+tests/test_test_framework.py::TestIntegration::test_cascade_delete_suite PASSED [100%]
+
+================================== FAILURES ===================================
+______________________ TestTestRuns.test_list_test_runs _______________________
+tests\test_test_framework.py:389: in test_list_test_runs
+    run1 = TestRun(test_suite_id=suite.id, status=TestStatus.COMPLETED, environment="development")
+C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\enum.py:786: in __getattr__
+    raise AttributeError(name) from None
+E   AttributeError: COMPLETED
+___________________ TestTestResults.test_create_test_result ___________________
+tests\test_test_framework.py:506: in test_create_test_result
+    response = await client.post(
+.venv\Lib\site-packages\httpx\_client.py:1861: in post
+    return await self.request(
+.venv\Lib\site-packages\httpx\_client.py:1542: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+.venv\Lib\site-packages\httpx\_client.py:1631: in send
+    response = await self._send_handling_auth(
+.venv\Lib\site-packages\httpx\_client.py:1659: in _send_handling_auth
+    response = await self._send_handling_redirects(
+.venv\Lib\site-packages\httpx\_client.py:1696: in _send_handling_redirects
+    response = await self._send_single_request(request)
+.venv\Lib\site-packages\httpx\_client.py:1732: in _send_single_request
+    response = await transport.handle_async_request(request)
+.venv\Lib\site-packages\httpx\_transports\asgi.py:170: in handle_async_request
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\applications.py:1054: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:113: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:187: in __call__
+    raise exc
+.venv\Lib\site-packages\starlette\middleware\errors.py:165: in __call__
+    await self.app(scope, receive, _send)
+.venv\Lib\site-packages\starlette\middleware\cors.py:85: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:62: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:62: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:51: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\starlette\routing.py:715: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:735: in app
+    await route.handle(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:288: in handle
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:76: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:62: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:51: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\starlette\routing.py:73: in app
+    response = await f(request)
+.venv\Lib\site-packages\fastapi\routing.py:301: in app
+    raw_response = await run_endpoint_function(
+.venv\Lib\site-packages\fastapi\routing.py:212: in run_endpoint_function
+    return await dependant.call(**values)
+app\api\v1\endpoints\test_framework.py:471: in create_test_result
+    duration=payload.duration,
+.venv\Lib\site-packages\pydantic\main.py:827: in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+E   AttributeError: 'TestResultCreate' object has no attribute 'duration'
+___________________ TestStatistics.test_get_test_statistics ___________________
+tests\test_test_framework.py:579: in test_get_test_statistics
+    run = TestRun(test_suite_id=suite.id, status=TestStatus.COMPLETED, total_tests=10, passed_tests=8, failed_tests=2)
+C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\enum.py:786: in __getattr__
+    raise AttributeError(name) from None
+E   AttributeError: COMPLETED
+__________________ TestIntegration.test_full_test_lifecycle ___________________
+tests\test_test_framework.py:740: in test_full_test_lifecycle
+    result_response = await client.post(
+.venv\Lib\site-packages\httpx\_client.py:1861: in post
+    return await self.request(
+.venv\Lib\site-packages\httpx\_client.py:1542: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+.venv\Lib\site-packages\httpx\_client.py:1631: in send
+    response = await self._send_handling_auth(
+.venv\Lib\site-packages\httpx\_client.py:1659: in _send_handling_auth
+    response = await self._send_handling_redirects(
+.venv\Lib\site-packages\httpx\_client.py:1696: in _send_handling_redirects
+    response = await self._send_single_request(request)
+.venv\Lib\site-packages\httpx\_client.py:1732: in _send_single_request
+    response = await transport.handle_async_request(request)
+.venv\Lib\site-packages\httpx\_transports\asgi.py:170: in handle_async_request
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\applications.py:1054: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:113: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:187: in __call__
+    raise exc
+.venv\Lib\site-packages\starlette\middleware\errors.py:165: in __call__
+    await self.app(scope, receive, _send)
+.venv\Lib\site-packages\starlette\middleware\cors.py:85: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:62: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:62: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:51: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\starlette\routing.py:715: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:735: in app
+    await route.handle(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:288: in handle
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:76: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:62: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:51: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\starlette\routing.py:73: in app
+    response = await f(request)
+.venv\Lib\site-packages\fastapi\routing.py:301: in app
+    raw_response = await run_endpoint_function(
+.venv\Lib\site-packages\fastapi\routing.py:212: in run_endpoint_function
+    return await dependant.call(**values)
+app\api\v1\endpoints\test_framework.py:471: in create_test_result
+    duration=payload.duration,
+.venv\Lib\site-packages\pydantic\main.py:827: in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+E   AttributeError: 'TestResultCreate' object has no attribute 'duration'
+------------------------------ Captured log call ------------------------------
+ERROR    app.services.cache:cache.py:67 Cache delete pattern error for audit_logs:list:*: Error 22 connecting to localhost:6379. 22.
+ERROR    app.services.cache:cache.py:67 Cache delete pattern error for test_suite:1:*: Error 22 connecting to localhost:6379. 22.
+ERROR    app.services.cache:cache.py:67 Cache delete pattern error for audit_logs:list:*: Error 22 connecting to localhost:6379. 22.
+ERROR    app.services.cache:cache.py:67 Cache delete pattern error for audit_logs:list:*: Error 22 connecting to localhost:6379. 22.
+============================== warnings summary ===============================
+.venv\Lib\site-packages\pydantic\_internal\_config.py:291
+.venv\Lib\site-packages\pydantic\_internal\_config.py:291
+.venv\Lib\site-packages\pydantic\_internal\_config.py:291
+.venv\Lib\site-packages\pydantic\_internal\_config.py:291
+.venv\Lib\site-packages\pydantic\_internal\_config.py:291
+.venv\Lib\site-packages\pydantic\_internal\_config.py:291
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\.venv\Lib\site-packages\pydantic\_internal\_config.py:291: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.8/migration/
+    warnings.warn(DEPRECATION_MESSAGE, DeprecationWarning)
+
+app\schemas\test_framework.py:55
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\schemas\test_framework.py:55: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.8/migration/
+    @validator('method')
+
+app\schemas\test_framework.py:61
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\schemas\test_framework.py:61: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.8/migration/
+    @validator('test_type')
+
+app\schemas\test_framework.py:89
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\schemas\test_framework.py:89: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.8/migration/
+    @validator('method')
+
+app\schemas\test_framework.py:95
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\schemas\test_framework.py:95: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.8/migration/
+    @validator('test_type')
+
+app\schemas\test_framework.py:287
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\schemas\test_framework.py:287: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.8/migration/
+    @validator('total_tests')
+
+app\models\test_framework.py:25
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\models\test_framework.py:25: PytestCollectionWarning: cannot collect test class 'TestSuite' because it has a __init__ constructor (from: tests/test_test_framework.py)
+    class TestSuite(Base):
+
+app\models\test_framework.py:54
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\models\test_framework.py:54: PytestCollectionWarning: cannot collect test class 'TestCase' because it has a __init__ constructor (from: tests/test_test_framework.py)
+    class TestCase(Base):
+
+app\models\test_framework.py:98
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\models\test_framework.py:98: PytestCollectionWarning: cannot collect test class 'TestRun' because it has a __init__ constructor (from: tests/test_test_framework.py)
+    class TestRun(Base):
+
+app\models\test_framework.py:141
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\models\test_framework.py:141: PytestCollectionWarning: cannot collect test class 'TestResult' because it has a __init__ constructor (from: tests/test_test_framework.py)
+    class TestResult(Base):
+
+app\models\test_framework.py:9
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\models\test_framework.py:9: PytestCollectionWarning: cannot collect test class 'TestStatus' because it has a __init__ constructor (from: tests/test_test_framework.py)
+    class TestStatus(str, enum.Enum):
+
+app\models\test_framework.py:18
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\models\test_framework.py:18: PytestCollectionWarning: cannot collect test class 'TestPriority' because it has a __init__ constructor (from: tests/test_test_framework.py)
+    class TestPriority(str, enum.Enum):
+
+app\schemas\test_framework.py:268
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\schemas\test_framework.py:268: PytestCollectionWarning: cannot collect test class 'TestRunExecutionRequest' because it has a __init__ constructor (from: tests/test_test_framework.py)
+    class TestRunExecutionRequest(BaseModel):
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_test_framework.py::TestTestRuns::test_list_test_runs - Attr...
+FAILED tests/test_test_framework.py::TestTestResults::test_create_test_result
+FAILED tests/test_test_framework.py::TestStatistics::test_get_test_statistics
+FAILED tests/test_test_framework.py::TestIntegration::test_full_test_lifecycle
+============ 4 failed, 26 passed, 18 warnings in 323.69s (0:05:23) ============

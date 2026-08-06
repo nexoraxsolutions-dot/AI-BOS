@@ -1,7 +1,7 @@
 """Create organization_settings table
 
 Revision ID: 0010
-Revises: 0009_create_password_reset_tokens
+Revises: 0009
 Create Date: 2026-07-29 11:14:00.000000
 
 """

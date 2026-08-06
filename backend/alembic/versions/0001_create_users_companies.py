@@ -1,13 +1,13 @@
 """create users and companies tables
 
-Revision ID: 0001_create_users_companies
+Revision ID: 0001
 Revises: 
 Create Date: 2026-07-18 00:00:00.000000
 """
 from alembic import op
 import sqlalchemy as sa
 
-revision = '0001_create_users_companies'
+revision = '0001'
 down_revision = None
 branch_labels = None
 depends_on = None

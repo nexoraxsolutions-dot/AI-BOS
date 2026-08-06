@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import auth, users, companies, dashboard, health, redis, environment_variables, tenant, audit_log, tokens, roles, departments, two_factor, devices, logging_history, sessions, api_keys, password_policy, account_lock, security_dashboard
+from app.api.v1.endpoints import auth, users, companies, dashboard, health, redis, environment_variables, tenant, audit_log, tokens, roles, departments, two_factor, devices, logging_history, sessions, api_keys, password_policy, account_lock, security_dashboard, test_framework, documents, logging_configuration
 
 api_router = APIRouter()
 api_router.include_router(health.router, prefix="", tags=["Health"])
@@ -17,8 +17,11 @@ api_router.include_router(roles.router, prefix="/roles", tags=["RBAC"])
 api_router.include_router(two_factor.router, prefix="/auth", tags=["Auth"])
 api_router.include_router(devices.router, prefix="/devices", tags=["Devices"])
 api_router.include_router(logging_history.router, prefix="/logging", tags=["Logging History"])
+api_router.include_router(logging_configuration.router, prefix="/logging-config", tags=["Logging Configuration"])
 api_router.include_router(sessions.router, prefix="/sessions", tags=["Sessions"])
 api_router.include_router(api_keys.router, prefix="/api-keys", tags=["API Keys"])
 api_router.include_router(password_policy.router, prefix="/password-policy", tags=["Password Policy"])
 api_router.include_router(account_lock.router, prefix="/account-lock", tags=["Account Lock"])
 api_router.include_router(security_dashboard.router, prefix="/security", tags=["Security Dashboard"])
+api_router.include_router(test_framework.router, prefix="/testing", tags=["Test Framework"])
+api_router.include_router(documents.router, prefix="/documents", tags=["Documentation"])

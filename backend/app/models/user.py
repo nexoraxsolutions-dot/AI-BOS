@@ -77,4 +77,16 @@ class User(Base):
         back_populates="user",
         cascade="all, delete-orphan",
     )
+    
+    created_test_suites = relationship(
+        "TestSuite",
+        back_populates="created_by",
+        cascade="all, delete-orphan",
+    )
+    
+    test_runs = relationship(
+        "TestRun",
+        back_populates="triggered_by_user",
+        cascade="all, delete-orphan",
+    )
 

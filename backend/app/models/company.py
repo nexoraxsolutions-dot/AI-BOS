@@ -30,3 +30,9 @@ class Company(Base):
 
     users = relationship("User", back_populates="company")
     departments = relationship("Department", back_populates="company", cascade="all, delete-orphan")
+    documents = relationship("Document", back_populates="company", cascade="all, delete-orphan")
+    test_suites = relationship(
+        "TestSuite",
+        back_populates="company",
+        cascade="all, delete-orphan"
+    )

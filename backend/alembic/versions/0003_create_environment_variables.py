@@ -1,7 +1,7 @@
 """create_environment_variables
 
-Revision ID: 0003_create_environment_variables
-Revises: 0002_add_timestamps
+Revision ID: 0003
+Revises: 0002
 Create Date: 2024-07-22 15:59:00.000000
 
 """
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '0003_create_environment_variables'
-down_revision: Union[str, None] = '0002_add_timestamps'
+revision: str = '0003'
+down_revision: Union[str, None] = '0002'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

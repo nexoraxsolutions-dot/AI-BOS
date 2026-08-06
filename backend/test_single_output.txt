@@ -1,0 +1,901 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.9, pytest-7.4.4, pluggy-1.6.0 -- C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend
+configfile: pytest.ini
+plugins: anyio-4.14.2, asyncio-0.21.1, cov-5.0.0
+asyncio: mode=Mode.AUTO
+collecting ... collected 1 item
+
+tests/test_test_framework.py::TestTestSuites::test_get_test_suite FAILED [100%]
+
+================================== FAILURES ===================================
+_____________________ TestTestSuites.test_get_test_suite ______________________
+
+self = <tests.test_test_framework.TestTestSuites object at 0x000001CDE8EFE750>
+client = <httpx.AsyncClient object at 0x000001CDE85D9350>
+admin_token_headers = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBhaS1ib3MuY29tIiwiZXhwIjoxNzg1NTY3OTczLCJ0eXBlIjoiYWNjZXNzIn0.Zokc5Ir-2c7qmYCjaAOVN-_DxseZepDYenqjbrWQo2c'}
+db_session = <sqlalchemy.orm.session.AsyncSession object at 0x000001CDE7485790>
+test_company = <app.models.company.Company object at 0x000001CDE8EFF4D0>
+admin_user = <app.models.user.User object at 0x000001CDE960D4D0>
+
+    @pytest.mark.asyncio
+    async def test_get_test_suite(self, client: AsyncClient, admin_token_headers: dict, db_session: AsyncSession, test_company, admin_user):
+        """Test getting a specific test suite."""
+        suite = TestSuite(name="Test Suite", company_id=test_company.id, created_by_id=admin_user.id)
+        db_session.add(suite)
+        await db_session.commit()
+        await db_session.refresh(suite)
+    
+>       response = await client.get(
+            f"/api/v1/testing/suites/{suite.id}",
+            headers=admin_token_headers,
+        )
+
+tests\test_test_framework.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <httpx.AsyncClient object at 0x000001CDE85D9350>
+url = '/api/v1/testing/suites/1'
+
+    async def get(
+        self,
+        url: URL | str,
+        *,
+        params: QueryParamTypes | None = None,
+        headers: HeaderTypes | None = None,
+        cookies: CookieTypes | None = None,
+        auth: AuthTypes | UseClientDefault | None = USE_CLIENT_DEFAULT,
+        follow_redirects: bool | UseClientDefault = USE_CLIENT_DEFAULT,
+        timeout: TimeoutTypes | UseClientDefault = USE_CLIENT_DEFAULT,
+        extensions: RequestExtensions | None = None,
+    ) -> Response:
+        """
+        Send a `GET` request.
+    
+        **Parameters**: See `httpx.request`.
+        """
+>       return await self.request(
+            "GET",
+            url,
+            params=params,
+            headers=headers,
+            cookies=cookies,
+            auth=auth,
+            follow_redirects=follow_redirects,
+            timeout=timeout,
+            extensions=extensions,
+        )
+
+.venv\Lib\site-packages\httpx\_client.py:1770: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <httpx.AsyncClient object at 0x000001CDE85D9350>, method = 'GET'
+url = '/api/v1/testing/suites/1'
+
+    async def request(
+        self,
+        method: str,
+        url: URL | str,
+        *,
+        content: RequestContent | None = None,
+        data: RequestData | None = None,
+        files: RequestFiles | None = None,
+        json: typing.Any | None = None,
+        params: QueryParamTypes | None = None,
+        headers: HeaderTypes | None = None,
+        cookies: CookieTypes | None = None,
+        auth: AuthTypes | UseClientDefault | None = USE_CLIENT_DEFAULT,
+        follow_redirects: bool | UseClientDefault = USE_CLIENT_DEFAULT,
+        timeout: TimeoutTypes | UseClientDefault = USE_CLIENT_DEFAULT,
+        extensions: RequestExtensions | None = None,
+    ) -> Response:
+        """
+        Build and send a request.
+    
+        Equivalent to:
+    
+        ```python
+        request = client.build_request(...)
+        response = await client.send(request, ...)
+        ```
+    
+        See `AsyncClient.build_request()`, `AsyncClient.send()`
+        and [Merging of configuration][0] for how the various parameters
+        are merged with client-level configuration.
+    
+        [0]: /advanced/clients/#merging-of-configuration
+        """
+    
+        if cookies is not None:  # pragma: no cover
+            message = (
+                "Setting per-request cookies=<...> is being deprecated, because "
+                "the expected behaviour on cookie persistence is ambiguous. Set "
+                "cookies directly on the client instance instead."
+            )
+            warnings.warn(message, DeprecationWarning, stacklevel=2)
+    
+        request = self.build_request(
+            method=method,
+            url=url,
+            content=content,
+            data=data,
+            files=files,
+            json=json,
+            params=params,
+            headers=headers,
+            cookies=cookies,
+            timeout=timeout,
+            extensions=extensions,
+        )
+>       return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+
+.venv\Lib\site-packages\httpx\_client.py:1542: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <httpx.AsyncClient object at 0x000001CDE85D9350>
+request = <Request('GET', 'http://test/api/v1/testing/suites/1')>
+
+    async def send(
+        self,
+        request: Request,
+        *,
+        stream: bool = False,
+        auth: AuthTypes | UseClientDefault | None = USE_CLIENT_DEFAULT,
+        follow_redirects: bool | UseClientDefault = USE_CLIENT_DEFAULT,
+    ) -> Response:
+        """
+        Send a request.
+    
+        The request is sent as-is, unmodified.
+    
+        Typically you'll want to build one with `AsyncClient.build_request()`
+        so that any client-level configuration is merged into the request,
+        but passing an explicit `httpx.Request()` is supported as well.
+    
+        See also: [Request instances][0]
+    
+        [0]: /advanced/clients/#request-instances
+        """
+        if self._state == ClientState.CLOSED:
+            raise RuntimeError("Cannot send a request, as the client has been closed.")
+    
+        self._state = ClientState.OPENED
+        follow_redirects = (
+            self.follow_redirects
+            if isinstance(follow_redirects, UseClientDefault)
+            else follow_redirects
+        )
+    
+        self._set_timeout(request)
+    
+        auth = self._build_request_auth(request, auth)
+    
+>       response = await self._send_handling_auth(
+            request,
+            auth=auth,
+            follow_redirects=follow_redirects,
+            history=[],
+        )
+
+.venv\Lib\site-packages\httpx\_client.py:1631: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <httpx.AsyncClient object at 0x000001CDE85D9350>
+request = <Request('GET', 'http://test/api/v1/testing/suites/1')>
+auth = <httpx.Auth object at 0x000001CDE7BEF390>, follow_redirects = False
+history = []
+
+    async def _send_handling_auth(
+        self,
+        request: Request,
+        auth: Auth,
+        follow_redirects: bool,
+        history: list[Response],
+    ) -> Response:
+        auth_flow = auth.async_auth_flow(request)
+        try:
+            request = await auth_flow.__anext__()
+    
+            while True:
+>               response = await self._send_handling_redirects(
+                    request,
+                    follow_redirects=follow_redirects,
+                    history=history,
+                )
+
+.venv\Lib\site-packages\httpx\_client.py:1659: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <httpx.AsyncClient object at 0x000001CDE85D9350>
+request = <Request('GET', 'http://test/api/v1/testing/suites/1')>
+follow_redirects = False, history = []
+
+    async def _send_handling_redirects(
+        self,
+        request: Request,
+        follow_redirects: bool,
+        history: list[Response],
+    ) -> Response:
+        while True:
+            if len(history) > self.max_redirects:
+                raise TooManyRedirects(
+                    "Exceeded maximum allowed redirects.", request=request
+                )
+    
+            for hook in self._event_hooks["request"]:
+                await hook(request)
+    
+>           response = await self._send_single_request(request)
+
+.venv\Lib\site-packages\httpx\_client.py:1696: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <httpx.AsyncClient object at 0x000001CDE85D9350>
+request = <Request('GET', 'http://test/api/v1/testing/suites/1')>
+
+    async def _send_single_request(self, request: Request) -> Response:
+        """
+        Sends a single request, without handling any redirections.
+        """
+        transport = self._transport_for_url(request.url)
+        start = time.perf_counter()
+    
+        if not isinstance(request.stream, AsyncByteStream):
+            raise RuntimeError(
+                "Attempted to send an sync request with an AsyncClient instance."
+            )
+    
+        with request_context(request=request):
+>           response = await transport.handle_async_request(request)
+
+.venv\Lib\site-packages\httpx\_client.py:1732: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <httpx.ASGITransport object at 0x000001CDE8ED8290>
+request = <Request('GET', 'http://test/api/v1/testing/suites/1')>
+
+    async def handle_async_request(
+        self,
+        request: Request,
+    ) -> Response:
+        assert isinstance(request.stream, AsyncByteStream)
+    
+        # ASGI scope.
+        scope = {
+            "type": "http",
+            "asgi": {"version": "3.0"},
+            "http_version": "1.1",
+            "method": request.method,
+            "headers": [(k.lower(), v) for (k, v) in request.headers.raw],
+            "scheme": request.url.scheme,
+            "path": request.url.path,
+            "raw_path": request.url.raw_path.split(b"?")[0],
+            "query_string": request.url.query,
+            "server": (request.url.host, request.url.port),
+            "client": self.client,
+            "root_path": self.root_path,
+        }
+    
+        # Request.
+        request_body_chunks = request.stream.__aiter__()
+        request_complete = False
+    
+        # Response.
+        status_code = None
+        response_headers = None
+        body_parts = []
+        response_started = False
+        response_complete = create_event()
+    
+        # ASGI callables.
+    
+        async def receive() -> dict[str, typing.Any]:
+            nonlocal request_complete
+    
+            if request_complete:
+                await response_complete.wait()
+                return {"type": "http.disconnect"}
+    
+            try:
+                body = await request_body_chunks.__anext__()
+            except StopAsyncIteration:
+                request_complete = True
+                return {"type": "http.request", "body": b"", "more_body": False}
+            return {"type": "http.request", "body": body, "more_body": True}
+    
+        async def send(message: typing.MutableMapping[str, typing.Any]) -> None:
+            nonlocal status_code, response_headers, response_started
+    
+            if message["type"] == "http.response.start":
+                assert not response_started
+    
+                status_code = message["status"]
+                response_headers = message.get("headers", [])
+                response_started = True
+    
+            elif message["type"] == "http.response.body":
+                assert not response_complete.is_set()
+                body = message.get("body", b"")
+                more_body = message.get("more_body", False)
+    
+                if body and request.method != "HEAD":
+                    body_parts.append(body)
+    
+                if not more_body:
+                    response_complete.set()
+    
+        try:
+>           await self.app(scope, receive, send)
+
+.venv\Lib\site-packages\httpx\_transports\asgi.py:170: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <fastapi.applications.FastAPI object at 0x000001CDE7134AD0>
+scope = {'app': <fastapi.applications.FastAPI object at 0x000001CDE7134AD0>, 'asgi': {'version': '3.0'}, 'client': ('127.0.0.1', 123), 'endpoint': <function get_test_suite at 0x000001CDE7ACE340>, ...}
+receive = <function ASGITransport.handle_async_request.<locals>.receive at 0x000001CDE9623BA0>
+send = <function ASGITransport.handle_async_request.<locals>.send at 0x000001CDE9620C20>
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if self.root_path:
+            scope["root_path"] = self.root_path
+>       await super().__call__(scope, receive, send)
+
+.venv\Lib\site-packages\fastapi\applications.py:1054: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <fastapi.applications.FastAPI object at 0x000001CDE7134AD0>
+scope = {'app': <fastapi.applications.FastAPI object at 0x000001CDE7134AD0>, 'asgi': {'version': '3.0'}, 'client': ('127.0.0.1', 123), 'endpoint': <function get_test_suite at 0x000001CDE7ACE340>, ...}
+receive = <function ASGITransport.handle_async_request.<locals>.receive at 0x000001CDE9623BA0>
+send = <function ASGITransport.handle_async_request.<locals>.send at 0x000001CDE9620C20>
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        scope["app"] = self
+        if self.middleware_stack is None:
+            self.middleware_stack = self.build_middleware_stack()
+>       await self.middleware_stack(scope, receive, send)
+
+.venv\Lib\site-packages\starlette\applications.py:113: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <starlette.middleware.errors.ServerErrorMiddleware object at 0x000001CDE7AFCAD0>
+scope = {'app': <fastapi.applications.FastAPI object at 0x000001CDE7134AD0>, 'asgi': {'version': '3.0'}, 'client': ('127.0.0.1', 123), 'endpoint': <function get_test_suite at 0x000001CDE7ACE340>, ...}
+receive = <function ASGITransport.handle_async_request.<locals>.receive at 0x000001CDE9623BA0>
+send = <function ASGITransport.handle_async_request.<locals>.send at 0x000001CDE9620C20>
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
+    
+        response_started = False
+    
+        async def _send(message: Message) -> None:
+            nonlocal response_started, send
+    
+            if message["type"] == "http.response.start":
+                response_started = True
+            await send(message)
+    
+        try:
+            await self.app(scope, receive, _send)
+        except Exception as exc:
+            request = Request(scope)
+            if self.debug:
+                # In debug mode, return traceback responses.
+                response = self.debug_response(request, exc)
+            elif self.handler is None:
+                # Use our default 500 error handler.
+                response = self.error_response(request, exc)
+            else:
+                # Use an installed 500 error handler.
+                if is_async_callable(self.handler):
+                    response = await self.handler(request, exc)
+                else:
+                    response = await run_in_threadpool(self.handler, request, exc)
+    
+            if not response_started:
+                await response(scope, receive, send)
+    
+            # We always continue to raise the exception.
+            # This allows servers to log the error, or allows test clients
+            # to optionally raise the error within the test case.
+>           raise exc
+
+.venv\Lib\site-packages\starlette\middleware\errors.py:187: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <starlette.middleware.errors.ServerErrorMiddleware object at 0x000001CDE7AFCAD0>
+scope = {'app': <fastapi.applications.FastAPI object at 0x000001CDE7134AD0>, 'asgi': {'version': '3.0'}, 'client': ('127.0.0.1', 123), 'endpoint': <function get_test_suite at 0x000001CDE7ACE340>, ...}
+receive = <function ASGITransport.handle_async_request.<locals>.receive at 0x000001CDE9623BA0>
+send = <function ASGITransport.handle_async_request.<locals>.send at 0x000001CDE9620C20>
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
+    
+        response_started = False
+    
+        async def _send(message: Message) -> None:
+            nonlocal response_started, send
+    
+            if message["type"] == "http.response.start":
+                response_started = True
+            await send(message)
+    
+        try:
+>           await self.app(scope, receive, _send)
+
+.venv\Lib\site-packages\starlette\middleware\errors.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <starlette.middleware.cors.CORSMiddleware object at 0x000001CDE9647FD0>
+scope = {'app': <fastapi.applications.FastAPI object at 0x000001CDE7134AD0>, 'asgi': {'version': '3.0'}, 'client': ('127.0.0.1', 123), 'endpoint': <function get_test_suite at 0x000001CDE7ACE340>, ...}
+receive = <function ASGITransport.handle_async_request.<locals>.receive at 0x000001CDE9623BA0>
+send = <function ServerErrorMiddleware.__call__.<locals>._send at 0x000001CDE9623B00>
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] != "http":  # pragma: no cover
+            await self.app(scope, receive, send)
+            return
+    
+        method = scope["method"]
+        headers = Headers(scope=scope)
+        origin = headers.get("origin")
+    
+        if origin is None:
+>           await self.app(scope, receive, send)
+
+.venv\Lib\site-packages\starlette\middleware\cors.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <starlette.middleware.exceptions.ExceptionMiddleware object at 0x000001CDE8F76910>
+scope = {'app': <fastapi.applications.FastAPI object at 0x000001CDE7134AD0>, 'asgi': {'version': '3.0'}, 'client': ('127.0.0.1', 123), 'endpoint': <function get_test_suite at 0x000001CDE7ACE340>, ...}
+receive = <function ASGITransport.handle_async_request.<locals>.receive at 0x000001CDE9623BA0>
+send = <function ServerErrorMiddleware.__call__.<locals>._send at 0x000001CDE9623B00>
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] not in ("http", "websocket"):
+            await self.app(scope, receive, send)
+            return
+    
+        scope["starlette.exception_handlers"] = (
+            self._exception_handlers,
+            self._status_handlers,
+        )
+    
+        conn: Request | WebSocket
+        if scope["type"] == "http":
+            conn = Request(scope, receive, send)
+        else:
+            conn = WebSocket(scope, receive, send)
+    
+>       await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+scope = {'app': <fastapi.applications.FastAPI object at 0x000001CDE7134AD0>, 'asgi': {'version': '3.0'}, 'client': ('127.0.0.1', 123), 'endpoint': <function get_test_suite at 0x000001CDE7ACE340>, ...}
+receive = <function ASGITransport.handle_async_request.<locals>.receive at 0x000001CDE9623BA0>
+send = <function ServerErrorMiddleware.__call__.<locals>._send at 0x000001CDE9623B00>
+
+    async def wrapped_app(scope: Scope, receive: Receive, send: Send) -> None:
+        response_started = False
+    
+        async def sender(message: Message) -> None:
+            nonlocal response_started
+    
+            if message["type"] == "http.response.start":
+                response_started = True
+            await send(message)
+    
+        try:
+            await app(scope, receive, sender)
+        except Exception as exc:
+            handler = None
+    
+            if isinstance(exc, HTTPException):
+                handler = status_handlers.get(exc.status_code)
+    
+            if handler is None:
+                handler = _lookup_exception_handler(exception_handlers, exc)
+    
+            if handler is None:
+>               raise exc
+
+.venv\Lib\site-packages\starlette\_exception_handler.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+scope = {'app': <fastapi.applications.FastAPI object at 0x000001CDE7134AD0>, 'asgi': {'version': '3.0'}, 'client': ('127.0.0.1', 123), 'endpoint': <function get_test_suite at 0x000001CDE7ACE340>, ...}
+receive = <function ASGITransport.handle_async_request.<locals>.receive at 0x000001CDE9623BA0>
+send = <function ServerErrorMiddleware.__call__.<locals>._send at 0x000001CDE9623B00>
+
+    async def wrapped_app(scope: Scope, receive: Receive, send: Send) -> None:
+        response_started = False
+    
+        async def sender(message: Message) -> None:
+            nonlocal response_started
+    
+            if message["type"] == "http.response.start":
+                response_started = True
+            await send(message)
+    
+        try:
+>           await app(scope, receive, sender)
+
+.venv\Lib\site-packages\starlette\_exception_handler.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <fastapi.routing.APIRouter object at 0x000001CDE5237B10>
+scope = {'app': <fastapi.applications.FastAPI object at 0x000001CDE7134AD0>, 'asgi': {'version': '3.0'}, 'client': ('127.0.0.1', 123), 'endpoint': <function get_test_suite at 0x000001CDE7ACE340>, ...}
+receive = <function ASGITransport.handle_async_request.<locals>.receive at 0x000001CDE9623BA0>
+send = <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001CDE9623CE0>
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        """
+        The main entry point to the Router class.
+        """
+>       await self.middleware_stack(scope, receive, send)
+
+.venv\Lib\site-packages\starlette\routing.py:715: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <fastapi.routing.APIRouter object at 0x000001CDE5237B10>
+scope = {'app': <fastapi.applications.FastAPI object at 0x000001CDE7134AD0>, 'asgi': {'version': '3.0'}, 'client': ('127.0.0.1', 123), 'endpoint': <function get_test_suite at 0x000001CDE7ACE340>, ...}
+receive = <function ASGITransport.handle_async_request.<locals>.receive at 0x000001CDE9623BA0>
+send = <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001CDE9623CE0>
+
+    async def app(self, scope: Scope, receive: Receive, send: Send) -> None:
+        assert scope["type"] in ("http", "websocket", "lifespan")
+    
+        if "router" not in scope:
+            scope["router"] = self
+    
+        if scope["type"] == "lifespan":
+            await self.lifespan(scope, receive, send)
+            return
+    
+        partial = None
+    
+        for route in self.routes:
+            # Determine if any route matches the incoming scope,
+            # and hand over to the matching route if found.
+            match, child_scope = route.matches(scope)
+            if match == Match.FULL:
+                scope.update(child_scope)
+>               await route.handle(scope, receive, send)
+
+.venv\Lib\site-packages\starlette\routing.py:735: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = APIRoute(path='/api/v1/testing/suites/{test_suite_id}', name='get_test_suite', methods=['GET'])
+scope = {'app': <fastapi.applications.FastAPI object at 0x000001CDE7134AD0>, 'asgi': {'version': '3.0'}, 'client': ('127.0.0.1', 123), 'endpoint': <function get_test_suite at 0x000001CDE7ACE340>, ...}
+receive = <function ASGITransport.handle_async_request.<locals>.receive at 0x000001CDE9623BA0>
+send = <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001CDE9623CE0>
+
+    async def handle(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if self.methods and scope["method"] not in self.methods:
+            headers = {"Allow": ", ".join(self.methods)}
+            if "app" in scope:
+                raise HTTPException(status_code=405, headers=headers)
+            else:
+                response = PlainTextResponse("Method Not Allowed", status_code=405, headers=headers)
+            await response(scope, receive, send)
+        else:
+>           await self.app(scope, receive, send)
+
+.venv\Lib\site-packages\starlette\routing.py:288: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+scope = {'app': <fastapi.applications.FastAPI object at 0x000001CDE7134AD0>, 'asgi': {'version': '3.0'}, 'client': ('127.0.0.1', 123), 'endpoint': <function get_test_suite at 0x000001CDE7ACE340>, ...}
+receive = <function ASGITransport.handle_async_request.<locals>.receive at 0x000001CDE9623BA0>
+send = <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001CDE9623CE0>
+
+    async def app(scope: Scope, receive: Receive, send: Send) -> None:
+        request = Request(scope, receive, send)
+    
+        async def app(scope: Scope, receive: Receive, send: Send) -> None:
+            response = await f(request)
+            await response(scope, receive, send)
+    
+>       await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+
+.venv\Lib\site-packages\starlette\routing.py:76: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+scope = {'app': <fastapi.applications.FastAPI object at 0x000001CDE7134AD0>, 'asgi': {'version': '3.0'}, 'client': ('127.0.0.1', 123), 'endpoint': <function get_test_suite at 0x000001CDE7ACE340>, ...}
+receive = <function ASGITransport.handle_async_request.<locals>.receive at 0x000001CDE9623BA0>
+send = <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001CDE9623CE0>
+
+    async def wrapped_app(scope: Scope, receive: Receive, send: Send) -> None:
+        response_started = False
+    
+        async def sender(message: Message) -> None:
+            nonlocal response_started
+    
+            if message["type"] == "http.response.start":
+                response_started = True
+            await send(message)
+    
+        try:
+            await app(scope, receive, sender)
+        except Exception as exc:
+            handler = None
+    
+            if isinstance(exc, HTTPException):
+                handler = status_handlers.get(exc.status_code)
+    
+            if handler is None:
+                handler = _lookup_exception_handler(exception_handlers, exc)
+    
+            if handler is None:
+>               raise exc
+
+.venv\Lib\site-packages\starlette\_exception_handler.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+scope = {'app': <fastapi.applications.FastAPI object at 0x000001CDE7134AD0>, 'asgi': {'version': '3.0'}, 'client': ('127.0.0.1', 123), 'endpoint': <function get_test_suite at 0x000001CDE7ACE340>, ...}
+receive = <function ASGITransport.handle_async_request.<locals>.receive at 0x000001CDE9623BA0>
+send = <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001CDE9623CE0>
+
+    async def wrapped_app(scope: Scope, receive: Receive, send: Send) -> None:
+        response_started = False
+    
+        async def sender(message: Message) -> None:
+            nonlocal response_started
+    
+            if message["type"] == "http.response.start":
+                response_started = True
+            await send(message)
+    
+        try:
+>           await app(scope, receive, sender)
+
+.venv\Lib\site-packages\starlette\_exception_handler.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+scope = {'app': <fastapi.applications.FastAPI object at 0x000001CDE7134AD0>, 'asgi': {'version': '3.0'}, 'client': ('127.0.0.1', 123), 'endpoint': <function get_test_suite at 0x000001CDE7ACE340>, ...}
+receive = <function ASGITransport.handle_async_request.<locals>.receive at 0x000001CDE9623BA0>
+send = <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001CDE9623EC0>
+
+    async def app(scope: Scope, receive: Receive, send: Send) -> None:
+>       response = await f(request)
+
+.venv\Lib\site-packages\starlette\routing.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+request = <starlette.requests.Request object at 0x000001CDE9648310>
+
+    async def app(request: Request) -> Response:
+        response: Union[Response, None] = None
+        async with AsyncExitStack() as file_stack:
+            try:
+                body: Any = None
+                if body_field:
+                    if is_body_form:
+                        body = await request.form()
+                        file_stack.push_async_callback(body.close)
+                    else:
+                        body_bytes = await request.body()
+                        if body_bytes:
+                            json_body: Any = Undefined
+                            content_type_value = request.headers.get("content-type")
+                            if not content_type_value:
+                                json_body = await request.json()
+                            else:
+                                message = email.message.Message()
+                                message["content-type"] = content_type_value
+                                if message.get_content_maintype() == "application":
+                                    subtype = message.get_content_subtype()
+                                    if subtype == "json" or subtype.endswith("+json"):
+                                        json_body = await request.json()
+                            if json_body != Undefined:
+                                body = json_body
+                            else:
+                                body = body_bytes
+            except json.JSONDecodeError as e:
+                validation_error = RequestValidationError(
+                    [
+                        {
+                            "type": "json_invalid",
+                            "loc": ("body", e.pos),
+                            "msg": "JSON decode error",
+                            "input": {},
+                            "ctx": {"error": e.msg},
+                        }
+                    ],
+                    body=e.doc,
+                )
+                raise validation_error from e
+            except HTTPException:
+                # If a middleware raises an HTTPException, it should be raised again
+                raise
+            except Exception as e:
+                http_error = HTTPException(
+                    status_code=400, detail="There was an error parsing the body"
+                )
+                raise http_error from e
+            errors: List[Any] = []
+            async with AsyncExitStack() as async_exit_stack:
+                solved_result = await solve_dependencies(
+                    request=request,
+                    dependant=dependant,
+                    body=body,
+                    dependency_overrides_provider=dependency_overrides_provider,
+                    async_exit_stack=async_exit_stack,
+                    embed_body_fields=embed_body_fields,
+                )
+                errors = solved_result.errors
+                if not errors:
+>                   raw_response = await run_endpoint_function(
+                        dependant=dependant,
+                        values=solved_result.values,
+                        is_coroutine=is_coroutine,
+                    )
+
+.venv\Lib\site-packages\fastapi\routing.py:301: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def run_endpoint_function(
+        *, dependant: Dependant, values: Dict[str, Any], is_coroutine: bool
+    ) -> Any:
+        # Only called by get_request_handler. Has been split into its own function to
+        # facilitate profiling endpoints, since inner functions are harder to profile.
+        assert dependant.call is not None, "dependant.call must be a function"
+    
+        if is_coroutine:
+>           return await dependant.call(**values)
+
+.venv\Lib\site-packages\fastapi\routing.py:212: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+test_suite_id = 1
+db = <sqlalchemy.orm.session.AsyncSession object at 0x000001CDE7485790>
+current_user = <app.models.user.User object at 0x000001CDE960D4D0>
+
+    @router.get("/suites/{test_suite_id}", response_model=test_framework_schema.TestSuiteOut)
+    async def get_test_suite(
+        test_suite_id: int,
+        db: AsyncSession = Depends(get_async_session),
+        current_user=Depends(get_current_active_user),
+    ):
+        """Get test suite by ID."""
+>       test_suite = await test_framework_service.get_test_suite(db, test_suite_id)
+
+app\api\v1\endpoints\test_framework.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = <sqlalchemy.orm.session.AsyncSession object at 0x000001CDE7485790>
+test_suite_id = 1
+
+    async def get_test_suite(db: AsyncSession, test_suite_id: int) -> TestSuite | None:
+        """Get test suite by ID."""
+        cache_key = f"test_suite:{test_suite_id}"
+        cached = await cache_service.get(cache_key)
+        if cached:
+            return cached
+    
+        result = await db.execute(
+            select(TestSuite)
+            .options(joinedload(TestSuite.test_cases))
+            .where(TestSuite.id == test_suite_id)
+        )
+>       test_suite = result.scalar_one_or_none()
+
+app\services\test_framework.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <sqlalchemy.engine.result.ChunkedIteratorResult object at 0x000001CDE9646210>
+
+    def scalar_one_or_none(self) -> Optional[Any]:
+        """Return exactly one scalar result or ``None``.
+    
+        This is equivalent to calling :meth:`_engine.Result.scalars` and
+        then :meth:`_engine.Result.one_or_none`.
+    
+        .. seealso::
+    
+            :meth:`_engine.Result.one_or_none`
+    
+            :meth:`_engine.Result.scalars`
+    
+        """
+>       return self._only_one_row(
+            raise_for_second_row=True, raise_for_none=False, scalar=True
+        )
+
+.venv\Lib\site-packages\sqlalchemy\engine\result.py:1487: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <sqlalchemy.engine.result.ChunkedIteratorResult object at 0x000001CDE9646210>
+raise_for_second_row = True, raise_for_none = False, scalar = True
+
+    def _only_one_row(
+        self,
+        raise_for_second_row: bool,
+        raise_for_none: bool,
+        scalar: bool,
+    ) -> Optional[_R]:
+        onerow = self._fetchone_impl
+    
+        row: Optional[_InterimRowType[Any]] = onerow(hard_close=True)
+        if row is None:
+            if raise_for_none:
+                raise exc.NoResultFound(
+                    "No row was found when one was required"
+                )
+            else:
+                return None
+    
+        if scalar and self._source_supports_scalars:
+            self._generate_rows = False
+            make_row = None
+        else:
+            make_row = self._row_getter
+    
+        try:
+            row = make_row(row) if make_row else row
+        except:
+            self._soft_close(hard=True)
+            raise
+    
+        if raise_for_second_row:
+            if self._unique_filter_state:
+                # for no second row but uniqueness, need to essentially
+                # consume the entire result :(
+                uniques, strategy = self._unique_strategy
+    
+>               existing_row_hash = strategy(row) if strategy else row
+
+.venv\Lib\site-packages\sqlalchemy\engine\result.py:776: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+obj = <app.models.test_framework.TestSuite object at 0x000001CDE9309FD0>
+
+    def require_unique(obj):
+>       raise sa_exc.InvalidRequestError(
+            "The unique() method must be invoked on this Result, "
+            "as it contains results that include joined eager loads "
+            "against collections"
+        )
+E       sqlalchemy.exc.InvalidRequestError: The unique() method must be invoked on this Result, as it contains results that include joined eager loads against collections
+
+.venv\Lib\site-packages\sqlalchemy\orm\loading.py:285: InvalidRequestError
+------------------------------ Captured log call ------------------------------
+ERROR    app.core.redis:redis.py:31 Failed to connect to Redis: Error 22 connecting to localhost:6379. 22.
+ERROR    app.services.cache:cache.py:27 Cache get error for key test_suite:1: Error 22 connecting to localhost:6379. 22.
+============================== warnings summary ===============================
+.venv\Lib\site-packages\pydantic\_internal\_config.py:291
+.venv\Lib\site-packages\pydantic\_internal\_config.py:291
+.venv\Lib\site-packages\pydantic\_internal\_config.py:291
+.venv\Lib\site-packages\pydantic\_internal\_config.py:291
+.venv\Lib\site-packages\pydantic\_internal\_config.py:291
+.venv\Lib\site-packages\pydantic\_internal\_config.py:291
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\.venv\Lib\site-packages\pydantic\_internal\_config.py:291: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.8/migration/
+    warnings.warn(DEPRECATION_MESSAGE, DeprecationWarning)
+
+app\schemas\test_framework.py:55
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\schemas\test_framework.py:55: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.8/migration/
+    @validator('method')
+
+app\schemas\test_framework.py:61
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\schemas\test_framework.py:61: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.8/migration/
+    @validator('test_type')
+
+app\schemas\test_framework.py:89
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\schemas\test_framework.py:89: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.8/migration/
+    @validator('method')
+
+app\schemas\test_framework.py:95
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\schemas\test_framework.py:95: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.8/migration/
+    @validator('test_type')
+
+app\schemas\test_framework.py:287
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\schemas\test_framework.py:287: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.8/migration/
+    @validator('total_tests')
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_test_framework.py::TestTestSuites::test_get_test_suite - sq...
+======================= 1 failed, 11 warnings in 10.32s =======================

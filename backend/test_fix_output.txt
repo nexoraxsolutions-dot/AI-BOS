@@ -1,0 +1,194 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.9, pytest-7.4.4, pluggy-1.6.0 -- C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend
+configfile: pytest.ini
+plugins: anyio-4.14.2, asyncio-0.21.1, cov-5.0.0
+asyncio: mode=Mode.AUTO
+collecting ... collected 4 items
+
+tests/test_test_framework.py::TestTestRuns::test_list_test_runs PASSED   [ 25%]
+tests/test_test_framework.py::TestTestResults::test_create_test_result PASSED [ 50%]
+tests/test_test_framework.py::TestStatistics::test_get_test_statistics FAILED [ 75%]
+tests/test_test_framework.py::TestIntegration::test_full_test_lifecycle FAILED [100%]
+
+================================== FAILURES ===================================
+___________________ TestStatistics.test_get_test_statistics ___________________
+tests\test_test_framework.py:588: in test_get_test_statistics
+    response = await client.get(
+.venv\Lib\site-packages\httpx\_client.py:1770: in get
+    return await self.request(
+.venv\Lib\site-packages\httpx\_client.py:1542: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+.venv\Lib\site-packages\httpx\_client.py:1631: in send
+    response = await self._send_handling_auth(
+.venv\Lib\site-packages\httpx\_client.py:1659: in _send_handling_auth
+    response = await self._send_handling_redirects(
+.venv\Lib\site-packages\httpx\_client.py:1696: in _send_handling_redirects
+    response = await self._send_single_request(request)
+.venv\Lib\site-packages\httpx\_client.py:1732: in _send_single_request
+    response = await transport.handle_async_request(request)
+.venv\Lib\site-packages\httpx\_transports\asgi.py:170: in handle_async_request
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\applications.py:1054: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:113: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:187: in __call__
+    raise exc
+.venv\Lib\site-packages\starlette\middleware\errors.py:165: in __call__
+    await self.app(scope, receive, _send)
+.venv\Lib\site-packages\starlette\middleware\cors.py:85: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:62: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:62: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:51: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\starlette\routing.py:715: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:735: in app
+    await route.handle(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:288: in handle
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:76: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:62: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:51: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\starlette\routing.py:73: in app
+    response = await f(request)
+.venv\Lib\site-packages\fastapi\routing.py:301: in app
+    raw_response = await run_endpoint_function(
+.venv\Lib\site-packages\fastapi\routing.py:212: in run_endpoint_function
+    return await dependant.call(**values)
+app\api\v1\endpoints\test_framework.py:543: in get_test_statistics
+    return test_framework_schema.TestStatistics(**stats)
+E   pydantic_core._pydantic_core.ValidationError: 4 validation errors for TestStatistics
+E   average_duration
+E     Field required [type=missing, input_value={'total_suites': 1, 'tota...1, 6, 39, 54, 557890)}]}, input_type=dict]
+E       For further information visit https://errors.pydantic.dev/2.8/v/missing
+E   recent_runs.0.skipped_tests
+E     Field required [type=missing, input_value={'id': 1, 'test_suite_nam..., 1, 6, 39, 54, 557890)}, input_type=dict]
+E       For further information visit https://errors.pydantic.dev/2.8/v/missing
+E   recent_runs.0.error_tests
+E     Field required [type=missing, input_value={'id': 1, 'test_suite_nam..., 1, 6, 39, 54, 557890)}, input_type=dict]
+E       For further information visit https://errors.pydantic.dev/2.8/v/missing
+E   recent_runs.0.triggered_by_user
+E     Field required [type=missing, input_value={'id': 1, 'test_suite_nam..., 1, 6, 39, 54, 557890)}, input_type=dict]
+E       For further information visit https://errors.pydantic.dev/2.8/v/missing
+__________________ TestIntegration.test_full_test_lifecycle ___________________
+tests\test_test_framework.py:770: in test_full_test_lifecycle
+    stats_response = await client.get(
+.venv\Lib\site-packages\httpx\_client.py:1770: in get
+    return await self.request(
+.venv\Lib\site-packages\httpx\_client.py:1542: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+.venv\Lib\site-packages\httpx\_client.py:1631: in send
+    response = await self._send_handling_auth(
+.venv\Lib\site-packages\httpx\_client.py:1659: in _send_handling_auth
+    response = await self._send_handling_redirects(
+.venv\Lib\site-packages\httpx\_client.py:1696: in _send_handling_redirects
+    response = await self._send_single_request(request)
+.venv\Lib\site-packages\httpx\_client.py:1732: in _send_single_request
+    response = await transport.handle_async_request(request)
+.venv\Lib\site-packages\httpx\_transports\asgi.py:170: in handle_async_request
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\applications.py:1054: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:113: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:187: in __call__
+    raise exc
+.venv\Lib\site-packages\starlette\middleware\errors.py:165: in __call__
+    await self.app(scope, receive, _send)
+.venv\Lib\site-packages\starlette\middleware\cors.py:85: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:62: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:62: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:51: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\starlette\routing.py:715: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:735: in app
+    await route.handle(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:288: in handle
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:76: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:62: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:51: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\starlette\routing.py:73: in app
+    response = await f(request)
+.venv\Lib\site-packages\fastapi\routing.py:301: in app
+    raw_response = await run_endpoint_function(
+.venv\Lib\site-packages\fastapi\routing.py:212: in run_endpoint_function
+    return await dependant.call(**values)
+app\api\v1\endpoints\test_framework.py:543: in get_test_statistics
+    return test_framework_schema.TestStatistics(**stats)
+E   pydantic_core._pydantic_core.ValidationError: 4 validation errors for TestStatistics
+E   average_duration
+E     Field required [type=missing, input_value={'total_suites': 1, 'tota...1, 6, 40, 19, 938533)}]}, input_type=dict]
+E       For further information visit https://errors.pydantic.dev/2.8/v/missing
+E   recent_runs.0.skipped_tests
+E     Field required [type=missing, input_value={'id': 1, 'test_suite_nam..., 1, 6, 40, 19, 938533)}, input_type=dict]
+E       For further information visit https://errors.pydantic.dev/2.8/v/missing
+E   recent_runs.0.error_tests
+E     Field required [type=missing, input_value={'id': 1, 'test_suite_nam..., 1, 6, 40, 19, 938533)}, input_type=dict]
+E       For further information visit https://errors.pydantic.dev/2.8/v/missing
+E   recent_runs.0.triggered_by_user
+E     Field required [type=missing, input_value={'id': 1, 'test_suite_nam..., 1, 6, 40, 19, 938533)}, input_type=dict]
+E       For further information visit https://errors.pydantic.dev/2.8/v/missing
+------------------------------ Captured log call ------------------------------
+ERROR    app.services.cache:cache.py:67 Cache delete pattern error for audit_logs:list:*: Error 22 connecting to localhost:6379. 22.
+ERROR    app.services.cache:cache.py:67 Cache delete pattern error for test_suite:1:*: Error 22 connecting to localhost:6379. 22.
+ERROR    app.services.cache:cache.py:67 Cache delete pattern error for audit_logs:list:*: Error 22 connecting to localhost:6379. 22.
+ERROR    app.services.cache:cache.py:67 Cache delete pattern error for audit_logs:list:*: Error 22 connecting to localhost:6379. 22.
+ERROR    app.services.cache:cache.py:27 Cache get error for key test_case:1: Error 22 connecting to localhost:6379. 22.
+ERROR    app.services.cache:cache.py:44 Cache set error for key test_case:1: Error 22 connecting to localhost:6379. 22.
+ERROR    app.services.cache:cache.py:27 Cache get error for key test_run:1: Error 22 connecting to localhost:6379. 22.
+ERROR    app.services.cache:cache.py:44 Cache set error for key test_run:1: Error 22 connecting to localhost:6379. 22.
+ERROR    app.services.cache:cache.py:54 Cache delete error for key test_run:1: Error 22 connecting to localhost:6379. 22.
+ERROR    app.services.cache:cache.py:67 Cache delete pattern error for test_runs:*: Error 22 connecting to localhost:6379. 22.
+ERROR    app.services.cache:cache.py:67 Cache delete pattern error for audit_logs:list:*: Error 22 connecting to localhost:6379. 22.
+============================== warnings summary ===============================
+.venv\Lib\site-packages\pydantic\_internal\_config.py:291
+.venv\Lib\site-packages\pydantic\_internal\_config.py:291
+.venv\Lib\site-packages\pydantic\_internal\_config.py:291
+.venv\Lib\site-packages\pydantic\_internal\_config.py:291
+.venv\Lib\site-packages\pydantic\_internal\_config.py:291
+.venv\Lib\site-packages\pydantic\_internal\_config.py:291
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\.venv\Lib\site-packages\pydantic\_internal\_config.py:291: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.8/migration/
+    warnings.warn(DEPRECATION_MESSAGE, DeprecationWarning)
+
+app\schemas\test_framework.py:55
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\schemas\test_framework.py:55: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.8/migration/
+    @validator('method')
+
+app\schemas\test_framework.py:61
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\schemas\test_framework.py:61: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.8/migration/
+    @validator('test_type')
+
+app\schemas\test_framework.py:89
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\schemas\test_framework.py:89: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.8/migration/
+    @validator('method')
+
+app\schemas\test_framework.py:95
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\schemas\test_framework.py:95: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.8/migration/
+    @validator('test_type')
+
+app\schemas\test_framework.py:288
+  C:\Users\HUSSAIN\OneDrive\Desktop\AI Business O.S\backend\app\schemas\test_framework.py:288: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.8/migration/
+    @validator('total_tests')
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_test_framework.py::TestStatistics::test_get_test_statistics
+FAILED tests/test_test_framework.py::TestIntegration::test_full_test_lifecycle
+============= 2 failed, 2 passed, 11 warnings in 94.36s (0:01:34) =============

@@ -54,6 +54,8 @@ app = FastAPI(
         {"name": "Tokens", "description": "Token management and revocation operations"},
         {"name": "Organization Settings", "description": "Organization settings and configuration operations"},
         {"name": "Logging History", "description": "Application log history and management operations"},
+        {"name": "Test Framework", "description": "Test framework management operations"},
+        {"name": "Documentation", "description": "Knowledge base and documentation management operations"},
     ],
     lifespan=lifespan,
 )
