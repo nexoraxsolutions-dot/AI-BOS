@@ -1,7 +1,7 @@
 """create_documents
 
-Revision ID: 0022_create_documents
-Revises: 0021_create_test_framework_tables
+revision = '0022'
+down_revision = '0021'
 Create Date: 2026-08-04 00:00:00.000000
 
 """
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '0022_create_documents'
-down_revision: Union[str, None] = '0021_create_test_framework_tables'
+revision: str = '0022'
+down_revision: Union[str, None] = '0021'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

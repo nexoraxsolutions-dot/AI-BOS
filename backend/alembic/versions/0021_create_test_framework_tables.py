@@ -1,7 +1,7 @@
 """create_test_framework_tables
 
-Revision ID: 0021_create_test_framework_tables
-Revises: 0020_create_password_history
+revision = '0021'
+down_revision = '0020'
 Create Date: 2024-01-01 00:00:00.000000
 
 """
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '0021_create_test_framework_tables'
-down_revision = '0020_create_password_history'
+revision = '0021'
+down_revision = '0020'
 branch_labels = None
 depends_on = None
 
