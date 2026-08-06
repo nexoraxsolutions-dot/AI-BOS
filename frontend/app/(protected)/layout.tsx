@@ -7,15 +7,21 @@ import Sidebar from '../../components/Sidebar'
 import { Sparkles } from 'lucide-react'
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, loading } = useAuth()
+  const { isAuthenticated, loading, user } = useAuth()
   const router = useRouter()
   const pathname = usePathname()
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
       router.push('/login')
+      return
     }
-  }, [isAuthenticated, loading, router])
+    // First login: a non-superuser account with no company must onboard first
+    // before it can use the rest of the application.
+    if (!loading && isAuthenticated && user && !user.company_id && !user.is_superuser) {
+      router.push('/onboarding')
+    }
+  }, [isAuthenticated, loading, user, router])
 
   if (loading) {
     return (

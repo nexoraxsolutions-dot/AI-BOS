@@ -143,11 +143,46 @@ async def invite_user_to_tenant(
     db: AsyncSession = Depends(get_async_session),
     current_user=Depends(require_superuser),
 ):
-    """Invite a user to join a tenant (superuser only)."""
-    # Find a company to assign (requires company_id in payload or default)
-    raise HTTPException(
-        status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="Direct invite flow not yet implemented. Use POST /api/v1/tenants/assign instead.",
+    """Invite a user to join a tenant (superuser only).
+
+    Creates a tokenized invitation with an expiration. If no company_id is
+    provided, the current superuser's company is used.
+    """
+    from app.services import invitation as invitation_service
+
+    company_id = payload.company_id or current_user.company_id
+    if not company_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="company_id is required (superuser has no default company)",
+        )
+
+    try:
+        invitation, token = await invitation_service.invite_user_to_company(
+            db,
+            company_id=company_id,
+            inviter=current_user,
+            email=payload.email,
+            role=payload.role or "member",
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+
+    from app.services.email import send_invitation_email
+    from app.services.company import get_company
+    company = await get_company(db, company_id)
+    await send_invitation_email(
+        to_email=payload.email,
+        token=token,
+        company_name=company.name if company else "your company",
+        inviter_name=current_user.email,
+        role=invitation.role,
+    )
+
+    return tenant_schema.TenantInviteResponse(
+        message="Invitation sent",
+        email=invitation.email,
+        user_id=None,
     )
 
 

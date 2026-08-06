@@ -19,6 +19,7 @@ class User(Base):
     is_2fa_enabled = Column(Boolean, default=False)
     otp_secret = Column(String, nullable=True)
     company_id = Column(Integer, ForeignKey("companies.id"), nullable=True)
+    active_company_id = Column(Integer, ForeignKey("companies.id"), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
@@ -28,6 +29,13 @@ class User(Base):
     lock_reason = Column(String, nullable=True)
 
     company = relationship("Company", back_populates="users")
+
+    memberships = relationship(
+        "CompanyMembership",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        foreign_keys="CompanyMembership.user_id",
+    )
     
     tokens = relationship(
         "Token",

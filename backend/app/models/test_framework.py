@@ -7,6 +7,7 @@ from app.db import Base
 
 
 class TestStatus(str, enum.Enum):
+    __test__ = False
     PENDING = "pending"
     RUNNING = "running"
     PASSED = "passed"
@@ -16,6 +17,7 @@ class TestStatus(str, enum.Enum):
 
 
 class TestPriority(str, enum.Enum):
+    __test__ = False
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
@@ -23,6 +25,7 @@ class TestPriority(str, enum.Enum):
 
 
 class TestSuite(Base):
+    __test__ = False
     __tablename__ = "test_suites"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -52,6 +55,7 @@ class TestSuite(Base):
 
 
 class TestCase(Base):
+    __test__ = False
     __tablename__ = "test_cases"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -96,6 +100,7 @@ class TestCase(Base):
 
 
 class TestRun(Base):
+    __test__ = False
     __tablename__ = "test_runs"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -139,6 +144,7 @@ class TestRun(Base):
 
 
 class TestResult(Base):
+    __test__ = False
     __tablename__ = "test_results"
 
     id = Column(Integer, primary_key=True, index=True)

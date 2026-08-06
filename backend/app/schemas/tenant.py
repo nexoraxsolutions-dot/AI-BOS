@@ -57,7 +57,9 @@ class TenantListResponse(BaseModel):
 class TenantInviteRequest(BaseModel):
     """Request to invite a user to a tenant."""
     email: str
+    company_id: Optional[int] = None
     full_name: Optional[str] = None
+    role: Optional[str] = "member"
 
 
 class TenantInviteResponse(BaseModel):

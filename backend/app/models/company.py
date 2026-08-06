@@ -29,6 +29,18 @@ class Company(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     users = relationship("User", back_populates="company")
+    memberships = relationship(
+        "CompanyMembership",
+        back_populates="company",
+        cascade="all, delete-orphan",
+        foreign_keys="CompanyMembership.company_id",
+    )
+    invitations = relationship(
+        "CompanyInvitation",
+        back_populates="company",
+        cascade="all, delete-orphan",
+        foreign_keys="CompanyInvitation.company_id",
+    )
     departments = relationship("Department", back_populates="company", cascade="all, delete-orphan")
     documents = relationship("Document", back_populates="company", cascade="all, delete-orphan")
     test_suites = relationship(

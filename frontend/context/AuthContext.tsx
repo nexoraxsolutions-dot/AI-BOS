@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { login as apiLogin, register as apiRegister, refreshToken as apiRefreshToken } from '../lib/api';
+import { login as apiLogin, register as apiRegister, refreshToken as apiRefreshToken, getMyProfile } from '../lib/api';
 
 interface UserInfo {
   id: number;
@@ -17,22 +17,24 @@ interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
   user: UserInfo | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<UserInfo | undefined>;
   register: (email: string, password: string, fullName?: string, username?: string) => Promise<void>;
   logout: () => void;
   loading: boolean;
   refreshAccessToken: () => Promise<boolean>;
+  refreshUser: () => Promise<UserInfo | null>;
 }
 
 const AuthContext = createContext<AuthContextType>({
   token: null,
   isAuthenticated: false,
   user: null,
-  login: async () => {},
+  login: async () => undefined,
   register: async () => {},
   logout: () => {},
   loading: false,
   refreshAccessToken: async () => false,
+  refreshUser: async () => null,
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -85,10 +87,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.setItem('ai_bos_refresh_token', response.refresh_token);
       }
       if (response.user) {
+        const userInfo = response.user as unknown as UserInfo;
         localStorage.setItem('ai_bos_user', JSON.stringify(response.user));
-        setUser(response.user);
+        setUser(userInfo);
       }
       setToken(response.access_token);
+      return response.user as unknown as UserInfo | undefined;
     } finally {
       setLoading(false);
     }
@@ -97,16 +101,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const register = async (email: string, password: string, fullName?: string, username?: string) => {
     setLoading(true);
     try {
-      const response = await apiRegister(email, password, fullName, username);
-      localStorage.setItem('ai_bos_token', response.access_token);
-      if (response.refresh_token) {
-        localStorage.setItem('ai_bos_refresh_token', response.refresh_token);
-      }
-      if (response.user) {
-        localStorage.setItem('ai_bos_user', JSON.stringify(response.user));
-        setUser(response.user);
-      }
-      setToken(response.access_token);
+      // Registration sends the verification email but the account's email is not
+      // verified yet, so we deliberately do NOT persist the returned tokens or log
+      // the user in. They must verify their email and then sign in.
+      await apiRegister(email, password, fullName, username);
     } finally {
       setLoading(false);
     }
@@ -120,6 +118,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
+  const refreshUser = async (): Promise<UserInfo | null> => {
+    try {
+      const profile = await getMyProfile();
+      const userInfo = profile as unknown as UserInfo;
+      localStorage.setItem('ai_bos_user', JSON.stringify(profile));
+      setUser(userInfo);
+      return userInfo;
+    } catch (error) {
+      console.error('Failed to refresh user:', error);
+      return null;
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -131,6 +142,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         logout,
         loading,
         refreshAccessToken,
+        refreshUser,
       }}
     >
       {children}

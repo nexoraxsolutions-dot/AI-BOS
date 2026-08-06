@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     email_from_name: str = "AI-BOS"
     email_verification_token_expire_hours: int = 48
     reset_token_expire_hours: int = 1
+    company_invitation_expire_hours: int = 72
     frontend_url: str = "http://localhost:3000"
 
 settings = Settings()

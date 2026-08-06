@@ -1,7 +1,7 @@
 import secrets
 from datetime import datetime, timedelta
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import Request
+from fastapi import HTTPException, Request, status
 
 from app.core.config import settings
 from app.core.security import verify_password
@@ -21,6 +21,46 @@ async def authenticate_user(db: AsyncSession, email: str, password: str, request
             account_lock_service = AccountLockService(db)
             await account_lock_service.record_failed_login(user, request)
         return None
+
+    # Account active check
+    if not user.is_active:
+        from app.services.audit_log import create_audit_log
+        from app.core.request import get_client_ip, get_user_agent
+        if request:
+            await create_audit_log(
+                db,
+                action="login_inactive_account",
+                resource_type="auth",
+                resource_id=user.id,
+                user_id=user.id,
+                ip_address=get_client_ip(request),
+                user_agent=get_user_agent(request),
+                details={"email": email},
+            )
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Your account is inactive. Please contact support.",
+        )
+
+    # Email verified check
+    if not user.is_email_verified:
+        from app.services.audit_log import create_audit_log
+        from app.core.request import get_client_ip, get_user_agent
+        if request:
+            await create_audit_log(
+                db,
+                action="login_unverified_email",
+                resource_type="auth",
+                resource_id=user.id,
+                user_id=user.id,
+                ip_address=get_client_ip(request),
+                user_agent=get_user_agent(request),
+                details={"email": email},
+            )
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Email not verified. Please verify your email address before logging in.",
+        )
 
     # Check if account is locked
     if user and request:

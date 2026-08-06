@@ -1,5 +1,5 @@
-from pydantic import BaseModel, field_validator, ConfigDict
-from typing import Optional, Dict, Any
+from pydantic import BaseModel, field_validator, ConfigDict, EmailStr
+from typing import Optional, Dict, Any, List
 from datetime import datetime
 import re
 
@@ -208,3 +208,93 @@ class CompanyListResponse(BaseModel):
     total: int
     page: int
     page_size: int
+
+
+# ========== Company Onboarding ==========
+
+class CompanyOnboardRequest(CompanyCreate):
+    """Create a company during self-service onboarding."""
+
+
+class CompanyOnboardResponse(CompanyOut):
+    """Company created through onboarding with defaults."""
+    membership_role: str = "owner"
+    default_department: Optional[Dict[str, Any]] = None
+    organization_settings: Optional[Dict[str, Any]] = None
+
+
+# ========== Company Invitations ==========
+
+class CompanyInviteRequest(BaseModel):
+    """Invite a user to a company."""
+    company_id: int
+    email: EmailStr
+    role: Optional[str] = "member"
+    message: Optional[str] = None
+
+
+class CompanyInviteResponse(BaseModel):
+    """Response after creating an invitation."""
+    invitation_id: int
+    company_id: int
+    company_name: str
+    email: str
+    token: str
+    expires_at: datetime
+
+
+class CompanyInvitationDetail(BaseModel):
+    """Public invitation details (safe to share with invitee)."""
+    id: int
+    company_id: int
+    company_name: str
+    email: str
+    role: str
+    status: str
+    expires_at: datetime
+    created_at: Optional[datetime] = None
+
+
+class InvitationActionRequest(BaseModel):
+    """Body used to accept or reject an invitation by token."""
+    token: str
+
+
+class InvitationActionResponse(BaseModel):
+    """Result of accepting/rejecting an invitation."""
+    message: str
+    invitation_id: Optional[int] = None
+    company_id: Optional[int] = None
+    company_name: Optional[str] = None
+    joined: bool = False
+
+
+# ========== Company Switching ==========
+
+class UserCompanyOut(BaseModel):
+    """A company the current user belongs to."""
+    id: int
+    name: str
+    domain: str
+    role: str = "member"
+    is_active: bool = True
+    is_current: bool = False
+    created_at: Optional[datetime] = None
+
+
+class UserCompaniesResponse(BaseModel):
+    """List of companies the current user belongs to."""
+    items: List[UserCompanyOut]
+    total: int
+    active_company_id: Optional[int] = None
+
+
+class SwitchCompanyRequest(BaseModel):
+    """Switch the user's active company."""
+    company_id: int
+
+
+class SwitchCompanyResponse(BaseModel):
+    """Result of switching the active company."""
+    message: str
+    active_company_id: int

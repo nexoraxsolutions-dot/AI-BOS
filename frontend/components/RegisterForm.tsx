@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '../context/AuthContext'
+import { resendVerification } from '../lib/api'
 
 interface FormErrors {
   email?: string
@@ -21,7 +21,24 @@ export default function RegisterForm() {
   const [errors, setErrors] = useState<FormErrors>({})
   const [touched, setTouched] = useState<Record<string, boolean>>({})
   const { register, loading } = useAuth()
-  const router = useRouter()
+
+  // Post-registration "Please verify your email" state
+  const [registered, setRegistered] = useState(false)
+  const [resendStatus, setResendStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const [resendMessage, setResendMessage] = useState('')
+
+  async function handleResend() {
+    setResendStatus('sending')
+    setResendMessage('')
+    try {
+      const data = await resendVerification(email)
+      setResendStatus('sent')
+      setResendMessage(data.message || 'Verification email sent successfully')
+    } catch (err) {
+      setResendStatus('error')
+      setResendMessage(err instanceof Error ? err.message : 'Failed to resend verification email')
+    }
+  }
 
   function validateField(field: string, value: string): string | undefined {
     if (field === 'email') {
@@ -112,10 +129,52 @@ export default function RegisterForm() {
 
     try {
       await register(email, password, fullName || undefined, username || undefined)
-      router.push('/dashboard')
+      // Do NOT redirect to the dashboard — the account email is not verified yet.
+      setRegistered(true)
     } catch (err) {
       setMessage(err instanceof Error ? err.message : 'Registration failed.')
     }
+  }
+
+  if (registered) {
+    return (
+      <div className="space-y-6 rounded-3xl border border-white/10 bg-slate-950/80 p-8 shadow-2xl backdrop-blur-xl max-w-lg w-full text-center">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/10 border border-emerald-500/40">
+          <svg className="h-7 w-7 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+          </svg>
+        </div>
+        <h2 className="text-2xl font-semibold text-white">Please verify your email.</h2>
+        <p className="text-sm text-slate-400">
+          We sent a verification link to <span className="text-cyan-300">{email}</span>.
+          Check your inbox to activate your account before signing in.
+        </p>
+
+        <button
+          onClick={handleResend}
+          disabled={resendStatus === 'sending'}
+          className="w-full rounded-2xl bg-cyan-500 px-5 py-3 text-base font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {resendStatus === 'sending' ? 'Sending...' : 'Resend Verification'}
+        </button>
+
+        {resendMessage && (
+          <div
+            className={`rounded-xl border p-3 text-sm ${
+              resendStatus === 'sent'
+                ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300'
+                : 'border-red-500/30 bg-red-500/10 text-red-400'
+            }`}
+          >
+            {resendMessage}
+          </div>
+        )}
+
+        <Link href="/" className="block text-sm text-cyan-400 hover:text-cyan-300">
+          Back to Sign in
+        </Link>
+      </div>
+    )
   }
 
   return (

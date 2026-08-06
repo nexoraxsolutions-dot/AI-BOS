@@ -362,6 +362,99 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/a
     return request<Company>(`/companies/by-domain/${encodeURIComponent(domain)}`);
   }
 
+  // ==================== Company Onboarding / Membership API ====================
+
+  export interface UserCompanyOut {
+    id: number;
+    name: string;
+    domain: string;
+    role?: string;
+    is_active?: boolean;
+    is_current?: boolean;
+    created_at?: string;
+  }
+
+  export interface UserCompaniesResponse {
+    items: UserCompanyOut[];
+    total: number;
+    active_company_id?: number | null;
+  }
+
+  export interface OnboardCompanyRequest {
+    name: string;
+    domain?: string;
+    industry?: string;
+    employee_count?: number;
+    website?: string;
+    logo_url?: string;
+    settings?: Record<string, unknown>;
+  }
+
+  export interface OnboardCompanyResponse extends Company {
+    membership_role?: string;
+    default_department?: Record<string, unknown> | null;
+    organization_settings?: Record<string, unknown> | null;
+  }
+
+  export interface SwitchCompanyResponse {
+    message: string;
+    active_company_id: number;
+  }
+
+  export interface CompanyInvitationDetail {
+    id: number;
+    company_id: number;
+    company_name: string;
+    email: string;
+    role: string;
+    status: string;
+    expires_at: string;
+    created_at?: string;
+  }
+
+  export interface InvitationActionResponse {
+    message: string;
+    invitation_id?: number;
+    company_id?: number;
+    company_name?: string;
+    joined: boolean;
+  }
+
+  export async function listUserCompanies(): Promise<UserCompaniesResponse> {
+    return request<UserCompaniesResponse>('/companies/my');
+  }
+
+  export async function onboardCompany(
+    data: OnboardCompanyRequest,
+  ): Promise<OnboardCompanyResponse> {
+    return request<OnboardCompanyResponse>('/companies/onboard', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  export async function switchCompany(companyId: number): Promise<SwitchCompanyResponse> {
+    return request<SwitchCompanyResponse>('/companies/switch', {
+      method: 'POST',
+      body: JSON.stringify({ company_id: companyId }),
+    });
+  }
+
+  export async function getInvitation(
+    token: string,
+  ): Promise<CompanyInvitationDetail> {
+    return request<CompanyInvitationDetail>(
+      `/companies/invitations/${encodeURIComponent(token)}`,
+    );
+  }
+
+  export async function acceptInvitation(token: string): Promise<InvitationActionResponse> {
+    return request<InvitationActionResponse>(
+      `/companies/invitations/${encodeURIComponent(token)}/accept`,
+      { method: 'POST' },
+    );
+  }
+
   // Redis API functions
   export interface RedisHealth {
     status: string;

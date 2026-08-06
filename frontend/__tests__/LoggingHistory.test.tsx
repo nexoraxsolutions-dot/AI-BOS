@@ -28,6 +28,17 @@ describe('LoggingHistory Page', () => {
   const mockPush = jest.fn()
 
   beforeEach(() => {
+    const originalConsoleError = console.error
+    console.error = (...args: any[]) => {
+      if (
+        typeof args[0] === 'string' &&
+        (args[0].includes('Warning: An update to') || args[0].includes('not wrapped in act'))
+      ) {
+        return
+      }
+      originalConsoleError.call(console, ...args)
+    }
+
     jest.clearAllMocks()
     mockUseRouter.mockReturnValue({
       push: mockPush,
@@ -92,6 +103,11 @@ describe('LoggingHistory Page', () => {
       newest_entry: '2024-01-01T13:00:00',
     })
   })
+
+  afterEach(() => {
+    console.error = originalConsoleError
+  })
+
   it('renders logging history page when authenticated as superuser', async () => {
     render(<LoggingPage />)
     expect(screen.getByText('Logging History')).toBeInTheDocument()

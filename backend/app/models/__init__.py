@@ -14,6 +14,7 @@ from app.models.environment_variable import EnvironmentVariable
 from app.models.organization_settings import OrganizationSettings
 from app.models.logging_configuration import LoggingConfiguration
 from app.models.session import UserSession
+from app.models.membership import CompanyMembership, CompanyInvitation
 from app.models.test_framework import (
     TestSuite,
     TestCase,
@@ -40,6 +41,8 @@ __all__ = [
     "OrganizationSettings",
     "LoggingConfiguration",
     "UserSession",
+    "CompanyMembership",
+    "CompanyInvitation",
     "TestSuite",
     "TestCase",
     "TestRun",

@@ -244,3 +244,57 @@ If you did not create an account, please ignore this email.
     """
 
     return await send_email(to_email, subject, html_content, text_content)
+
+
+async def send_invitation_email(
+    to_email: str,
+    token: str,
+    company_name: str,
+    inviter_name: Optional[str] = None,
+    role: Optional[str] = None,
+) -> bool:
+    """Send a company invitation link to a user."""
+    invite_url = f"{settings.frontend_url}/invitations/accept?token={token}"
+    inviter = inviter_name or "An administrator"
+    role_text = f" as {role}" if role else ""
+    subject = f"You've been invited to join {company_name}"
+
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="utf-8"></head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin:0; padding:20px;">
+        <div style="max-width:600px;margin:0 auto;">
+            <div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;padding:30px;text-align:center;border-radius:8px 8px 0 0;">
+                <h1 style="margin:0;">You're invited!</h1>
+            </div>
+            <div style="background:#f9f9f9;padding:30px;border-radius:0 0 8px 8px;">
+                <p>Hi,</p>
+                <p><strong>{inviter}</strong> has invited you to join <strong>{company_name}</strong>{role_text} on AI-BOS.</p>
+                <p style="text-align:center;">
+                    <a href="{invite_url}" style="display:inline-block;padding:12px 30px;background:#667eea;color:white;text-decoration:none;border-radius:5px;font-weight:bold;margin:20px 0;">
+                        Accept Invitation
+                    </a>
+                </p>
+                <p>Or copy and paste this link into your browser:</p>
+                <p style="word-break:break-all;font-size:12px;color:#667eea;">{invite_url}</p>
+                <p>This invitation will expire in {settings.company_invitation_expire_hours} hours.</p>
+                <p>If you were not expecting this invitation, you can safely ignore this email.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    text_content = f"""
+You've been invited to join {company_name} on AI-BOS.
+
+{inviter} has invited you{role_text}.
+
+Accept the invitation here:
+{invite_url}
+
+This invitation expires in {settings.company_invitation_expire_hours} hours.
+
+If you were not expecting this invitation, you can safely ignore this email.
+"""
+    return await send_email(to_email, subject, html_content, text_content)

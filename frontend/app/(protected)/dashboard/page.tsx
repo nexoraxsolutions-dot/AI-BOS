@@ -4,12 +4,13 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../../context/AuthContext';
 import { getDashboardSummary, DashboardResponse, DashboardSummary } from '../../../lib/api';
+import { listUserCompanies, switchCompany, UserCompanyOut } from '../../../lib/api';
 import StatCard from '../../../components/StatCard';
 import { ChartContainer, AreaChart, DonutChart } from '../../../components/ChartContainer';
 import StatusBadge from '../../../components/StatusBadge';
 import {
   DollarSign, Users, Ticket, Briefcase, Sparkles, ArrowRight,
-  CheckCircle2, UserPlus, FileText, TrendingUp,
+  CheckCircle2, UserPlus, FileText, TrendingUp, ChevronDown, Building2,
 } from 'lucide-react';
 
 const DEMO_SUMMARY: DashboardSummary = {
@@ -61,10 +62,13 @@ const activities = [
 ];
 
 export default function DashboardPage() {
-  const { isAuthenticated, token } = useAuth();
+  const { isAuthenticated, token, user, refreshUser } = useAuth();
   const router = useRouter();
   const [data, setData] = useState<DashboardResponse | null>(null);
   const [loading, setLoading] = useState(true);
+  const [companies, setCompanies] = useState<UserCompanyOut[]>([]);
+  const [switching, setSwitching] = useState(false);
+  const [workspaceOpen, setWorkspaceOpen] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -75,10 +79,13 @@ export default function DashboardPage() {
     async function fetchData() {
       try {
         setLoading(true);
-        const result = await getDashboardSummary();
-        setData(result);
+        const [summaryResult, companiesResult] = await Promise.all([
+          getDashboardSummary(),
+          listUserCompanies(),
+        ]);
+        setData(summaryResult);
+        setCompanies(companiesResult.items);
       } catch {
-        // Graceful fallback: render the dashboard with demo data on API failure
         setData({ summary: DEMO_SUMMARY, message: 'Showing sample data' });
       } finally {
         setLoading(false);
@@ -87,6 +94,23 @@ export default function DashboardPage() {
 
     fetchData();
   }, [isAuthenticated, router, token]);
+
+  const activeCompany = companies.find((c) => c.is_current) ?? companies[0] ?? null;
+
+  async function handleSwitch(companyId: number) {
+    setSwitching(true);
+    setWorkspaceOpen(false);
+    try {
+      await switchCompany(companyId);
+      await refreshUser();
+      router.refresh();
+    } catch (err) {
+      // eslint-disable-next-line no-alert
+      alert(err instanceof Error ? err.message : 'Failed to switch workspace');
+    } finally {
+      setSwitching(false);
+    }
+  }
 
   if (loading) {
     return (
@@ -108,12 +132,56 @@ export default function DashboardPage() {
               Dashboard
             </h1>
             <p className="text-sm text-slate-500 dark:text-dark-muted">
-              {data?.message ?? 'Welcome back — here is your business at a glance.'}
+              {activeCompany
+                ? `${activeCompany.name} — here is your business at a glance.`
+                : data?.message ?? 'Welcome back — here is your business at a glance.'}
             </p>
           </div>
-          <button className="btn-brand self-start sm:self-auto">
-            <Sparkles size={16} /> Generate Report
-          </button>
+
+          <div className="flex items-center gap-3">
+            {companies.length > 1 && (
+              <div className="relative">
+                <button
+                  onClick={() => setWorkspaceOpen((v) => !v)}
+                  className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-dark-border dark:bg-white/5 dark:text-dark-text dark:hover:bg-white/10"
+                >
+                  <Building2 size={16} />
+                  {activeCompany?.name ?? 'Switch workspace'}
+                  <ChevronDown size={16} />
+                </button>
+                {workspaceOpen && (
+                  <div className="absolute right-0 z-20 mt-2 w-72 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl dark:border-dark-border dark:bg-dark-surface">
+                    <div className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-dark-muted">
+                      Switch workspace
+                    </div>
+                    {companies.map((c) => (
+                      <button
+                        key={c.id}
+                        onClick={() => handleSwitch(c.id)}
+                        disabled={switching}
+                        className={`flex w-full items-center justify-between px-4 py-3 text-left text-sm transition hover:bg-slate-50 dark:hover:bg-white/5 ${
+                          c.is_current ? 'bg-cyan-500/5' : ''
+                        }`}
+                      >
+                        <span className="flex flex-col">
+                          <span className={`font-medium ${c.is_current ? 'text-cyan-600 dark:text-cyan-300' : 'text-slate-700 dark:text-dark-text'}`}>
+                            {c.name}
+                          </span>
+                          <span className="text-xs text-slate-500 dark:text-dark-muted">
+                            {c.domain} · {c.role ?? 'member'}
+                          </span>
+                        </span>
+                        {c.is_current && <span className="text-xs text-cyan-600 dark:text-cyan-300">Current</span>}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+            <button className="btn-brand self-start sm:self-auto">
+              <Sparkles size={16} /> Generate Report
+            </button>
+          </div>
         </div>
 
         {/* Key metrics */}

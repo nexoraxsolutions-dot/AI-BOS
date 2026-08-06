@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional, List
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from app.models.test_framework import TestStatus, TestPriority
 
 
@@ -52,13 +52,15 @@ class TestCaseBase(BaseModel):
     is_active: bool = True
     order: int = 0
 
-    @validator('method')
+    @field_validator('method')
+    @classmethod
     def validate_method(cls, v):
         if v and v.upper() not in ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']:
             raise ValueError('Method must be GET, POST, PUT, DELETE, or PATCH')
         return v.upper() if v else v
 
-    @validator('test_type')
+    @field_validator('test_type')
+    @classmethod
     def validate_test_type(cls, v):
         allowed_types = ['unit', 'integration', 'e2e', 'performance', 'security']
         if v not in allowed_types:
@@ -86,13 +88,15 @@ class TestCaseUpdate(BaseModel):
     is_active: Optional[bool] = None
     order: Optional[int] = None
 
-    @validator('method')
+    @field_validator('method')
+    @classmethod
     def validate_method(cls, v):
         if v and v.upper() not in ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']:
             raise ValueError('Method must be GET, POST, PUT, DELETE, or PATCH')
         return v.upper() if v else v
 
-    @validator('test_type')
+    @field_validator('test_type')
+    @classmethod
     def validate_test_type(cls, v):
         if v:
             allowed_types = ['unit', 'integration', 'e2e', 'performance', 'security']
@@ -180,7 +184,7 @@ class TestResultBase(BaseModel):
     output: Optional[str] = None
     error_message: Optional[str] = None
     error_traceback: Optional[str] = None
-    duration: Optional[float] = Field(None, ge=0)
+    duration: Optional[float] = None
     request_url: Optional[str] = Field(None, max_length=500)
     request_method: Optional[str] = Field(None, max_length=10)
     request_headers: Optional[str] = None
@@ -285,10 +289,11 @@ class TestRunCompleteRequest(BaseModel):
     error_message: Optional[str] = None
     error_traceback: Optional[str] = None
 
-    @validator('total_tests')
-    def validate_total_tests(cls, v, values):
-        if 'passed_tests' in values and 'failed_tests' in values and 'skipped_tests' in values and 'error_tests' in values:
-            total = values['passed_tests'] + values['failed_tests'] + values['skipped_tests'] + values['error_tests']
+    @field_validator('total_tests')
+    @classmethod
+    def validate_total_tests(cls, v, info):
+        if info.data and all(k in info.data for k in ['passed_tests', 'failed_tests', 'skipped_tests', 'error_tests']):
+            total = info.data['passed_tests'] + info.data['failed_tests'] + info.data['skipped_tests'] + info.data['error_tests']
             if v != total:
                 raise ValueError(f'total_tests ({v}) must equal sum of passed, failed, skipped, and error tests ({total})')
         return v
